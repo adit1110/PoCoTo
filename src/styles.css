@@ -1,0 +1,25 @@
+/* Background color for the scene */
+.root {
+    -fx-background-color: #2C3E50;
+}
+
+/* Styling for all buttons */
+.button {
+    -fx-background-color: #3498DB;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+/* Button hover effect */
+.button:hover {
+    -fx-background-color: #2980B9;
+}
+
+/* Button click effect */
+.button:pressed {
+    -fx-background-color: #1A5276;
+}

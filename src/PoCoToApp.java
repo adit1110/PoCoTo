@@ -26,6 +26,12 @@ public class PoCoToApp extends Application {
         layout.getChildren().addAll(newGameButton, loadGameButton, settingsButton, exitButton);
         
         Scene scene = new Scene(layout, 400, 300);
+
+
+        System.out.println("CSS File Path: " + PoCoToApp.class.getResource("styles.css"));
+
+        scene.getStylesheets().add(PoCoToApp.class.getResource("/styles.css").toExternalForm());
+
         primaryStage.setTitle("PoCoTo - Main Menu");
         primaryStage.setScene(scene);
         
