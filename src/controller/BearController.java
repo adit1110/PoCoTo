@@ -56,4 +56,8 @@ public class BearController {
     public boolean isAngry() {
         return bear.isAngry();
     }
+
+    public Bear getBear() {
+        return bear;
+    }
 }

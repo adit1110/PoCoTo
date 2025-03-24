@@ -1,14 +1,19 @@
 package view;
 
-
 import controller.BearController;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.image.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.Bear;
 
 public class GameplayScreen {
 
@@ -21,77 +26,88 @@ public class GameplayScreen {
     private Text bearStatusText;
     private ImageView bearImage;
 
-    public GameplayScreen(BearController bearController) {
-        this.bearController = bearController;
+    public GameplayScreen(BearController controller) {
+        this.bearController = controller;
     }
 
     public void start(Stage primaryStage) {
-        
-        // Labels and Progress Bars
-        VBox statsBox = new VBox(10);
-        statsBox.setPadding(new Insets(10));
+        // Title label
+        Label title = new Label("PoCoTo");
+        title.getStyleClass().add("title");
 
+        // Stat bars
         hungerBar = createLabeledBar("Hunger");
         healthBar = createLabeledBar("Health");
         sleepBar = createLabeledBar("Sleep");
         happinessBar = createLabeledBar("Happiness");
 
-
+        VBox statsBox = new VBox(10);
+        statsBox.setPadding(new Insets(20));
         statsBox.getChildren().addAll(hungerBar, healthBar, sleepBar, happinessBar);
+        statsBox.setAlignment(Pos.CENTER);
 
-        // Bear Image (find Bear sprite images)
-
-        bearImage = new ImageView(new Image("/assets/bear_idle.png")); // Placeholder image
+        // Bear image
+        bearImage = new ImageView(getBearImage(bearController.getBear()));
         bearImage.setFitWidth(150);
         bearImage.setPreserveRatio(true);
 
-        // Bear Status Text
+        // Status
         bearStatusText = new Text("Bear is calm.");
+        bearStatusText.getStyleClass().add("text");
 
-        // Gameplay buttons
-        Button feedButton = new Button("Feed");
-        Button sleepButton = new Button("Sleep");
-        Button playButton = new Button("Play");
-        Button healButton = new Button("Heal");
+        // Buttons
+        Button feedBtn = new Button("Feed");
+        Button playBtn = new Button("Play");
+        Button sleepBtn = new Button("Sleep");
+        Button healBtn = new Button("Heal");
 
-        HBox buttonBox = new HBox(15, feedButton, sleepButton, playButton, healButton);
+        HBox buttonBox = new HBox(15, feedBtn, playBtn, sleepBtn, healBtn);
         buttonBox.setPadding(new Insets(10));
+        buttonBox.setAlignment(Pos.CENTER);
 
-        // Button Actions
-        feedButton.setOnAction(e -> {
+        // Button actions
+        feedBtn.setOnAction(e -> {
             bearController.feedBear();
             updateUI();
         });
 
-        playButton.setOnAction(e -> {
+        playBtn.setOnAction(e -> {
             bearController.playWithBear();
             updateUI();
         });
 
-        sleepButton.setOnAction(e -> {
+        sleepBtn.setOnAction(e -> {
             bearController.putBearToSleep();
             updateUI();
         });
 
-        healButton.setOnAction(e -> {
+        healBtn.setOnAction(e -> {
             bearController.healBear();
             updateUI();
         });
 
-        VBox root = new VBox(20, bearImage, statsBox, buttonBox, bearStatusText);
-        root.setPadding(new Insets(10));
+        VBox root = new VBox(20, title, bearImage, statsBox, buttonBox, bearStatusText);
+        root.setPadding(new Insets(30));
+        root.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(root, 800, 600);
+
+        // Apply styles.css if present
+        var css = getClass().getResource("/styles.css");
+        if (css != null) {
+            scene.getStylesheets().add(css.toExternalForm());
+        }
+
         primaryStage.setTitle("PoCoTo - Gameplay");
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
 
-        updateUI();
+        updateUI(); // Initialize bars
     }
 
     private ProgressBar createLabeledBar(String labelText) {
-    ProgressBar bar = new ProgressBar(1.0);
-    return bar;
+        return new ProgressBar(1.0);
     }
 
     private void updateUI() {
@@ -100,17 +116,22 @@ public class GameplayScreen {
         sleepBar.setProgress(bearController.getSleepPercent());
         happinessBar.setProgress(bearController.getHappinessPercent());
 
-        // Dynamic status label
+        String type = bearController.getBear().getClass().getSimpleName().toLowerCase();
+
         if (bearController.isDead()) {
             bearStatusText.setText("Bear has died ☠");
-            bearImage.setImage(new Image("/assets/bear_dead.png"));
+            bearImage.setImage(new Image("file:assets/" + type + "_dead.png"));
         } else if (bearController.isAngry()) {
             bearStatusText.setText("Bear is angry 😠");
-            bearImage.setImage(new Image("/assets/bear_angry.png"));
+            bearImage.setImage(new Image("file:assets/" + type + "_angry.png"));
         } else {
             bearStatusText.setText("Bear is calm.");
-            bearImage.setImage(new Image("/assets/bear_idle.png"));
+            bearImage.setImage(new Image("file:assets/" + type + "_idle.png"));
         }
     }
-    
+
+    private Image getBearImage(Bear bear) {
+        String type = bear.getClass().getSimpleName().toLowerCase(); // "po", "co", "to"
+        return new Image("file:assets/" + type + "_idle.png");
+    }
 }
