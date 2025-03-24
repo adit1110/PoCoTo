@@ -19,5 +19,9 @@ public class Co extends Bear {
             health = Math.max(health - 1, MIN_STAT);
         }
     }
+
+    public String getLabel() {
+        return "Co (Polar Bear)";
+    }
     
 }

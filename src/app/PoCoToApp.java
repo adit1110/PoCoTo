@@ -24,7 +24,7 @@ public class PoCoToApp extends Application {
         showMainMenu(primaryStage);
     }
 
-    private void showMainMenu(Stage primaryStage) {
+    public void showMainMenu(Stage primaryStage) {
         Label title = new Label("PoCoTo");
         title.getStyleClass().add("title");
 
@@ -104,7 +104,7 @@ public class PoCoToApp extends Application {
         }
 
         BearController controller = new BearController(bear);
-        GameplayScreen screen = new GameplayScreen(controller);
+        GameplayScreen screen = new GameplayScreen(controller, this);
         screen.start(primaryStage);
 
         primaryStage.setWidth(800);

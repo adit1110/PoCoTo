@@ -18,4 +18,8 @@ public class Po extends Bear{
             health = Math.max(health - 3, MIN_STAT);
         }
     }
+
+    public String getLabel() {
+        return "Po (Panda)";
+    }
 }

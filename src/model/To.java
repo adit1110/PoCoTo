@@ -17,5 +17,9 @@ public class To extends Bear {
             health = Math.max(health - 2, MIN_STAT);
         }
     }
+
+    public String getLabel() {
+        return "To (Grizzly Bear)";
+    }
     
 }

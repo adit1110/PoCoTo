@@ -80,7 +80,7 @@ public abstract class Bear {
         return happiness;
     }
 
-    // Optional useful for UI (check in with group about this
+    // Optional useful for UI (check in with group about this)
     
     public double getHungerPercent() {
         return hunger / (double) MAX_STAT;
@@ -97,4 +97,6 @@ public abstract class Bear {
     public double getHappinessPercent() {
         return happiness / (double) MAX_STAT;
     }
+
+    public abstract String getLabel();
 }

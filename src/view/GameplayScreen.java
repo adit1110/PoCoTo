@@ -14,10 +14,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Bear;
+import app.PoCoToApp;
 
 public class GameplayScreen {
 
     private BearController bearController;
+
+    private PoCoToApp app;
 
     private ProgressBar hungerBar;
     private ProgressBar healthBar;
@@ -26,8 +29,15 @@ public class GameplayScreen {
     private Text bearStatusText;
     private ImageView bearImage;
 
-    public GameplayScreen(BearController controller) {
+    private Label bearNameLabel;
+    private Label hungerLabel;
+    private Label healthLabel;
+    private Label sleepLabel;
+    private Label happinessLabel;
+
+    public GameplayScreen(BearController controller, PoCoToApp app) {
         this.bearController = controller;
+        this.app = app;
     }
 
     public void start(Stage primaryStage) {
@@ -35,20 +45,34 @@ public class GameplayScreen {
         Label title = new Label("PoCoTo");
         title.getStyleClass().add("title");
 
-        // Stat bars
-        hungerBar = createLabeledBar("Hunger");
-        healthBar = createLabeledBar("Health");
-        sleepBar = createLabeledBar("Sleep");
-        happinessBar = createLabeledBar("Happiness");
+        bearNameLabel = new Label(bearController.getBear().getLabel());
+        bearNameLabel.getStyleClass().add("bear-name");
 
-        VBox statsBox = new VBox(10);
+        // Stat bars with labels
+        hungerLabel = new Label("Hunger");
+        hungerBar = createLabeledBar("Hunger");
+        HBox hungerBox = new HBox(10, hungerLabel, hungerBar);
+
+        healthLabel = new Label("Health");
+        healthBar = createLabeledBar("Health");
+        HBox healthBox = new HBox(10, healthLabel, healthBar);
+
+        sleepLabel = new Label("Sleep");
+        sleepBar = createLabeledBar("Sleep");
+        HBox sleepBox = new HBox(10, sleepLabel, sleepBar);
+        
+        happinessLabel = new Label("Happiness");
+        happinessBar = createLabeledBar("Happiness");
+        HBox happinessBox = new HBox(10, happinessLabel, happinessBar);
+
+        VBox statsBox = new VBox(10, hungerBox, healthBox, sleepBox, happinessBox);
         statsBox.setPadding(new Insets(20));
-        statsBox.getChildren().addAll(hungerBar, healthBar, sleepBar, happinessBar);
         statsBox.setAlignment(Pos.CENTER);
 
         // Bear image
         bearImage = new ImageView(getBearImage(bearController.getBear()));
         bearImage.setFitWidth(150);
+        bearImage.setFitHeight(150);
         bearImage.setPreserveRatio(true);
 
         // Status
@@ -64,6 +88,16 @@ public class GameplayScreen {
         HBox buttonBox = new HBox(15, feedBtn, playBtn, sleepBtn, healBtn);
         buttonBox.setPadding(new Insets(10));
         buttonBox.setAlignment(Pos.CENTER);
+
+        //Save/Load stub buttons
+        Button saveButton = new Button("Save Game");
+        Button loadButton = new Button("Load Game");
+        HBox saveLoadBox = new HBox(15, saveButton, loadButton);
+        saveLoadBox.setAlignment(Pos.CENTER);
+
+        // Back to Main Menu button
+        Button backButton = new Button("Back to Main Menu");
+        backButton.setOnAction(e -> app.showMainMenu(primaryStage));
 
         // Button actions
         feedBtn.setOnAction(e -> {
@@ -86,13 +120,14 @@ public class GameplayScreen {
             updateUI();
         });
 
-        VBox root = new VBox(20, title, bearImage, statsBox, buttonBox, bearStatusText);
+        VBox.setMargin(bearImage, new Insets(10, 0, 10, 0));
+        VBox root = new VBox(25, title, bearNameLabel, bearImage, statsBox, buttonBox, saveLoadBox, bearStatusText, backButton);
         root.setPadding(new Insets(30));
         root.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(root, 800, 600);
 
-        // Apply styles.css if present
+        // Apply styles.css
         var css = getClass().getResource("/styles.css");
         if (css != null) {
             scene.getStylesheets().add(css.toExternalForm());
@@ -103,7 +138,7 @@ public class GameplayScreen {
         primaryStage.setResizable(false);
         primaryStage.show();
 
-        updateUI(); // Initialize bars
+        updateUI();
     }
 
     private ProgressBar createLabeledBar(String labelText) {
@@ -111,10 +146,23 @@ public class GameplayScreen {
     }
 
     private void updateUI() {
-        hungerBar.setProgress(bearController.getHungerPercent());
-        healthBar.setProgress(bearController.getHealthPercent());
-        sleepBar.setProgress(bearController.getSleepPercent());
-        happinessBar.setProgress(bearController.getHappinessPercent());
+
+        bearNameLabel.setText(bearController.getBear().getLabel());
+        
+        double hunger = bearController.getHungerPercent();
+        double health = bearController.getHealthPercent();
+        double sleep = bearController.getSleepPercent();
+        double happiness = bearController.getHappinessPercent();
+
+        hungerBar.setProgress(hunger);
+        healthBar.setProgress(health);
+        sleepBar.setProgress(sleep);
+        happinessBar.setProgress(happiness);
+
+        hungerLabel.setText("Hunger: " + Math.round(hunger * 100) + "%");
+        healthLabel.setText("Health: " + Math.round(health * 100) + "%");
+        sleepLabel.setText("Sleep: " + Math.round(sleep * 100) + "%");
+        happinessLabel.setText("Happiness: " + Math.round(happiness * 100) + "%");
 
         String type = bearController.getBear().getClass().getSimpleName().toLowerCase();
 
@@ -133,5 +181,13 @@ public class GameplayScreen {
     private Image getBearImage(Bear bear) {
         String type = bear.getClass().getSimpleName().toLowerCase(); // "po", "co", "to"
         return new Image("file:assets/" + type + "_idle.png");
+    }
+
+    private void saveGame() {
+        System.out.println("Saving game...");
+    }
+
+    private void loadGame() {
+        System.out.println("Loading game...");
     }
 }
