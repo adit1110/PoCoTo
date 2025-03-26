@@ -13,6 +13,7 @@ package app;
 import java.net.URL;
 
 import controller.BearController;
+import controller.GameController;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -44,7 +45,7 @@ public class PoCoToApp extends Application {
         Button exitButton = new Button("Exit");
 
         newGameButton.setOnAction(e -> showBearSelection(primaryStage));
-        loadGameButton.setOnAction(e -> loadGame());
+        loadGameButton.setOnAction(e -> loadGame(primaryStage));
         settingsButton.setOnAction(e -> openSettings());
         exitButton.setOnAction(e -> primaryStage.close());
 
@@ -113,6 +114,8 @@ public class PoCoToApp extends Application {
                 return; // fail silently
         }
 
+        GameController.setCurrentBear(bear);
+
         BearController controller = new BearController(bear);
         GameplayScreen screen = new GameplayScreen(controller, this);
         screen.start(primaryStage);
@@ -122,9 +125,13 @@ public class PoCoToApp extends Application {
         primaryStage.setResizable(false);
     }
 
-    private void loadGame() {
-        System.out.println("Loading game...");
-        // Implement game loading functionality
+    private void loadGame(Stage primaryStage) { // doesn't work without Stage in the code
+        Bear loadedBear = GameController.loadGame();
+        if(loadedBear != null) {
+            BearController controller = new BearController(loadedBear);
+            GameplayScreen screen = new GameplayScreen(controller, this);
+            screen.start(primaryStage);
+        }
     }
 
     private void openSettings() {

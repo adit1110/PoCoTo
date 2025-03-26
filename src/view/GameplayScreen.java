@@ -15,6 +15,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Bear;
 import app.PoCoToApp;
+import controller.GameController;
+import view.PauseMenu;
 
 public class GameplayScreen {
 
@@ -84,8 +86,9 @@ public class GameplayScreen {
         Button playBtn = new Button("Play");
         Button sleepBtn = new Button("Sleep");
         Button healBtn = new Button("Heal");
+        Button pauseBtn = new Button("Pause");
 
-        HBox buttonBox = new HBox(15, feedBtn, playBtn, sleepBtn, healBtn);
+        HBox buttonBox = new HBox(15, feedBtn, playBtn, sleepBtn, healBtn, pauseBtn);
         buttonBox.setPadding(new Insets(10));
         buttonBox.setAlignment(Pos.CENTER);
 
@@ -119,6 +122,17 @@ public class GameplayScreen {
             bearController.healBear();
             updateUI();
         });
+
+        pauseBtn.setOnAction(e -> {   //By Jayansh Bagga- Pause Button Action 
+            PauseMenu pauseMenu = new PauseMenu(
+                primaryStage, // if needed, pass primaryStage directly
+                () -> {}, // Resume - currently does nothing
+                () -> GameController.saveGame(), // Save
+                () -> app.showMainMenu(primaryStage) // Return to main menu
+            );
+            pauseMenu.show();
+        });
+
 
         VBox.setMargin(bearImage, new Insets(10, 0, 10, 0));
         VBox root = new VBox(25, title, bearNameLabel, bearImage, statsBox, buttonBox, saveLoadBox, bearStatusText, backButton);

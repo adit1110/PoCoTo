@@ -7,11 +7,13 @@
 
 package model;
 
+import java.io.Serializable;
+
 /**
  * Abstract class representing a Bear.
  * Contains common fields and methods used by all bear types.
  */
-public abstract class Bear {
+public abstract class Bear implements Serializable {
     // Basic attributes for a bear
     protected String name;
     protected int hunger;
