@@ -1,0 +1,10 @@
+# Ignore compiled class files and build output
+/bin/
+*.class
+
+# Ignore serialized save data
+bear_save.dat
+
+# Ignore JARs (optional)
+*.jar
+git
