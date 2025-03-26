@@ -3,6 +3,7 @@ package app;
 import java.net.URL;
 
 import controller.BearController;
+import controller.GameController;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -103,6 +104,8 @@ public class PoCoToApp extends Application {
                 return; // fail silently
         }
 
+        GameController.setCurrentBear(bear); // Added by Jayansh Bagga - this should set currentBear to save 
+
         BearController controller = new BearController(bear);
         GameplayScreen screen = new GameplayScreen(controller, this);
         screen.start(primaryStage);
@@ -113,8 +116,13 @@ public class PoCoToApp extends Application {
     }
 
     private void loadGame() {
-        System.out.println("Loading game...");
-        // Implement game loading functionality
+        Bear loadedBear = GameController.loadGame();  // Added by Jayansh Bagga - implemented load game method 
+        if (loadedBear != null) {
+            BearController controller = new BearController(loadedBear);
+            GameplayScreen screen = new GameplayScreen(controller, this);
+            screen.start(primaryStage);
+}
+
     }
 
     private void openSettings() {

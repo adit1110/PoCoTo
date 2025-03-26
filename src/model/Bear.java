@@ -1,6 +1,6 @@
 package model;
 
-public abstract class Bear {
+public abstract class Bear implements Serializable { //Serializable Added By Jayansh Bagga, This allows bear onbjects to be saveable via seralization. 
     protected String name;
     protected int hunger;
     protected int health;
