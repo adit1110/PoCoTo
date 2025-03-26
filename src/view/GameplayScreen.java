@@ -1,5 +1,7 @@
 package view;
 
+import view.PauseMenu;
+import controller.GameController;
 import controller.BearController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,7 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.image.ImageView; 
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -86,9 +88,11 @@ public class GameplayScreen {
         Button playBtn = new Button("Play");
         Button sleepBtn = new Button("Sleep");
         Button healBtn = new Button("Heal");
-        Button pauseBtn = new Button("Pause");
 
-        HBox buttonBox = new HBox(15, feedBtn, playBtn, sleepBtn, healBtn, pauseBtn);
+        Button pauseBtn = new Button("Pause"); //Added by Jayansh Bagga
+
+        HBox buttonBox = new HBox(15, feedBtn, playBtn, sleepBtn, healBtn, pauseBtn); //pause button update - By Jayansh Bagga
+
         buttonBox.setPadding(new Insets(10));
         buttonBox.setAlignment(Pos.CENTER);
 
@@ -125,13 +129,14 @@ public class GameplayScreen {
 
         pauseBtn.setOnAction(e -> {   //By Jayansh Bagga- Pause Button Action 
             PauseMenu pauseMenu = new PauseMenu(
-                primaryStage, // if needed, pass primaryStage directly
+                primaryStage, // if needed, pass primaryStage directly (changed to primaryStage by Adit)
                 () -> {}, // Resume - currently does nothing
                 () -> GameController.saveGame(), // Save
                 () -> app.showMainMenu(primaryStage) // Return to main menu
             );
             pauseMenu.show();
         });
+
 
 
         VBox.setMargin(bearImage, new Insets(10, 0, 10, 0));

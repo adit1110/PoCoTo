@@ -114,7 +114,8 @@ public class PoCoToApp extends Application {
                 return; // fail silently
         }
 
-        GameController.setCurrentBear(bear);
+        GameController.setCurrentBear(bear); // Added by Jayansh Bagga - this should set currentBear to save
+        
 
         BearController controller = new BearController(bear);
         GameplayScreen screen = new GameplayScreen(controller, this);
