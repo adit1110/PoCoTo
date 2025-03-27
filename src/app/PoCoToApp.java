@@ -1,8 +1,19 @@
+/** PoCoToApp.Java 
+ * By: Adit Bhimani
+ * PoCoToApp.java is the main app file of the game. It is the entry point of the game.
+ * It contains the main method and the start method. The start method is responsible for
+ * displaying the main menu of the game. The main menu contains buttons for starting a new game,
+ * loading a game, opening settings, and exiting the game. The start method also sets the scene
+ * for the main menu and sets the title of the stage. The main method calls the launch method
+ * to start the game.
+ * 
+ * */ 
 package app;
 
 import java.net.URL;
 
 import controller.BearController;
+import controller.GameController;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -34,7 +45,7 @@ public class PoCoToApp extends Application {
         Button exitButton = new Button("Exit");
 
         newGameButton.setOnAction(e -> showBearSelection(primaryStage));
-        loadGameButton.setOnAction(e -> loadGame());
+        loadGameButton.setOnAction(e -> loadGame(primaryStage));
         settingsButton.setOnAction(e -> openSettings());
         exitButton.setOnAction(e -> primaryStage.close());
 
@@ -103,6 +114,9 @@ public class PoCoToApp extends Application {
                 return; // fail silently
         }
 
+        GameController.setCurrentBear(bear); // Added by Jayansh Bagga - this should set currentBear to save
+        
+
         BearController controller = new BearController(bear);
         GameplayScreen screen = new GameplayScreen(controller, this);
         screen.start(primaryStage);
@@ -112,9 +126,13 @@ public class PoCoToApp extends Application {
         primaryStage.setResizable(false);
     }
 
-    private void loadGame() {
-        System.out.println("Loading game...");
-        // Implement game loading functionality
+    private void loadGame(Stage primaryStage) {
+        Bear loadedBear = GameController.loadGame();
+        if(loadedBear != null) {
+            BearController controller = new BearController(loadedBear);
+            GameplayScreen screen = new GameplayScreen(controller, this);
+            screen.start(primaryStage);
+        }
     }
 
     private void openSettings() {

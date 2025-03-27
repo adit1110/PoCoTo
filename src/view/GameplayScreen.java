@@ -1,5 +1,15 @@
+/**
+ * Author: Adit Bhimani
+ * GameplayScreen.java represents the main gameplay screen.
+ * It displays the bear's stats, image, and buttons to interact with the bear.
+ * It also displays a pause button to pause the game.
+ * It also displays a save and load button to save and load the game.
+ */
+
 package view;
 
+import view.PauseMenu;
+import controller.GameController;
 import controller.BearController;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,13 +18,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.image.ImageView; 
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Bear;
 import app.PoCoToApp;
+import controller.GameController;
+import view.PauseMenu;
 
 public class GameplayScreen {
 
@@ -85,7 +97,10 @@ public class GameplayScreen {
         Button sleepBtn = new Button("Sleep");
         Button healBtn = new Button("Heal");
 
-        HBox buttonBox = new HBox(15, feedBtn, playBtn, sleepBtn, healBtn);
+        Button pauseBtn = new Button("Pause"); //Added by Jayansh Bagga
+
+        HBox buttonBox = new HBox(15, feedBtn, playBtn, sleepBtn, healBtn, pauseBtn); //pause button update - By Jayansh Bagga
+
         buttonBox.setPadding(new Insets(10));
         buttonBox.setAlignment(Pos.CENTER);
 
@@ -119,6 +134,18 @@ public class GameplayScreen {
             bearController.healBear();
             updateUI();
         });
+
+        pauseBtn.setOnAction(e -> {   //By Jayansh Bagga- Pause Button Action 
+            PauseMenu pauseMenu = new PauseMenu(
+                primaryStage, // if needed, pass primaryStage directly (changed to primaryStage by Adit)
+                () -> {}, // Resume - currently does nothing
+                () -> GameController.saveGame(), // Save
+                () -> app.showMainMenu(primaryStage) // Return to main menu
+            );
+            pauseMenu.show();
+        });
+
+
 
         VBox.setMargin(bearImage, new Insets(10, 0, 10, 0));
         VBox root = new VBox(25, title, bearNameLabel, bearImage, statsBox, buttonBox, saveLoadBox, bearStatusText, backButton);
