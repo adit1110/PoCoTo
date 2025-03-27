@@ -1,4 +1,4 @@
-package test.view;
+package test;
 
 import javafx.stage.Stage;
 import javafx.application.Platform;
@@ -48,7 +48,7 @@ public class PauseMenuTest {
             );
 
             menu.show();                      // Simulate showing it again before triggering
-            menu.resumeAction.run();          // Simulate clicking resume button
+            menu.getResumeAction().run();          // Simulate clicking resume button
 
             // Verify the action was executed
             assertTrue(resumeCalled[0], "Resume action should be triggered");

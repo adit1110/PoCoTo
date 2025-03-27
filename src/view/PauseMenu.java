@@ -77,4 +77,8 @@ public class PauseMenu {
     public void show() {
         pauseStage.showAndWait();
     }
+
+    public Runnable getResumeAction() {
+        return onResume;
+    }
 }
