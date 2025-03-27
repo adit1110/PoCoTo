@@ -1,3 +1,11 @@
+/**
+ * Author: Adit Bhimani
+ * GameplayScreen.java represents the main gameplay screen.
+ * It displays the bear's stats, image, and buttons to interact with the bear.
+ * It also displays a pause button to pause the game.
+ * It also displays a save and load button to save and load the game.
+ */
+
 package view;
 
 import view.PauseMenu;

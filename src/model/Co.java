@@ -6,6 +6,10 @@
 
  package model;
 
+/**
+ * Represents a Polar Bear in the PoCoTo game.
+ * Co has unique behavior affecting how it updates health when hungry.
+ */
 public class Co extends Bear {
 
     public Co(String name) {
