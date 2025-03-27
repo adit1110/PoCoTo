@@ -126,7 +126,7 @@ public class PoCoToApp extends Application {
         primaryStage.setResizable(false);
     }
 
-    private void loadGame(Stage primaryStage) { // doesn't work without Stage in the code
+    private void loadGame(Stage primaryStage) {
         Bear loadedBear = GameController.loadGame();
         if(loadedBear != null) {
             BearController controller = new BearController(loadedBear);

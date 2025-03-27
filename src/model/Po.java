@@ -7,6 +7,10 @@
 
 package model;
 
+/**
+ * Represents a Panda Bear in the PoCoTo game.
+ * Po has a special behavior where it becomes angry more easily.
+ */
 public class Po extends Bear {
 
     public Po(String name) {
