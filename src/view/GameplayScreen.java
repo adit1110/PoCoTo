@@ -130,7 +130,9 @@ public class GameplayScreen {
         pauseBtn.setOnAction(e -> {   //By Jayansh Bagga- Pause Button Action 
             PauseMenu pauseMenu = new PauseMenu(
                 primaryStage, // if needed, pass primaryStage directly (changed to primaryStage by Adit)
-                () -> {}, // Resume - currently does nothing
+                () -> {
+                    System.out.println("Game resumed."); //resume action 
+                }, 
                 () -> GameController.saveGame(), // Save
                 () -> app.showMainMenu(primaryStage) // Return to main menu
             );
