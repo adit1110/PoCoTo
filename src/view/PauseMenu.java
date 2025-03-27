@@ -1,6 +1,7 @@
 package view;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -37,16 +38,22 @@ public class PauseMenu {
         pauseStage.setTitle("Paused");
 
         VBox layout = new VBox(15);
-        layout.setPadding(new Insets(20));
+        layout.setPadding(new Insets(20));                          // Added by Jayansh Bagga - adds padding
+        layout.setAlignment(Pos.CENTER);                            // Added by Jayansh Bagga - centers button layout
 
         Button resumeButton = new Button("Resume");
         Button saveButton = new Button("Save Game");
         Button mainMenuButton = new Button("Main Menu");
 
+        // Added by Jayansh Bagga - uniform styling for buttons
+        resumeButton.setPrefWidth(120);
+        saveButton.setPrefWidth(120);
+        mainMenuButton.setPrefWidth(120);
+
         // Button Actions
         resumeButton.setOnAction(e -> {
-            onResume.run();
-            pauseStage.close();
+            onResume.run();                                         // Added by Jayansh Bagga - triggers resume logic passed from GameplayScreen
+            pauseStage.close();                                     // Added by Jayansh Bagga - closes the pause menu
         });
 
         saveButton.setOnAction(e -> {
@@ -58,7 +65,7 @@ public class PauseMenu {
             pauseStage.close();
         });
 
-        layout.getChildren().addAll(resumeButton, saveButton, mainMenuButton);
+        layout.getChildren().addAll(resumeButton, saveButton, mainMenuButton);  // Updated layout structure
 
         Scene scene = new Scene(layout, 300, 200);
         pauseStage.setScene(scene);
@@ -69,5 +76,9 @@ public class PauseMenu {
      */
     public void show() {
         pauseStage.showAndWait();
+    }
+
+    public Runnable getResumeAction() {
+        return onResume;
     }
 }
