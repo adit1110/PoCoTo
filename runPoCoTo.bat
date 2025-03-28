@@ -1,20 +1,3 @@
-@REM @echo off
-@REM echo Compiling PoCoTo Project...
-
-@REM javac --module-path "C:\Program Files\Java\javafx-sdk-23.0.2\lib" --add-modules javafx.controls,javafx.fxml -d bin src\app\PoCoToApp.java src\controller\*.java src\model\*.java src\view\*.java
-
-@REM if %errorlevel% neq 0 (
-@REM     echo Compilation failed!
-@REM     pause
-@REM     exit /b
-@REM )
-
-@REM echo Running PoCoToApp...
-
-@REM java --module-path "C:\Program Files\Java\javafx-sdk-23.0.2\lib" --add-modules javafx.controls,javafx.fxml -cp bin app.PoCoToApp
-
-@REM pause
-
 @echo off
 setlocal
 
