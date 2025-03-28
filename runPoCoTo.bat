@@ -22,13 +22,13 @@ src/service/*.java
 
 IF %ERRORLEVEL% NEQ 0 (
     echo.
-    echo ❌ Compilation failed!
+    echo Compilation failed!
     pause
     exit /b
 )
 
 echo.
-echo ✅ Compilation successful!
+echo Compilation successful!
 echo Running PoCoToApp...
 
 :: Run the app
