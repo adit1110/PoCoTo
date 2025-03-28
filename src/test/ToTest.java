@@ -1,5 +1,5 @@
 /**
- * Author: Adit Bhimani
+ * @author: Adit Bhimani
  * Unit tests for the To (Grizzly Bear) class.
  * Focuses on stat decay and emotional impact on health.
  */

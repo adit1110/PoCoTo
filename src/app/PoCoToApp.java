@@ -1,5 +1,5 @@
 /** PoCoToApp.Java 
- * By: Adit Bhimani
+ * @author: Adit Bhimani
  * PoCoToApp.java is the main app file of the game. It is the entry point of the game.
  * It contains the main method and the start method. The start method is responsible for
  * displaying the main menu of the game. The main menu contains buttons for starting a new game,
@@ -27,6 +27,12 @@ import model.Co;
 import model.Po;
 import model.To;
 import view.GameplayScreen;
+
+/**
+ * PoCoToApp is the main application class for the PoCoTo game.
+ * It initializes the JavaFX application and displays the main menu.
+ * The main menu allows users to start a new game, load a game, open settings, or exit the game.
+ */
 
 public class PoCoToApp extends Application {
 

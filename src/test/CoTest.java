@@ -1,5 +1,5 @@
 /**
- * By: Adit Bhimani
+ * @author: Adit Bhimani
  * Unit tests for the Co (Polar Bear) class.
  * Verifies stat update and hunger-related health loss.
  */

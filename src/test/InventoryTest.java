@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * By: Krish Patel
+ * @author: Krish Patel
  * Unit tests for the Inventory class.
  * This class verifies the functionality of methods in the Inventory class.
  * It tests adding, using, and checking items in the inventory.

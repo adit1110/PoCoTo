@@ -4,7 +4,7 @@
  * and user statistics display. Additionally, it features "Save" and "Cancel" buttons to 
  * confirm or cancel the settings.
  * 
- * @author Krish Patel
+ * @author: Krish Patel
  */
 
 package view;

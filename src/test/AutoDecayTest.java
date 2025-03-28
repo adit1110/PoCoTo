@@ -1,5 +1,5 @@
 /**
- * @author Adit Bhimani
+ * @author: Adit Bhimani
  * JUnit test for verifying that a bear's stats decrease over time.
  * This test ensures that the auto-decay feature works as intended.
  */

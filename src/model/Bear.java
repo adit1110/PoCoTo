@@ -1,5 +1,5 @@
 /**
- * Author: Adit Bhimani
+ * @author: Adit Bhimani
  * Bear.java is an abstract class that represents a bear in the game. It contains
  * the bear's name, hunger, health, sleep, and happiness used by all bear types
  * 

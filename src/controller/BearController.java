@@ -1,12 +1,18 @@
 /**
- * Author: Adit Bhimani
  * BearController acts as an intermediary between the bear model and the UI.
  * It provides methods to trigger bear actions and access bear state.
+ * @author: Adit Bhimani
  */
 
 package controller;
 
 import model.Bear;
+
+/**
+ * BearController class manages the bear's state and actions.
+ * It provides methods to interact with the bear and retrieve its stats.
+ * This class is responsible for handling user-triggered actions and updating the bear's state.
+ */
 
 public class BearController {
 

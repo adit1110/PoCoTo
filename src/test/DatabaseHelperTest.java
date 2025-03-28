@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * DatabaseHelperTest.java
  * Unit tests for saving and loading Bear game data to and from a file
  * using JSON format.
- * Created by Bhavya Sharma
+ * @author: Bhavya Sharma
  */
 
 public class DatabaseHelperTest {

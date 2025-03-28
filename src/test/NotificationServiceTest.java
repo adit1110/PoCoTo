@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Unit tests for the NotificationService class
  * Ensures that the correct notification is displayed based on the bear's status
  * and that the notification text is set correctly.
- * Created by Bhavya Sharma
+ * @author: Bhavya Sharma
  */
 
 public class NotificationServiceTest {

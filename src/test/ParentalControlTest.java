@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * By: Krish Patel
+ * @author: Krish Patel
  * Unit tests for the ParentalControl class.
  * This class verifies the functionality of methods in the ParentalControl class.
  * It tests the functionality of playtime limit, character revival toggle, and user statistics.

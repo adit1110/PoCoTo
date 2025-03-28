@@ -1,5 +1,5 @@
 /**
- * Author: Adit Bhimani
+ * @author: Adit Bhimani
  * Unit tests for the Po (Panda Bear) class.
  * Verifies stat changes and state transitions.
  */

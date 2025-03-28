@@ -5,7 +5,7 @@ package model;
  * It holds a Bear object, an Inventory object, and the player's score.
  * It also tracks session time and provides methods to manage the player's game progress.
  * 
- * @author Krish Patel
+ * @author: Krish Patel
  */
 public class Player {
 

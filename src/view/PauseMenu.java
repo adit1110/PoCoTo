@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 /**
  * PauseMenu.java
  * Implements the Pause Menu UI with Resume, Save, and Main Menu buttons.
- * Created by Jayansh Bagga
+ * @author: Jayansh Bagga
  */
 public class PauseMenu {
 

@@ -1,5 +1,5 @@
 /**
- * Author: Adit Bhimani
+ * @author: Adit Bhimani
  * Co class represents the Polar Bear type.
  * Implements specific behavior for updating stats.
  */

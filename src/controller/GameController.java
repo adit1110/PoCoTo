@@ -6,7 +6,7 @@ import model.Bear;
 /**
  * GameController.java
  * Handles current game state, saving, and loading bear instance.
- * Created by Jayansh Bagga
+ * @author: Jayansh Bagga
  */
 public class GameController {
 

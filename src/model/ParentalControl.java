@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
  * It interacts with the Bear object and provides functionality like session tracking
  * and setting up playtime limits for guardians.
  * 
- * @author Krish Patel
+ * @author: Krish Patel
  */
 public class ParentalControl {
 

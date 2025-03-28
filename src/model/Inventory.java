@@ -7,7 +7,7 @@ import java.util.Map;
  * The Inventory class tracks the items and their counts for a player in the Bear game.
  * It provides methods to add, use, and check items in the inventory.
  * 
- * @author Krish Patel
+ * @author: Krish Patel
  */
 public class Inventory {
 

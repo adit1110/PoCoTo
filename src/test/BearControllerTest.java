@@ -1,5 +1,5 @@
 /**
- * Author: Adit Bhimani
+ * @author: Adit Bhimani
  * 
  * This test class verifies the functionality of the BearController class.
  * It ensures that bear actions correctly affect the bear's state and that 

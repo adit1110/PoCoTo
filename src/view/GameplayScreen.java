@@ -1,5 +1,5 @@
 /**
- * Author: Adit Bhimani
+ * @author: Adit Bhimani
  * GameplayScreen.java represents the main gameplay screen.
  * It displays the bear's stats, image, and buttons to interact with the bear.
  * It also displays a pause button to pause the game.
@@ -33,6 +33,9 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
+/**
+ * GameplayScreen class represents the main gameplay screen of the application.
+ */
 
 public class GameplayScreen {
 

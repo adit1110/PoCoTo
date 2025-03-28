@@ -1,5 +1,5 @@
 /**
- * Author: Adit Bhimani
+ * @author: Adit Bhimani
  * To class represents the Grizzly Bear type.
  * Implements specific behavior for updating stats.
  */

@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * PauseMenuTest.java
  * Verifies PauseMenu functionality including resume callback execution.
- * Created by Jayansh Bagga
+ * @author: Jayansh Bagga
  */
 public class PauseMenuTest {
 

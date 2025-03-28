@@ -1,5 +1,5 @@
 /**
- * Author: Adit Bhimani
+ * @author: Adit Bhimani
  *
  * Po class represents the Panda bear type.
  * Implements specific behavior for updating stats.
