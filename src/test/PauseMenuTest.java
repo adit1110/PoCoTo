@@ -1,4 +1,4 @@
-package test;
+package test; // modified by Adit to fix the package name
 
 import javafx.stage.Stage;
 import javafx.application.Platform;
