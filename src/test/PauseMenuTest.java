@@ -1,4 +1,4 @@
-package test.view;
+package test; // Modified by Adit to fix the package name
 
 import javafx.stage.Stage;
 import javafx.application.Platform;
@@ -31,9 +31,9 @@ public class PauseMenuTest {
                 () -> {},
                 () -> {}
             );
-            menu.show();
-            // Manually simulate resume
-            menu.show();
+
+            menu.show();                           // Simulate showing the menu
+            menu.getResumeAction().run();          // Simulate clicking resume button
         });
 
         Thread.sleep(1000); // Allow time for JavaFX thread

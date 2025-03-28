@@ -24,9 +24,15 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Bear;
+import service.NotificationService; // added by Bhavya Sharma
 import app.PoCoToApp;
 import controller.GameController;
 import view.PauseMenu;
+import controller.SaveLoadController; // added by Bhavya Sharma
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+
 
 public class GameplayScreen {
 
@@ -46,9 +52,13 @@ public class GameplayScreen {
     private Label healthLabel;
     private Label sleepLabel;
     private Label happinessLabel;
+    private NotificationService notificationService; // added by Bhavya Sharma
+    private SaveLoadController saveLoadController; // added by Bhavya Sharma
+    private Timeline autoDecayTimer;
 
     public GameplayScreen(BearController controller, PoCoToApp app) {
         this.bearController = controller;
+        this.notificationService = new NotificationService(bearStatusText); // implemented by Bhavya Sharma
         this.app = app;
     }
 
@@ -89,7 +99,8 @@ public class GameplayScreen {
 
         // Status
         bearStatusText = new Text("Bear is calm.");
-        bearStatusText.getStyleClass().add("text");
+        saveLoadController = new SaveLoadController(bearController.getBear()); // added by Bhavya Sharma
+        bearStatusText.getStyleClass().add("text"); // added by Bhavya Sharma
 
         // Buttons
         Button feedBtn = new Button("Feed");
@@ -118,21 +129,25 @@ public class GameplayScreen {
         feedBtn.setOnAction(e -> {
             bearController.feedBear();
             updateUI();
+            notificationService.checkBearStatus(bearController.getBear()); // added by Bhavya Sharma
         });
 
         playBtn.setOnAction(e -> {
             bearController.playWithBear();
             updateUI();
+            notificationService.checkBearStatus(bearController.getBear()); // added by Bhavya Sharma
         });
 
         sleepBtn.setOnAction(e -> {
             bearController.putBearToSleep();
             updateUI();
+            notificationService.checkBearStatus(bearController.getBear()); // added by Bhavya Sharma
         });
 
         healBtn.setOnAction(e -> {
             bearController.healBear();
             updateUI();
+            notificationService.checkBearStatus(bearController.getBear()); // added by Bhavya Sharma
         });
 
         pauseBtn.setOnAction(e -> {   //By Jayansh Bagga- Pause Button Action 
@@ -168,6 +183,7 @@ public class GameplayScreen {
         primaryStage.show();
 
         updateUI();
+        startAutoDecay();
     }
 
     private ProgressBar createLabeledBar(String labelText) {
@@ -219,4 +235,14 @@ public class GameplayScreen {
     private void loadGame() {
         System.out.println("Loading game...");
     }
+
+    private void startAutoDecay() {
+    autoDecayTimer = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
+        bearController.updateBear();
+        updateUI();
+    }));
+    autoDecayTimer.setCycleCount(Timeline.INDEFINITE);
+    autoDecayTimer.play();
+}
+
 }

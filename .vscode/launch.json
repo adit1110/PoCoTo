@@ -4,7 +4,13 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-    
+        {
+            "type": "java",
+            "name": "PoCoToApp",
+            "request": "launch",
+            "mainClass": "app.PoCoToApp",
+            "projectName": "group50_1e9e7a98"
+        },
         {
             "type": "java",
             "name": "Current File",
@@ -17,7 +23,7 @@
             "request": "launch",
             "mainClass": "PoCoToApp",
             "projectName": "group50_43259ea2",
-             "vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-23.0.2/lib\" --add-modules javafx.controls,javafx.fxml"
+            "vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-23.0.2/lib\" --add-modules javafx.controls,javafx.fxml"
         }
     ]
 }
