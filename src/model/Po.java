@@ -31,8 +31,8 @@ public class Po extends Bear {
         happiness = Math.max(happiness - 2, MIN_STAT);
 
         // If hunger is less than or equal to 25, drop health by 3 points
-        if (hunger <= 25) {
-            health = Math.max(health - 3, MIN_STAT);
+        if (hunger < 25 || sleep < 20) {
+        health = Math.max(health - 2, MIN_STAT);
         }
     }
 

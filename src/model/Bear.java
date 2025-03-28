@@ -55,10 +55,7 @@ public abstract class Bear implements Serializable { //Serializable Added By Jay
      * @param amount the amount of sleep recovery
      */
     public void sleep(int amount) {
-        // NOTE: There is an error here: it uses hunger instead of sleep. 
-        // It should probably be:
-        // sleep = Math.min(sleep + amount, MAX_STAT);
-        sleep = Math.min(hunger + amount, MAX_STAT);
+        sleep = Math.min(sleep + amount, MAX_STAT);
     }
 
     /**
@@ -67,9 +64,6 @@ public abstract class Bear implements Serializable { //Serializable Added By Jay
      * @param amount the amount of fun to add
      */
     public void play(int amount) {
-        // NOTE: Same potential error: It uses hunger instead of happiness.
-        // It should probably be:
-        // happiness = Math.min(happiness + amount, MAX_STAT);
         happiness = Math.min(hunger + amount, MAX_STAT);
     }
 
@@ -79,9 +73,6 @@ public abstract class Bear implements Serializable { //Serializable Added By Jay
      * @param amount the healing amount
      */
     public void heal(int amount) {
-        // NOTE: Again, it uses hunger instead of health.
-        // It should likely be:
-        // health = Math.min(health + amount, MAX_STAT);
         health = Math.min(hunger + amount, MAX_STAT);
     }
 

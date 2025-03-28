@@ -67,7 +67,7 @@ public class PauseMenu {
 
         layout.getChildren().addAll(resumeButton, saveButton, mainMenuButton);  // Updated layout structure
 
-        Scene scene = new Scene(layout, 300, 200);
+        Scene scene = new Scene(layout, 800, 600); // changed by Adit to make the window bigger
         pauseStage.setScene(scene);
     }
 
@@ -79,6 +79,6 @@ public class PauseMenu {
     }
 
     public Runnable getResumeAction() {
-        return onResume;
+        return onResume; // added by Adit to help test the resume action
     }
 }

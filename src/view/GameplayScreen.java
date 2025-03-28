@@ -27,6 +27,10 @@ import model.Bear;
 import app.PoCoToApp;
 import controller.GameController;
 import view.PauseMenu;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
+
 
 public class GameplayScreen {
 
@@ -46,6 +50,7 @@ public class GameplayScreen {
     private Label healthLabel;
     private Label sleepLabel;
     private Label happinessLabel;
+    private Timeline autoDecayTimer;
 
     public GameplayScreen(BearController controller, PoCoToApp app) {
         this.bearController = controller;
@@ -168,6 +173,7 @@ public class GameplayScreen {
         primaryStage.show();
 
         updateUI();
+        startAutoDecay();
     }
 
     private ProgressBar createLabeledBar(String labelText) {
@@ -219,4 +225,14 @@ public class GameplayScreen {
     private void loadGame() {
         System.out.println("Loading game...");
     }
+
+    private void startAutoDecay() {
+    autoDecayTimer = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
+        bearController.updateBear();
+        updateUI();
+    }));
+    autoDecayTimer.setCycleCount(Timeline.INDEFINITE);
+    autoDecayTimer.play();
+}
+
 }
