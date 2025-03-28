@@ -32,29 +32,38 @@ import controller.SaveLoadController; // added by Bhavya Sharma
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
+import model.Po;
+import model.Co;
+import model.To;
 
 /**
  * GameplayScreen class represents the main gameplay screen of the application.
+ * Handles UI layout, bear interaction buttons, visual updates, and decay logic.
  */
 
 public class GameplayScreen {
 
+    // Controllers and app references
     private BearController bearController;
-
     private PoCoToApp app;
 
+    // UI components for bear stats
     private ProgressBar hungerBar;
     private ProgressBar healthBar;
     private ProgressBar sleepBar;
     private ProgressBar happinessBar;
+    
     private Text bearStatusText;
     private ImageView bearImage;
 
+    // Labels for bear names and stats
     private Label bearNameLabel;
     private Label hungerLabel;
     private Label healthLabel;
     private Label sleepLabel;
     private Label happinessLabel;
+    
+    // Services and helper classes
     private NotificationService notificationService; // added by Bhavya Sharma
     private SaveLoadController saveLoadController; // added by Bhavya Sharma
     private Timeline autoDecayTimer;
@@ -62,6 +71,8 @@ public class GameplayScreen {
     /**
      * Constructor to initialize the GameplayScreen with a BearController and PoCoToApp instance.
      * This constructor sets up the UI components and their layout.
+     * @param controller the controller handling the current bear's logic
+     * @param app reference to the main app file for screen navigation
      */
     public GameplayScreen(BearController controller, PoCoToApp app) {
         this.bearController = controller;
@@ -69,6 +80,11 @@ public class GameplayScreen {
         this.app = app;
     }
 
+    /**
+     * Launches the gameplay UI with stat bars, bear image, interaction buttons, and timers.
+     *
+     * @param primaryStage the main stage passed from the application entry point
+     */
     public void start(Stage primaryStage) {
         // Title label
         Label title = new Label("PoCoTo");
@@ -98,13 +114,13 @@ public class GameplayScreen {
         statsBox.setPadding(new Insets(20));
         statsBox.setAlignment(Pos.CENTER);
 
-        // Bear image
+        // Bear image setup
         bearImage = new ImageView(getBearImage(bearController.getBear()));
         bearImage.setFitWidth(150);
         bearImage.setFitHeight(150);
         bearImage.setPreserveRatio(true);
 
-        // Status
+        // Status text setup
         bearStatusText = new Text("Bear is calm.");
         saveLoadController = new SaveLoadController(bearController.getBear()); // added by Bhavya Sharma
         bearStatusText.getStyleClass().add("text"); // added by Bhavya Sharma
@@ -114,11 +130,9 @@ public class GameplayScreen {
         Button playBtn = new Button("Play");
         Button sleepBtn = new Button("Sleep");
         Button healBtn = new Button("Heal");
-
         Button pauseBtn = new Button("Pause"); //Added by Jayansh Bagga
 
         HBox buttonBox = new HBox(15, feedBtn, playBtn, sleepBtn, healBtn, pauseBtn); //pause button update - By Jayansh Bagga
-
         buttonBox.setPadding(new Insets(10));
         buttonBox.setAlignment(Pos.CENTER);
 
@@ -132,7 +146,7 @@ public class GameplayScreen {
         Button backButton = new Button("Back to Main Menu");
         backButton.setOnAction(e -> app.showMainMenu(primaryStage));
 
-        // Button actions
+        // Button logic for user interactions
         feedBtn.setOnAction(e -> {
             bearController.feedBear();
             updateUI();
@@ -176,7 +190,7 @@ public class GameplayScreen {
         root.setPadding(new Insets(30));
         root.setAlignment(Pos.CENTER);
 
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 800, 600); // game screen dimensions
 
         // Apply styles.css
         var css = getClass().getResource("/styles.css");
@@ -193,10 +207,19 @@ public class GameplayScreen {
         startAutoDecay();
     }
 
+    /**
+     * Creates a progress bar for a given stat.
+     *
+     * @param labelText the stat name
+     * @return ProgressBar with full value (1.0)
+     */
     private ProgressBar createLabeledBar(String labelText) {
         return new ProgressBar(1.0);
     }
 
+    /**
+     * Updates all bear stats on the UI and the corresponding bear sprite/status
+     */
     private void updateUI() {
 
         bearNameLabel.setText(bearController.getBear().getLabel());
@@ -217,32 +240,88 @@ public class GameplayScreen {
         happinessLabel.setText("Happiness: " + Math.round(happiness * 100) + "%");
 
         String type = bearController.getBear().getClass().getSimpleName().toLowerCase();
+        Bear currentBear = bearController.getBear();
+        bearImage.setImage(new Image("file: " + getBearSpritePath(currentBear)));
 
-        if (bearController.isDead()) {
-            bearStatusText.setText("Bear has died ☠");
-            bearImage.setImage(new Image("file:assets/" + type + "_dead.png"));
-        } else if (bearController.isAngry()) {
-            bearStatusText.setText("Bear is angry 😠");
-            bearImage.setImage(new Image("file:assets/" + type + "_angry.png"));
+        // text to pop up based on the bear's status
+        if (currentBear.isDead()) {
+            bearStatusText.setText("Bear has died");
+        } else if (currentBear.isAngry()) {
+            bearStatusText.setText("Bear is angry");
+        } else if (currentBear.isHungry()) {
+            bearStatusText.setText("Bear is hungry");
+        } else if (currentBear.isTired()) {
+            bearStatusText.setText("Bear is tired");
         } else {
-            bearStatusText.setText("Bear is calm.");
-            bearImage.setImage(new Image("file:assets/" + type + "_idle.png"));
+            bearStatusText.setText("Bear is calm");
         }
     }
 
+    /**
+     * Determines the path of the bear's sprite based on type of bear and the status of the bear
+     * 
+     * @param bear the bear object
+     * @return path to the sprite image file
+     */
+    
+    private String getBearSpritePath(Bear bear) {
+        if (bear instanceof Po) {
+            if(bear.isTired()) {
+                return "assets/po_sleep.png";
+            }
+            if(bear.isHungry()) {
+                return "assets/po_hungry.png";
+            }
+            return "assets/po_play.png";
+        } else if (bear instanceof Co) {
+            if(bear.isTired()) {
+                return "assets/co_sleep.png";
+            }
+            if(bear.isHungry()) {
+                return "assets/co_hungry.png";
+            }
+            return "assets/co_play.png";
+        }else if (bear instanceof To) {
+            if(bear.isTired()) {
+                return "assets/to_sleep.png";
+            }
+            if(bear.isHungry()) {
+                return "assets/to_hungry.png";
+            }
+            return "assets/to_play.png";
+        }
+        throw new IllegalArgumentException("Unknown bear type: " + bear.getClass().getSimpleName()); // default fallback if needed
+    }
+
+    
+    /**
+     * Gets the default idle image for the bear when game starts.
+     *
+     * @param bear the bear object
+     * @return Image representing the idle sprite
+     */
     private Image getBearImage(Bear bear) {
         String type = bear.getClass().getSimpleName().toLowerCase(); // "po", "co", "to"
         return new Image("file:assets/" + type + "_idle.png");
     }
 
+    /**
+     * Triggers dummy save logic
+     */
     private void saveGame() {
         System.out.println("Saving game...");
     }
 
+    /**
+     * Triggers dummy load logic
+     */
     private void loadGame() {
         System.out.println("Loading game...");
     }
 
+    /**
+     * Starts automatic stat decay using a Timeline that runs every 5 seconds.
+     */
     private void startAutoDecay() {
     autoDecayTimer = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
         bearController.updateBear();
