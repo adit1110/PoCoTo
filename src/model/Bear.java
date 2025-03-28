@@ -167,4 +167,11 @@ public abstract class Bear implements Serializable { //Serializable Added By Jay
      * @return the display label for the bear.
      */
     public abstract String getLabel();
+
+    public void revive() { // Added by Adit to help fix ParentalControl.java tester file
+        hunger = MAX_STAT;
+        health = MAX_STAT;
+        sleep = MAX_STAT;
+        happiness = MAX_STAT;
+    }
 }

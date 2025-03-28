@@ -1,6 +1,7 @@
 package test;
 
 import model.Player;
+import model.Po; // added by Adit to help fix the tests not working
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +23,7 @@ class PlayerTest {
     @BeforeEach
     void setUp() {
         // Assuming that Player requires a Bear object in the constructor
-        player = new Player(new Bear("Bear1"));
+        player = new Player(new Po("Bear1"));
     }
 
     /**

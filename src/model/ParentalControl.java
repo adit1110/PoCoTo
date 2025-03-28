@@ -17,6 +17,9 @@ public class ParentalControl {
     private int totalSessions;
     private boolean isRevivalEnabled;
     private int maxPlaytimeMinutes;
+    private boolean characterRevivalEnabled = false; // added by Adit to help fix tests not running
+    private String password = ""; // added by Adit to help fix tests not running
+
 
     private Bear bear;
 
@@ -140,4 +143,26 @@ public class ParentalControl {
     public boolean isRevivalEnabled() {
         return isRevivalEnabled;
     }
+
+    public void toggleCharacterRevival(boolean enabled) {
+        this.characterRevivalEnabled = enabled;
+    }
+
+    public boolean isCharacterRevivalEnabled() {
+        return characterRevivalEnabled;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public boolean checkPassword(String input) {
+        return this.password.equals(input);
+    }
+
+    public String getUserStatistics() {
+        return "Playtime Limit: " + maxPlaytimeMinutes + "\n" +
+                "Character Revival: " + (characterRevivalEnabled ? "Enabled" : "Disabled");
+}
+
 }

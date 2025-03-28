@@ -58,7 +58,7 @@ public class GameplayScreen {
 
     public GameplayScreen(BearController controller, PoCoToApp app) {
         this.bearController = controller;
-        this.notificationService = new NotificationService(controller.getBear()); // implemented by Bhavya Sharma
+        this.notificationService = new NotificationService(bearStatusText); // implemented by Bhavya Sharma
         this.app = app;
     }
 
@@ -99,7 +99,6 @@ public class GameplayScreen {
 
         // Status
         bearStatusText = new Text("Bear is calm.");
-        notificationService = notificationService(bearStatusText); // added by Bhavya Sharma
         saveLoadController = new SaveLoadController(bearController.getBear()); // added by Bhavya Sharma
         bearStatusText.getStyleClass().add("text"); // added by Bhavya Sharma
 
@@ -210,7 +209,6 @@ public class GameplayScreen {
         sleepLabel.setText("Sleep: " + Math.round(sleep * 100) + "%");
         happinessLabel.setText("Happiness: " + Math.round(happiness * 100) + "%");
 
-        String alert = notifier.checkAlerts(); // implemented by Bhavya Sharma
         String type = bearController.getBear().getClass().getSimpleName().toLowerCase();
 
         if (bearController.isDead()) {

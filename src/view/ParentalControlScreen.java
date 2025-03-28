@@ -30,6 +30,7 @@ public class ParentalControlScreen {
 
     private Stage primaryStage;
 
+
     /**
      * Constructs the ParentalControlScreen UI components, including the password field,
      * playtime limit dropdown, revival toggle, user statistics display, and action buttons.
@@ -111,3 +112,4 @@ public class ParentalControlScreen {
         primaryStage.close();  // Close the window if Cancel is clicked
     }
 }
+

@@ -1,5 +1,6 @@
 package test;
 
+import model.Po; // added by Adit to help fix the tests not working
 import model.ParentalControl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ class ParentalControlTest {
      */
     @BeforeEach
     void setUp() {
-        parentalControl = new ParentalControl();
+        parentalControl = new ParentalControl(new Po("Bear1"));
     }
 
     /**
