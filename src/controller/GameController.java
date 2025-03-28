@@ -1,12 +1,6 @@
 package controller;
 
-
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.*; 
+import java.io.*;
 import model.Bear;
 
 /**
@@ -16,27 +10,30 @@ import model.Bear;
  */
 public class GameController {
 
+    /** The currently selected bear */
     private static Bear currentBear;
-    private static final String SAVE_FILE = "bear_save.dat"; // Save file name
+
+    /** Save file path */
+    private static final String SAVE_FILE = "bear_save.dat";
 
     /**
-     * Sets the currently active bear
-     * @param bear the selected bear object
+     * Sets the current bear in session
+     * @param bear the active Bear object
      */
     public static void setCurrentBear(Bear bear) {
         currentBear = bear;
     }
 
     /**
-     * Gets the currently active bear
-     * @return Bear object currently in play
+     * Returns the current bear instance
+     * @return Bear object currently being played
      */
     public static Bear getCurrentBear() {
         return currentBear;
     }
 
     /**
-     * Saves the current bear to a file using serialization
+     * Saves the current bear state to disk using serialization
      */
     public static void saveGame() {
         if (currentBear == null) {
@@ -53,8 +50,8 @@ public class GameController {
     }
 
     /**
-     * Loads the bear object from save file
-     * @return the loaded Bear or null if failed
+     * Loads the saved bear from disk
+     * @return Bear object or null on failure
      */
     public static Bear loadGame() {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(SAVE_FILE))) {

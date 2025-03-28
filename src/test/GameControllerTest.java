@@ -1,14 +1,10 @@
-package test;
+package test.controller;
 
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import org.junit.jupiter.api.Test; // libraries added by Jayansh Bagga
-
-import controller.GameController; // libraries added by Jayansh Bagga
-import model.Bear; // libraries added by Jayansh Bagga
-import model.Po; // libraries added by Jayansh Bagga
+import model.Bear;
+import model.Po;
+import controller.GameController;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * GameControllerTest.java
@@ -18,7 +14,7 @@ import model.Po; // libraries added by Jayansh Bagga
 public class GameControllerTest {
 
     /**
-     * Test whether setCurrentBear() correctly stores the bear
+     * Tests whether GameController properly stores and retrieves current bear
      */
     @Test
     public void testSetAndGetCurrentBear() {
@@ -29,13 +25,12 @@ public class GameControllerTest {
     }
 
     /**
-     * Test saving a bear and loading it back from file
-     * Ensures hunger value is retained
+     * Tests saving and loading a bear, and ensures hunger state is preserved
      */
     @Test
     public void testSaveAndLoadBear() {
         Bear bear = new Po("Po");
-        bear.feed(-40); // Reduce hunger to simulate change
+        bear.feed(-40); // Simulate change in hunger
         GameController.setCurrentBear(bear);
         GameController.saveGame();
 
