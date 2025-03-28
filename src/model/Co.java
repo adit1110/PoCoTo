@@ -12,6 +12,9 @@
  */
 public class Co extends Bear {
 
+    /**
+     * Constructor to initialize a Co bear with a name.
+     */
     public Co(String name) {
         super(name);
     }

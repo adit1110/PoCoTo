@@ -66,28 +66,46 @@ public class BearController {
 
     // UI Display Values: methods to get normalized percentages of each stat.
 
+    /*
+     * Returns the bear's hunger percentage.
+     */
     public double getHungerPercent() {
         return bear.getHungerPercent();
     }
 
+    /*
+     * Returns the bear's health percentage.
+     */
     public double getHealthPercent() {
         return bear.getHealthPercent();
     }
 
+    /*
+     * Returns the bear's sleep percentage.
+     */
     public double getSleepPercent() {
         return bear.getSleepPercent();
     }
 
+    /*
+     * Returns the bear's happiness percentage.
+     */
     public double getHappinessPercent() {
         return bear.getHappinessPercent();
     }
 
     // State checkers
 
+    /*
+     * Checks if the bear is dead.
+     */
     public boolean isDead() {
         return bear.isDead();
     }
 
+    /*
+     * Checks if the bear is angry.
+     */
     public boolean isAngry() {
         return bear.isAngry();
     }

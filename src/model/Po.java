@@ -13,6 +13,9 @@ package model;
  */
 public class Po extends Bear {
 
+    /**
+     * Constructor to initialize a Po bear with a name.
+     */
     public Po(String name) {
         super(name);
     }

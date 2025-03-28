@@ -59,6 +59,10 @@ public class GameplayScreen {
     private SaveLoadController saveLoadController; // added by Bhavya Sharma
     private Timeline autoDecayTimer;
 
+    /**
+     * Constructor to initialize the GameplayScreen with a BearController and PoCoToApp instance.
+     * This constructor sets up the UI components and their layout.
+     */
     public GameplayScreen(BearController controller, PoCoToApp app) {
         this.bearController = controller;
         this.notificationService = new NotificationService(bearStatusText); // implemented by Bhavya Sharma

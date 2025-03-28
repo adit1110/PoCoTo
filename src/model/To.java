@@ -12,6 +12,9 @@ package model;
  */
 public class To extends Bear {
 
+    /**
+     * Constructor to initialize a To bear with a name.
+     */
     public To(String name) {
         super(name);
     }

@@ -14,14 +14,40 @@ import java.io.Serializable;
  */
 public abstract class Bear implements Serializable { //Serializable Added By Jayansh Bagga, This allows bear onbjects to be saveable via seralization.
     // Basic attributes for a bear
+    
+    /**
+     * The name of the bear.
+     */
     protected String name;
+    
+    /**
+     * The bear's current hunger level
+     */
     protected int hunger;
+    
+    /**
+     * The bear's current health level
+     */
     protected int health;
+    
+    /**
+     * The bear's current sleep level
+     */
     protected int sleep;
+    /**
+     * The bear's current happiness level
+     */
     protected int happiness;
 
-    // Maximum and minimum values for the stats
+    
+    /**
+     * The maximum values for the bear's stats.
+     */
     protected final int MAX_STAT = 100;
+
+    /**
+     * The minimum values for the bear's stats.
+     */
     protected final int MIN_STAT = 0;
 
     /**
@@ -122,40 +148,80 @@ public abstract class Bear implements Serializable { //Serializable Added By Jay
 
     // Getters for the bear's attributes
 
+    /**
+     * Retrives the name of the bear
+     * @return the name of the bear.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets the bear's current hunger level.
+     * @return the bear's current hunger level.
+     */
     public int getHunger() {
         return hunger;
     }
 
+    /**
+     * Gets the bear's current health level.
+     * @return the bear's current health level.
+     */
     public int getHealth() {
         return health;
     }
 
+    /**
+     * Gets the bear's current sleep level.
+     * @return the current sleep level of the bear.
+     */
     public int getSleep() {
         return sleep;
     }
 
+    /**
+     * Returns how happy the bear currently is.
+     * @return the current happiness level of the bear.
+     */
     public int getHappiness() {
         return happiness;
     }
 
     // These methods return normalized percentages (0.0 to 1.0) for UI usage.
 
+    /**
+     * Calculates the bear's current hunger level as a percentage of max.
+     * 
+     * @return the hunger percentage (0.0 to 1.0).
+     */
     public double getHungerPercent() {
         return hunger / (double) MAX_STAT;
     }
 
+    /**
+    * Calculates the bear's current health level as a percentage of the max.
+    *
+    * @return the health level as a value between 0.0 and 1.0
+    */
     public double getHealthPercent() {
         return health / (double) MAX_STAT;
     }
 
+    /**
+    * Calculates the bear's current sleep level as a percentage of the max.
+    *
+    * @return the sleep level as a value between 0.0 and 1.0
+    */
     public double getSleepPercent() {
         return sleep / (double) MAX_STAT;
     }
 
+    /**
+    * Calculates the bear's current happiness level as a percentage of the max.
+    *
+    * @return the happiness level as a value between 0.0 and 1.0
+    */
     public double getHappinessPercent() {
         return happiness / (double) MAX_STAT;
     }
@@ -168,6 +234,10 @@ public abstract class Bear implements Serializable { //Serializable Added By Jay
      */
     public abstract String getLabel();
 
+    /**
+     * Revive the bear by restoring all stats to max level
+     * Used for testing or game reset purposes
+     */
     public void revive() { // Added by Adit to help fix ParentalControl.java tester file
         hunger = MAX_STAT;
         health = MAX_STAT;
