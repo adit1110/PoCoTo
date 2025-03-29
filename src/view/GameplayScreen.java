@@ -198,7 +198,7 @@ public class GameplayScreen {
                 () -> {
                     System.out.println("Game resumed."); //resume action 
                 }, 
-                () -> GameController.saveGame(), // Save
+                () -> GameController.saveGame(bearController.getBear()), // Save (modified by Adit to pass the bear into the method call)
                 () -> app.showMainMenu(primaryStage) // Return to main menu
             );
             pauseMenu.show();
