@@ -32,7 +32,7 @@ public class GameControllerTest {
         Bear bear = new Po("Po");
         bear.feed(-40); // Simulate change in hunger
         GameController.setCurrentBear(bear);
-        GameController.saveGame();
+        GameController.saveGame(bear); // bear added into brackets by Adit to help tests run
 
         Bear loaded = GameController.loadGame();
         assertNotNull(loaded, "Loaded bear should not be null");
