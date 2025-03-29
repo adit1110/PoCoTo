@@ -277,7 +277,7 @@ public class GameplayScreen {
 
         String type = bearController.getBear().getClass().getSimpleName().toLowerCase();
         Bear currentBear = bearController.getBear();
-        bearImage.setImage(new Image("file: " + getBearSpritePath(currentBear)));
+        bearImage.setImage(new Image("file:" + getBearSpritePath(currentBear)));
 
         // text to pop up based on the bear's status
         if (currentBear.isDead()) {
