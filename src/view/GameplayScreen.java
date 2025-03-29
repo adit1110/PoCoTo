@@ -35,6 +35,10 @@ import javafx.util.Duration;
 import model.Po;
 import model.Co;
 import model.To;
+import view.ParentalControlScreen; // added by Adit
+import model.Inventory;
+import javafx.scene.control.Alert;
+import java.util.List;
 
 /**
  * GameplayScreen class represents the main gameplay screen of the application.
@@ -67,6 +71,8 @@ public class GameplayScreen {
     private NotificationService notificationService; // added by Bhavya Sharma
     private SaveLoadController saveLoadController; // added by Bhavya Sharma
     private Timeline autoDecayTimer;
+
+    private Inventory inventory = new Inventory(); // Inventory instance for the inventory
 
     /**
      * Constructor to initialize the GameplayScreen with a BearController and PoCoToApp instance.
@@ -131,19 +137,34 @@ public class GameplayScreen {
         Button sleepBtn = new Button("Sleep");
         Button healBtn = new Button("Heal");
         Button pauseBtn = new Button("Pause"); //Added by Jayansh Bagga
+        Button saveButton = new Button("Save Game"); // moved up here by Adit
+        Button loadButton = new Button("Load Game"); // moved up here by Adit
+        Button backButton = new Button("Back to Main Menu"); // moved up here by Adit
+        Button parentalControlBtn = new Button("Parental Controls"); // added by Adit to display the Parental Controls button
+        Button InventoryBtn = new Button("Inventory"); // added by Adit to display the Inventory button
 
-        HBox buttonBox = new HBox(15, feedBtn, playBtn, sleepBtn, healBtn, pauseBtn); //pause button update - By Jayansh Bagga
+        // Set preferred widths for consistent button sizing
+        feedBtn.setPrefWidth(100);
+        playBtn.setPrefWidth(100);
+        sleepBtn.setPrefWidth(100);
+        healBtn.setPrefWidth(100);
+        pauseBtn.setPrefWidth(100);
+        parentalControlBtn.setPrefWidth(150);
+        InventoryBtn.setPrefWidth(100);
+        saveButton.setPrefWidth(120);
+        loadButton.setPrefWidth(120);
+        backButton.setPrefWidth(150);
+
+
+        HBox buttonBox = new HBox(15, feedBtn, playBtn, sleepBtn, healBtn, pauseBtn, parentalControlBtn, InventoryBtn); //pause button update - By Jayansh Bagga
         buttonBox.setPadding(new Insets(10));
         buttonBox.setAlignment(Pos.CENTER);
 
         //Save/Load stub buttons
-        Button saveButton = new Button("Save Game");
-        Button loadButton = new Button("Load Game");
         HBox saveLoadBox = new HBox(15, saveButton, loadButton);
         saveLoadBox.setAlignment(Pos.CENTER);
 
         // Back to Main Menu button
-        Button backButton = new Button("Back to Main Menu");
         backButton.setOnAction(e -> app.showMainMenu(primaryStage));
 
         // Button logic for user interactions
@@ -181,6 +202,21 @@ public class GameplayScreen {
                 () -> app.showMainMenu(primaryStage) // Return to main menu
             );
             pauseMenu.show();
+        });
+
+        parentalControlBtn.setOnAction(e -> { // added by Adit for the parentalControl button
+            ParentalControlScreen screen = new ParentalControlScreen(primaryStage);
+            primaryStage.setScene(new Scene(screen.getRoot()));
+            primaryStage.show();
+        });
+
+        InventoryBtn.setOnAction(e -> { // added by Adit to show the Inventory Button
+            List<String> items = Inventory.getItems();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Inventory");
+            alert.setHeaderText("Your Items: ");
+            alert.setContentText(String.join("\n", items.isEmpty() ? List.of("No items yet!") : items));
+            alert.showAndWait();
         });
 
 

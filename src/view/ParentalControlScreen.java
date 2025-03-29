@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.scene.Parent; // added by Adit
 
 
 public class ParentalControlScreen {
@@ -29,6 +30,8 @@ public class ParentalControlScreen {
     private Button cancelButton;
 
     private Stage primaryStage;
+
+    private VBox root; // added by Adit
 
 
     /**
@@ -60,7 +63,7 @@ public class ParentalControlScreen {
         cancelButton.setOnAction(event -> cancelSettings());
 
         // Layout arrangement
-        VBox layout = new VBox(10);
+        VBox layout = new VBox(10); // fixed by Adit
         layout.getChildren().addAll(
                 passwordField,
                 playtimeLimitDropdown,
@@ -70,7 +73,9 @@ public class ParentalControlScreen {
                 cancelButton
         );
 
-        Scene scene = new Scene(layout, 300, 250);
+        this.root = layout; // added by Adit
+
+        Scene scene = new Scene(layout, 800, 600); // dimensions changed by Adit
         primaryStage.setTitle("Parental Controls");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -110,6 +115,10 @@ public class ParentalControlScreen {
         revivalToggleButton.setSelected(true);
         userStatsDisplay.setText("User Statistics: \nTotal Playtime: 0 hours\nTotal Sessions: 0");
         primaryStage.close();  // Close the window if Cancel is clicked
+    }
+
+    public Parent getRoot() { // added by Adit to make ParentalControlScreen's UI into a scene manually
+        return root;
     }
 }
 

@@ -2,6 +2,9 @@ package model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List; // added by Adit for the List<String> method
+import java.util.ArrayList; // added by Adit for the List<String> method
+
 
 /**
  * The Inventory class tracks the items and their counts for a player in the Bear game.
@@ -11,7 +14,7 @@ import java.util.Map;
  */
 public class Inventory {
 
-    private Map<String, Integer> items;
+    private static Map<String, Integer> items; // changed by Adit to include static to safely call it from the static method getItems()
 
     /**
      * Constructs an Inventory object with an empty list of items.
@@ -60,4 +63,18 @@ public class Inventory {
     public int getItemCount(String item) {
         return items.getOrDefault(item, 0);
     }
+
+    /** Added by Adit to implement a static getItems() method
+     * Returns a copy of the inventory items as a formatted list of strings.
+     * 
+     * @return A list of strings representating each item and its count
+     */
+
+     public static List<String> getItems() {
+        List<String> itemList = new ArrayList<>();
+        for(Map.Entry<String, Integer> entry: items.entrySet()) {
+            itemList.add(entry.getKey() + ": " + entry.getValue());
+        }
+        return itemList;
+     }
 }
