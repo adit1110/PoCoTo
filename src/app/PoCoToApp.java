@@ -134,11 +134,12 @@ public class PoCoToApp extends Application {
 
     private void loadGame(Stage primaryStage) {
         Bear loadedBear = GameController.loadGame();
-        if(loadedBear != null) {
-            BearController controller = new BearController(loadedBear);
-            GameplayScreen screen = new GameplayScreen(controller, this);
+        if (loadedBear != null) {
+            GameController.setCurrentBear(loadedBear);
+            GameplayScreen screen = new GameplayScreen(new BearController(loadedBear), this);
             screen.start(primaryStage);
         }
+
     }
 
     private void openSettings() {

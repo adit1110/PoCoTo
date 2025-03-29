@@ -1,5 +1,6 @@
 package view;
 
+import controller.GameController;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -46,6 +47,10 @@ public class PauseMenu {
         });
 
         Button saveButton = new Button("Save Game");
+        saveButton.setOnAction(e -> {
+            GameController.saveGame(GameController.getCurrentBear());
+        });
+
         Button mainMenuButton = new Button("Main Menu");
 
         saveButton.setOnAction(e -> {
