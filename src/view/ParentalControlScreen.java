@@ -10,7 +10,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.Parent; // added by Adit
 /**
- * ParetalControlScreen has all the components for the admin options with dropdown with a password field.
+ * ParentalControlScreen has all the components for the admin options with dropdown with a password field.
  */
 public class ParentalControlScreen {
 
