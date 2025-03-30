@@ -20,6 +20,9 @@ import javafx.stage.Stage;
 import controller.BearController; // added by Adit
 import app.PoCoToApp; // added by Adit
 
+/**
+ * The InventoryScreen class represents the UI and all the items placed in the inventory section
+ */
 public class InventoryScreen {
     private Stage primaryStage;
     private BearController controller; // added by Adit
