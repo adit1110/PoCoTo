@@ -1,12 +1,3 @@
-/**
- * The ParentalControlScreen class provides a user interface for guardians to manage parental controls.
- * It includes password-protected access, playtime limit settings, character revival toggle, 
- * and user statistics display. Additionally, it features "Save" and "Cancel" buttons to 
- * confirm or cancel the settings.
- * 
- * @author: Krish Patel
- */
-
 package view;
 
 import javafx.scene.Scene;
@@ -18,7 +9,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.Parent; // added by Adit
-
 
 public class ParentalControlScreen {
 
@@ -63,7 +53,7 @@ public class ParentalControlScreen {
         cancelButton.setOnAction(event -> cancelSettings());
 
         // Layout arrangement
-        VBox layout = new VBox(10); // fixed by Adit
+        VBox layout = new VBox(15);  // Added custom spacing
         layout.getChildren().addAll(
                 passwordField,
                 playtimeLimitDropdown,
@@ -75,9 +65,17 @@ public class ParentalControlScreen {
 
         this.root = layout; // added by Adit
 
-        Scene scene = new Scene(layout, 800, 600); // dimensions changed by Adit
+        // Create the scene with the layout and set dimensions
+        Scene scene = new Scene(layout, 800, 600);
+
+        // Link the stylesheet to the scene
+        scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+
+        // Set the title and scene for the stage
         primaryStage.setTitle("Parental Controls");
         primaryStage.setScene(scene);
+
+        // Show the stage
         primaryStage.show();
     }
 
@@ -121,4 +119,3 @@ public class ParentalControlScreen {
         return root;
     }
 }
-
