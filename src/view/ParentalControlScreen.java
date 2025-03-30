@@ -9,7 +9,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.Parent; // added by Adit
-
+/**
+ * ParetalControlScreen has all the components for the admin options with dropdown with a password field.
+ */
 public class ParentalControlScreen {
 
     private PasswordField passwordField;
@@ -88,6 +90,7 @@ public class ParentalControlScreen {
         String password = passwordField.getText();
 
         // Check for valid admin password
+        // Password is: admin
         if (password.equals("admin")) {
             String playtimeLimit = playtimeLimitDropdown.getValue();
             boolean isRevivalEnabled = revivalToggleButton.isSelected();
