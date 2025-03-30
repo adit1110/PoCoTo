@@ -39,6 +39,7 @@ import view.ParentalControlScreen; // added by Adit
 import model.Inventory;
 import javafx.scene.control.Alert;
 import java.util.List;
+import view.GameplayScreen;
 
 /**
  * GameplayScreen class represents the main gameplay screen of the application.

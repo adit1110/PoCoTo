@@ -1,3 +1,5 @@
+package view; // added by Adit
+
 /**
  * The InventoryScreen class represents the inventory UI in the game.
  * It displays available items (apple and banana) and allows the player
