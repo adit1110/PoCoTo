@@ -16,9 +16,15 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.geometry.Insets; // added by Adit
+import javafx.geometry.Pos; // added by Adit
+import javafx.scene.layout.HBox; // added by Adit
 import javafx.stage.Stage;
 import controller.BearController; // added by Adit
 import app.PoCoToApp; // added by Adit
+import javafx.scene.text.Text; // added by Adit
+
+
 
 /**
  * The InventoryScreen class represents the UI and all the items placed in the inventory section
@@ -27,6 +33,7 @@ public class InventoryScreen {
     private Stage primaryStage;
     private BearController controller; // added by Adit
     private PoCoToApp app; // added by Adit
+    private Text feedbackText; // added by Adit
 
     public InventoryScreen(Stage primaryStage, BearController controller, PoCoToApp app) {
         this.primaryStage = primaryStage;
@@ -37,18 +44,39 @@ public class InventoryScreen {
 
     private void showInventoryScreen() {
         VBox layout = new VBox(20);
+        layout.setPadding(new Insets(20)); // added by Adit to style the inventory screen
+        layout.setAlignment(Pos.CENTER); // added by Adit to style the inventory screen
+        layout.setStyle("-fx-background-color: #2c3e50;"); // added by Adit to style the inventory screen
+
+        HBox imageBox = new HBox(40); // added by Adit to style the inventory screen
+        imageBox.setAlignment(Pos.CENTER); // added by Adit to style the inventory screen
+
+        feedbackText = new Text(""); // added by Adit to have a visual confirmation for feeding the bear show up
+        feedbackText.setStyle("-fx-fill: white; -fx-font-size: 14px;"); // added by Adit to have a visual confirmation for feeding the bear show up
         
         // Load images from assets
         Image appleImage = new Image("file:assets/apple.png");
         Image bananaImage = new Image("file:assets/banana.png");
 
+        // feed bear with fruit logic added by Adit
         ImageView appleView = new ImageView(appleImage);
-        appleView.setFitWidth(100);
-        appleView.setFitHeight(100);
+        appleView.setFitWidth(80);
+        appleView.setFitHeight(80);
+        appleView.setOnMouseClicked(e -> {
+            controller.feedBear();
+            feedbackText.setText("Fed the bear with a apple!"); // added by Adit to have a visual confirmation for feeding the bear show up
+        });
 
-        ImageView bananaView = new ImageView(bananaImage);
-        bananaView.setFitWidth(100);
-        bananaView.setFitHeight(100);
+        // feed bear with fruit logic added by Adit
+        ImageView bananaView = new ImageView(new Image("file:assets/banana.png"));
+        bananaView.setFitWidth(80);
+        bananaView.setFitHeight(80);
+        bananaView.setOnMouseClicked(e -> {
+            controller.feedBear();
+            feedbackText.setText("Fed the bear with a banana!"); // added by Adit to have a visual confirmation for feeding the bear show up
+        });
+
+        imageBox.getChildren().addAll(appleView, bananaView);
 
         // Back button to return to GameplayScreen
         Button backButton = new Button("Back to Game");
@@ -64,6 +92,7 @@ public class InventoryScreen {
         scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm()); // modified by Adit to look for styles.css from the root of the classpath
 
         primaryStage.setScene(scene);
+        primaryStage.setTitle("PoCoTo - Inventory"); // added by Adit to title the screen
         primaryStage.show();
     }
 }
