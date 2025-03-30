@@ -99,6 +99,9 @@ public class GameplayScreen {
         bearNameLabel = new Label(bearController.getBear().getLabel());
         bearNameLabel.getStyleClass().add("bear-name");
 
+        bearStatusText = new Text("Bear is calm.");
+        bearStatusText.getStyleClass().add("text");
+
         // Stat bars with labels
         hungerLabel = new Label("Hunger");
         hungerBar = createLabeledBar("Hunger");
@@ -236,6 +239,8 @@ public class GameplayScreen {
 
         primaryStage.setTitle("PoCoTo - Gameplay");
         primaryStage.setScene(scene);
+        primaryStage.setWidth(800);
+        primaryStage.setHeight(600);
         primaryStage.setResizable(false);
         primaryStage.show();
 
