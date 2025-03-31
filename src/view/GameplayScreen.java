@@ -216,12 +216,6 @@ public class GameplayScreen {
 
         InventoryBtn.setOnAction(e -> { // added by Adit to show the Inventory Button
             InventoryScreen inventoryScreen = new InventoryScreen(primaryStage, bearController, app);
-            List<String> items = Inventory.getItems();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Inventory");
-            alert.setHeaderText("Your Items: ");
-            alert.setContentText(String.join("\n", items.isEmpty() ? List.of("No items yet!") : items));
-            alert.showAndWait();
         });
 
 
