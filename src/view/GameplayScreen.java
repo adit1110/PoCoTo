@@ -83,7 +83,6 @@ public class GameplayScreen {
      */
     public GameplayScreen(BearController controller, PoCoToApp app) {
         this.bearController = controller;
-        this.notificationService = new NotificationService(bearStatusText); // implemented by Bhavya Sharma
         this.app = app;
     }
 
@@ -102,6 +101,8 @@ public class GameplayScreen {
 
         bearStatusText = new Text("Bear is calm.");
         bearStatusText.getStyleClass().add("text");
+
+        this.notificationService = new NotificationService(bearStatusText); // implemented by Bhavya Sharma (moved by Adit)
 
         // Stat bars with labels
         hungerLabel = new Label("Hunger");
