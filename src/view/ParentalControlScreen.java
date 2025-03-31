@@ -5,10 +5,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox; // added by Adit
+import javafx.geometry.Insets; // added by Adit
+import javafx.geometry.Pos; // added by Adit
+import javafx.scene.control.Label; // added by Adit
+import javafx.scene.control.Button; // added by Adit
 import javafx.scene.control.ComboBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.Parent; // added by Adit
+import app.PoCoToApp; // added by Adit
 /**
  * ParentalControlScreen has all the components for the admin options with dropdown with a password field.
  */
@@ -20,6 +26,8 @@ public class ParentalControlScreen {
     private Text userStatsDisplay;
     private Button saveButton;
     private Button cancelButton;
+    private Button mainMenuButton; // added by Adit
+    private PoCoToApp app; // Added by Adit
 
     private Stage primaryStage;
 
@@ -49,10 +57,12 @@ public class ParentalControlScreen {
 
         saveButton = new Button("Save");
         cancelButton = new Button("Cancel");
+        mainMenuButton = new Button("Back to Main Menu");
 
         // Define button actions
         saveButton.setOnAction(event -> saveSettings());
         cancelButton.setOnAction(event -> cancelSettings());
+        mainMenuButton.setOnAction(e -> app.showMainMenu(primaryStage)); // added by Adit
 
         // Layout arrangement
         VBox layout = new VBox(15);  // Added custom spacing
@@ -62,7 +72,8 @@ public class ParentalControlScreen {
                 revivalToggleButton,
                 userStatsDisplay,
                 saveButton,
-                cancelButton
+                cancelButton,
+                mainMenuButton // added by Adit
         );
 
         this.root = layout; // added by Adit
@@ -119,6 +130,25 @@ public class ParentalControlScreen {
     }
 
     public Parent getRoot() { // added by Adit to make ParentalControlScreen's UI into a scene manually
+        return root;
+    }
+
+    public VBox createFreshRoot() { // added by Adit
+        VBox root = new VBox(20);
+        root.setPadding(new Insets(20));
+
+        root.setAlignment(Pos.CENTER);
+
+        Label title = new Label("Parental Controls");
+        title.getStyleClass().add("title");
+
+        Label warningLabel = new Label("This section is restricted.");
+        warningLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px;");
+
+        Button mainMenuButton = new Button("Back to Main Menu");
+        mainMenuButton.setOnAction(e -> app.showMainMenu(primaryStage));
+
+        root.getChildren().addAll(title, warningLabel, mainMenuButton);
         return root;
     }
 }
