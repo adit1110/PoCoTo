@@ -8,8 +8,17 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import app.PoCoToApp; // added by Adit
 
 public class SettingsScreen {
+
+    private PoCoToApp app; // added by Adit
+
+    public SettingsScreen(PoCoToApp app) {
+        this.app = app;
+    }
+
+
 
     public void display(Stage primaryStage) {
         // Create the layout
@@ -48,19 +57,25 @@ public class SettingsScreen {
             System.out.println("Dark Mode: " + darkModeCheckBox.isSelected());
         });
 
-        // Back Button
-        Button backButton = new Button("Back");
+        // Back to Main Menu Button
+        Button backButton = new Button("Back to Main Menu");
         GridPane.setConstraints(backButton, 1, 3);
         backButton.setOnAction(e -> {
-            // Handle back navigation here
-            primaryStage.setScene(new Scene(new Label("Main Screen Placeholder"), 400, 300));
+            app.showMainMenu(primaryStage);
         });
 
         // Add all elements to the grid
         grid.getChildren().addAll(titleLabel, volumeLabel, volumeSlider, darkModeLabel, darkModeCheckBox, saveButton, backButton);
 
+
+        Scene settingsScene = new Scene(grid, 800, 600);
+
+        var css = getClass().getResource("/styles.css"); // added by Adit
+        if (css != null) {
+            settingsScene.getStylesheets().add(css.toExternalForm());
+        }
+
         // Create and set the scene
-        Scene settingsScene = new Scene(grid, 400, 300);
         primaryStage.setScene(settingsScene);
         primaryStage.setTitle("Settings");
         primaryStage.show();
