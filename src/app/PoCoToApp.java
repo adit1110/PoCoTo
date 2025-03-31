@@ -63,10 +63,7 @@ public class PoCoToApp extends Application {
         });
 
         parentalControlsButton.setOnAction(e -> {
-            ParentalControlScreen pcScreen = new ParentalControlScreen(primaryStage);
-            VBox freshRoot = pcScreen.createFreshRoot();
-            Scene pcScene = new Scene(freshRoot, 800, 600);
-            primaryStage.setScene(pcScene);
+            new ParentalControlScreen(primaryStage, this);
         });        
 
 

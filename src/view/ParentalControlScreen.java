@@ -40,8 +40,9 @@ public class ParentalControlScreen {
      * 
      * @param primaryStage The primary stage to display the UI.
      */
-    public ParentalControlScreen(Stage primaryStage) {
+    public ParentalControlScreen(Stage primaryStage, PoCoToApp app ) { // slightly modified by Adit
         this.primaryStage = primaryStage;
+        this.app = app; // added by Adit
 
         passwordField = new PasswordField();
         passwordField.setPromptText("Enter Admin Password");
