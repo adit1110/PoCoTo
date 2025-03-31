@@ -9,7 +9,7 @@ Bhavya Sharma
 Krish Patel
 Jeremy Ro
 
-Description
+Description:
 PoCoTo is a Java-based virtual pet simulation game where players care for one of three unique bears: Po (Panda), Co (Polar Bear), and To (Grizzly Bear). Each bear has different traits and needs. Players interact by feeding, playing, healing, and putting their bear to sleep. The goal is to maintain the bear’s happiness, hunger, sleep, and health.
 The game includes save/load features, parental controls, a settings menu, and optional mini-games for added interaction.
 
@@ -78,5 +78,11 @@ admin
 From here, you can:
 Set a daily playtime limit
 Enable or disable auto-revive for bears
+
+Debugs:
+Pause Button in the game is missing
+Minigame is not fully implemented
+Character Revive was not implemented
+
 
 No separate installation is required. This feature is built into the main game.
