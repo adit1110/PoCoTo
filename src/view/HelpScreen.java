@@ -35,15 +35,11 @@ public class HelpScreen extends Stage {
         BorderPane.setMargin(helpContent, new Insets(10, 20, 10, 20));
 
         // ---- Bottom: Navigation Buttons ----
-        Button backButton = new Button("Back");
+        Button backButton = new Button("Back to Main Menu");
         backButton.setStyle("-fx-font-size: 14px; -fx-padding: 5 15;"); // Style the button
         backButton.setOnAction(e -> close()); // Close the HelpScreen
 
-        Button contactSupportButton = new Button("Contact Support");
-        contactSupportButton.setStyle("-fx-font-size: 14px; -fx-padding: 5 15;");
-        contactSupportButton.setOnAction(e -> openSupportPage()); // Open a support page or dialog
-
-        HBox bottomBox = new HBox(10, contactSupportButton, backButton);
+        HBox bottomBox = new HBox(10, backButton);
         bottomBox.setAlignment(Pos.CENTER_RIGHT);
         bottomBox.setPadding(new Insets(10, 20, 20, 20));
 
@@ -55,7 +51,7 @@ public class HelpScreen extends Stage {
 
         // ---- Scene Setup ----
         Scene scene = new Scene(mainPane, 800, 600);
-        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm()); // External CSS
+        scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm()); // External CSS
         setScene(scene);
     }
 
@@ -85,13 +81,6 @@ public class HelpScreen extends Stage {
                "Enjoy your journey with PoCoTo!";
     }
 
-    /**
-     * Opens a support page or dialog for contacting support.
-     */
-    private void openSupportPage() {
-        // Placeholder for opening a support page or dialog
-        System.out.println("Redirecting to support page...");
-    }
 
     // Main method for standalone testing
     public static void main(String[] args) {
