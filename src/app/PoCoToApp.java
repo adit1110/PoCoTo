@@ -50,7 +50,14 @@ public class PoCoToApp extends Application {
         showMainMenu(primaryStage);
     }
 
+    /**
+     * Displays the main menu UI with all navigation buttons
+     * 
+     * @param primaryStage the window to render content into
+     */
+
     public void showMainMenu(Stage primaryStage) {
+        // title label for the game
         Label title = new Label("PoCoTo");
         title.getStyleClass().add("title");
 
@@ -62,31 +69,28 @@ public class PoCoToApp extends Application {
         Button settingsButton = new Button("Settings");
         Button exitButton = new Button("Exit");
 
+        // Create the main menu buttons
         newGameButton.setOnAction(e -> showBearSelection(primaryStage));
-        
         loadGameButton.setOnAction(e -> loadGame(primaryStage));
-        
         tutorialButton.setOnAction(e -> {
             HelpScreen help = new HelpScreen();
             help.show();
         });
-
         parentalControlsButton.setOnAction(e -> {
             new ParentalControlScreen(primaryStage, this);
         });
-
         settingsButton.setOnAction(e -> {
             SettingsScreen settingsScreen = new SettingsScreen(this);
             settingsScreen.display(primaryStage);
         });
-
         exitButton.setOnAction(e -> primaryStage.close());
 
+        // Stack menu buttons vertically
         VBox menuBox = new VBox(15, newGameButton, loadGameButton, tutorialButton, parentalControlsButton, settingsButton, exitButton);
         menuBox.setAlignment(Pos.CENTER);
 
 
-        // Credits alignment and basic formatting
+        // Credits for the team
         Label teamLabel = new Label("Created by: Adit Bhimani, Jayansh Bagga, Bhavya Sharma, Jeremy Ro, Krish Patel");
         Label teamInfoLabel = new Label("Team 50 - Winter 2025");
         Label courseLabel = new Label("Created for CS2212 at Western University");
@@ -95,17 +99,22 @@ public class PoCoToApp extends Application {
         creditsBox.getStyleClass().add("credits");
 
         
+        // Game title at the top
         VBox topBox = new VBox(10, title);
         topBox.setAlignment(Pos.CENTER);
         topBox.setPadding(new Insets(20));
 
+        // Combine all sections into a layout
         BorderPane root = new BorderPane();
         root.setTop(topBox);
         root.setCenter(menuBox);
         root.setBottom(creditsBox);
         BorderPane.setMargin(creditsBox, new Insets(20));
 
-        Scene scene = new Scene(root, 800, 600);
+        
+        Scene scene = new Scene(root, 800, 600); // screen size
+        
+        // load the css style sheet
         URL css = getClass().getResource("/styles.css");
         if (css != null) {
             scene.getStylesheets().add(css.toExternalForm());
@@ -116,15 +125,23 @@ public class PoCoToApp extends Application {
         primaryStage.show();
     }
 
+    /**
+     * Shows the bear selection screen for starting a new game.
+     * 
+     * @param primaryStage the window to render content into
+     */
     private void showBearSelection(Stage primaryStage) {
         Label title = new Label("PoCoTo");
         title.getStyleClass().add("title");
 
+        // Buttons for bear type selection
         Button poButton = new Button("Po (Panda)");
         Button coButton = new Button("Co (Polar Bear)");
         Button toButton = new Button("To (Grizzly Bear)");
         Button backButton = new Button("Back");
 
+        
+        // Button actions
         poButton.setOnAction(e -> selectBear("Po", primaryStage));
         coButton.setOnAction(e -> selectBear("Co", primaryStage));
         toButton.setOnAction(e -> selectBear("To", primaryStage));
@@ -148,6 +165,12 @@ public class PoCoToApp extends Application {
         primaryStage.setScene(scene);
     }
 
+    /**
+     * Starts the game using the selected bear.
+     * 
+     * @param bearName name identifier for the bear type
+     * @param primaryStage the main game window
+     */
     private void selectBear(String bearName, Stage primaryStage) {
         Bear bear;
         switch (bearName) {
@@ -176,6 +199,12 @@ public class PoCoToApp extends Application {
         primaryStage.setResizable(false);
     }
 
+    /**
+     * 
+     * Loads a previously saved bear and starts the game.
+     * 
+     * @param primaryStage the main game window
+     */
     private void loadGame(Stage primaryStage) {
         Bear loadedBear = GameController.loadGame();
         if (loadedBear != null) {
