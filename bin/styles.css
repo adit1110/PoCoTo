@@ -79,5 +79,25 @@
 /* Title Text */
 .title {
     -fx-font-size: 40px;
-    -fx-font
+    -fx-font-weight: bold;
+    -fx-text-fill: #ECF0F1;
+    -fx-padding: 15px;
+    -fx-border-color: #3498DB;
+    -fx-border-width: 0 0 3px 0;
+}
+
+/* Stylish Input Fields */
+.text-field, .password-field, .combo-box {
+    -fx-background-color: #ECF0F1;  /* Light grey */
+    -fx-text-fill: #2C3E50;  /* Dark blue text */
+    -fx-font-size: 16px;
+    -fx-padding: 8px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+/* Highlight input fields when focused */
+.text-field:focused, .password-field:focused, .combo-box:focused {
+    -fx-border-color: #3498DB;
+    -fx-border-width: 2px;
 }
