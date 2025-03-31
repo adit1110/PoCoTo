@@ -149,25 +149,31 @@ public class GameplayScreen {
         Button InventoryBtn = new Button("Inventory"); // added by Adit to display the Inventory button
 
         // Set preferred widths for consistent button sizing
-        feedBtn.setPrefWidth(100);
-        playBtn.setPrefWidth(100);
-        sleepBtn.setPrefWidth(100);
-        healBtn.setPrefWidth(100);
-        pauseBtn.setPrefWidth(100);
-        parentalControlBtn.setPrefWidth(150);
-        InventoryBtn.setPrefWidth(100);
-        saveButton.setPrefWidth(120);
-        loadButton.setPrefWidth(120);
-        backButton.setPrefWidth(150);
+        feedBtn.setPrefWidth(120);
+        playBtn.setPrefWidth(120);
+        sleepBtn.setPrefWidth(120);
+        healBtn.setPrefWidth(120);
+        pauseBtn.setPrefWidth(120);
+        parentalControlBtn.setPrefWidth(160);
+        InventoryBtn.setPrefWidth(120);
+        saveButton.setPrefWidth(140);
+        loadButton.setPrefWidth(140);
+        backButton.setPrefWidth(180);
 
 
-        HBox buttonBox = new HBox(15, feedBtn, playBtn, sleepBtn, healBtn, pauseBtn, parentalControlBtn, InventoryBtn); //pause button update - By Jayansh Bagga
-        buttonBox.setPadding(new Insets(10));
-        buttonBox.setAlignment(Pos.CENTER);
+        HBox topButtons = new HBox(15, feedBtn, playBtn, sleepBtn, healBtn, parentalControlBtn, InventoryBtn);
+        topButtons.setPadding(new Insets(10));
+        topButtons.setAlignment(Pos.CENTER);
 
-        //Save/Load stub buttons
         HBox saveLoadBox = new HBox(15, saveButton, loadButton);
         saveLoadBox.setAlignment(Pos.CENTER);
+
+        HBox pauseBox = new HBox(pauseBtn);
+        pauseBox.setAlignment(Pos.BOTTOM_RIGHT);
+        pauseBox.setPadding(new Insets(10, 20, 10, 10));
+
+        VBox root = new VBox(25, title, bearNameLabel, bearImage, statsBox, topButtons, saveLoadBox, bearStatusText, backButton);
+        root.setAlignment(Pos.CENTER);
 
         // Back to Main Menu button
         backButton.setOnAction(e -> app.showMainMenu(primaryStage));
@@ -222,9 +228,9 @@ public class GameplayScreen {
 
 
         VBox.setMargin(bearImage, new Insets(10, 0, 10, 0));
-        VBox root = new VBox(25, title, bearNameLabel, bearImage, statsBox, buttonBox, saveLoadBox, bearStatusText, backButton);
         root.setPadding(new Insets(30));
         root.setAlignment(Pos.CENTER);
+        
 
         Scene scene = new Scene(root, 800, 600); // game screen dimensions
 
