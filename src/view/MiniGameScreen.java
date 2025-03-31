@@ -1,3 +1,14 @@
+/**
+ * MiniGameScreen.java
+ * 
+ * This class implements a mini-game screen for the virtual pet game "PoCoTo".
+ * The mini-game is a Tic Tac Toe variant using bear-themed symbols: "Pic" (player) and "Pac" (computer).
+ * It handles player moves, makes computer moves, checks for win conditions or draw,
+ * and communicates the final result via a result handler callback.
+ * 
+ * @author Jeremy Ro
+ */
+
 package view;
 
 import javafx.application.Application;
@@ -18,6 +29,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 
+/**
+ * MiniGameScreen class represents the mini-game screen for the Tic Tac Toe variant.
+ * It extends the Stage class to create a new window for the game.
+ * The game allows a player to play against a computer in a 3x3 grid.
+ */
+
 public class MiniGameScreen extends Stage {
 
     private static final int BOARD_SIZE = 3;
@@ -30,6 +47,9 @@ public class MiniGameScreen extends Stage {
 
     private Label statusLabel; // Displays game status (e.g., "Player's Turn", "Computer Wins")
 
+    /**
+     * Constructs a new MiniGameScreen, initializing the UI elements and event handling.
+     */
     public MiniGameScreen() {
         setTitle("MiniGame: Pic, Pac, Toe");
 
@@ -54,6 +74,7 @@ public class MiniGameScreen extends Stage {
         boardGrid.setVgap(10);
         boardGrid.setAlignment(Pos.CENTER);
 
+        // Initalize board buttons
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 Button cellButton = new Button("");
@@ -90,13 +111,22 @@ public class MiniGameScreen extends Stage {
 
     /**
      * Sets the result handler callback.
+     * When the mini-game ends, the handler is called with a result string:
+     * "Player Win", "Computer Wins", or "Draw".
+     * 
+     * @param handler Consumer to process the result.
      */
+
     public void setResultHandler(Consumer<String> handler) {
         this.resultHandler = handler;
     }
 
     /**
-     * Handles the player's move.
+     * Handles the player's move when a cell is clicked.
+     * Checks if the move is valid, marks the cell, and evaluates game state.
+     *
+     * @param row the row index of the clicked cell.
+     * @param col the column index of the clicked cell.
      */
     private void handlePlayerMove(int row, int col) {
         if (gameOver) return;
@@ -152,6 +182,8 @@ public class MiniGameScreen extends Stage {
 
     /**
      * Checks the board for a winner.
+     * 
+     * @return the symbol ("Pic" or "Pac") of the winner, "Draw" if board is full with no winner, or null if the game should continue.
      */
     private String checkWinner() {
         for (int i = 0; i < BOARD_SIZE; i++) {
@@ -184,6 +216,8 @@ public class MiniGameScreen extends Stage {
 
     /**
      * Checks if the board is full.
+     * 
+     * @return true if the board is full; false otherwise.
      */
     private boolean isBoardFull() {
         for (int row = 0; row < BOARD_SIZE; row++) {
@@ -197,7 +231,9 @@ public class MiniGameScreen extends Stage {
     }
 
     /**
-     * Ends the game and displays the result.
+     * Ends the game by setting the game over flag, printing the result, and calling the result handler callback.
+     *
+     * @param winner the symbol of the winner ("Pic", "Pac", or "Draw").
      */
     private void endGame(String winner) {
         gameOver = true;
@@ -228,11 +264,18 @@ public class MiniGameScreen extends Stage {
         }
     }
 
-    // ---- Main Method for Testing ----
+    /**
+     * Main method for standalong testing.
+     * 
+     * @param args command line arguments.
+     */
     public static void main(String[] args) {
         Application.launch(TestMiniGameApp.class, args);
     }
 
+    /**
+     * Inner class for launching MiniGameScreen
+     */
     public static class TestMiniGameApp extends Application {
         @Override
         public void start(Stage primaryStage) {

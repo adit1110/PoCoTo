@@ -1,3 +1,16 @@
+/**
+ * HelpScreen.java
+ * 
+ * This class implements the help screen for the PoCoTo game using JavaFX.
+ * It displays instructions and tutorials for the game including guidance on gameplay,
+ * saving/loading, and parental controls.
+ * The screen is composed of a title, a scrollable non-editable text area with help content,
+ * and a "Back" button to close the help window.
+ * 
+ * @author Jeremy Ro
+ */
+
+
 package view;
 
 import javafx.application.Application;
@@ -11,6 +24,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+/**
+ * Constructs a new HelpScreen.
+ * Sets up the user interface elements including a title, a help content area, and a "Back" button.
+ * The scene uses an external stylesheet for consistent styling.
+ */
+
 
 public class HelpScreen extends Stage {
 
@@ -82,12 +102,20 @@ public class HelpScreen extends Stage {
     }
 
 
-    // Main method for standalone testing
+    /**
+     * Main method for standalone testing of the HelpScreen.
+     *
+     * @param args command-line arguments.
+     */
     public static void main(String[] args) {
         Application.launch(TestHelpApp.class, args);
     }
 
-    // Inner class to run the HelpScreen as a standalone application for testing.
+    /**
+     * Starts the HelpScreen and displays it.
+     *
+     * @param primaryStage the primary stage for this application.
+     */
     public static class TestHelpApp extends Application {
         @Override
         public void start(Stage primaryStage) {

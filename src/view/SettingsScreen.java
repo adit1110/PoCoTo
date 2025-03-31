@@ -1,3 +1,16 @@
+/**
+ * SettingsScreen.java
+ * 
+ * This class implements the settings screen for the PoCoTo game using JavaFX.
+ * The screen contains three tabs: General Settings, Parental Controls, and Help.
+ * It provides controls for adjusting the volume, language, display resolution,
+ * as well as options for enabling parental controls and viewing help content.
+ * 
+ * This screen is intended to be launched as a standalone window for testing or integrated into the main game flow.
+ * 
+ * @author Jeremy Ro
+ */
+
 package view;
 
 import javafx.geometry.Insets;
@@ -9,6 +22,17 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import app.PoCoToApp; // added by Adit
+
+    /**
+     * Constructs a new SettingsScreen.
+     * Initializes the user interface by creating three tabs:
+     * - General Settings: Adjust volume, language, and display resolution.
+     * - Parental Controls: Enable/disable parental controls, set a playtime limit, and enter a password.
+     * - Help: Displays basic help and tutorial information.
+     * 
+     * Event handling for the Apply, Cancel, and Reset Play Time buttons is set up in the constructor.
+     */
+
 
 public class SettingsScreen {
 
