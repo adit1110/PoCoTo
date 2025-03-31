@@ -1,5 +1,16 @@
 package view;
 
+/**
+ * The ParentalControlScreen class represents the parental control settings UI.
+ * It allows administrators to set playtime limits, toggle character revival, and view user statistics.
+ * Users must enter the correct admin password to save settings.
+ * 
+ * The UI follows a structured layout with a password field, dropdown, toggle button,
+ * statistics display, and action buttons.
+ * 
+ * @author Krish Patel
+ */
+
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
