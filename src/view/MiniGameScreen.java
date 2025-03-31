@@ -1,4 +1,4 @@
-package com.yourteam.projectname.views;
+package view;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox; // added by Adit
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class MiniGameScreen extends Stage {
     private static final String COMPUTER_SYMBOL = "Pac";
     private Consumer<String> resultHandler;
     private boolean gameOver = false;
+    private String winner; // added by Adit
 
     private Label statusLabel; // Displays game status (e.g., "Player's Turn", "Computer Wins")
 
@@ -81,7 +83,7 @@ public class MiniGameScreen extends Stage {
         mainPane.setBottom(bottomBox);
 
         // ---- Scene Setup ----
-        Scene scene = new Scene(mainPane, 400, 500);
+        Scene scene = new Scene(mainPane, 800, 600);
         scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
         setScene(scene);
     }
@@ -105,7 +107,7 @@ public class MiniGameScreen extends Stage {
         statusLabel.setText("Computer's Turn");
 
         // Check for a winner after player's move
-        String winner = checkWinner();
+        winner = checkWinner(); // modified by Adit to help fix bugs
         if (winner != null) {
             endGame(winner);
             return;

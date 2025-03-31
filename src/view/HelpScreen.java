@@ -1,4 +1,4 @@
-package com.yourteam.projectname.views;
+package view;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -54,7 +54,7 @@ public class HelpScreen extends Stage {
         mainPane.setBottom(bottomBox);
 
         // ---- Scene Setup ----
-        Scene scene = new Scene(mainPane, 600, 500);
+        Scene scene = new Scene(mainPane, 800, 600);
         scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm()); // External CSS
         setScene(scene);
     }

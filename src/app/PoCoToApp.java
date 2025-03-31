@@ -27,6 +27,8 @@ import model.Co;
 import model.Po;
 import model.To;
 import view.GameplayScreen;
+import view.HelpScreen;
+import view.ParentalControlScreen;
 
 /**
  * PoCoToApp is the main application class for the PoCoTo game.
@@ -47,15 +49,28 @@ public class PoCoToApp extends Application {
 
         Button newGameButton = new Button("New Game");
         Button loadGameButton = new Button("Load Game");
-        Button settingsButton = new Button("Settings");
+        Button tutorialButton = new Button("Tutorial / Instructions");
+        Button parentalControlsButton = new Button("Parental Controls");
         Button exitButton = new Button("Exit");
 
         newGameButton.setOnAction(e -> showBearSelection(primaryStage));
+        
         loadGameButton.setOnAction(e -> loadGame(primaryStage));
-        settingsButton.setOnAction(e -> openSettings());
+        
+        tutorialButton.setOnAction(e -> {
+            HelpScreen help = new HelpScreen();
+            help.show();
+        });
+
+        parentalControlsButton.setOnAction(e -> {
+            ParentalControlScreen pcScreen = new ParentalControlScreen(primaryStage);
+            primaryStage.setScene(new Scene(pcScreen.getRoot()));
+        });
+
+
         exitButton.setOnAction(e -> primaryStage.close());
 
-        VBox menuBox = new VBox(15, newGameButton, loadGameButton, settingsButton, exitButton);
+        VBox menuBox = new VBox(15, newGameButton, loadGameButton, tutorialButton, parentalControlsButton, exitButton);
         menuBox.setAlignment(Pos.CENTER);
 
         VBox root = new VBox(30, title, menuBox);
@@ -140,11 +155,6 @@ public class PoCoToApp extends Application {
             screen.start(primaryStage);
         }
 
-    }
-
-    private void openSettings() {
-        System.out.println("Opening settings...");
-        // Implement settings UI
     }
 
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package com.yourteam.projectname.views;
+package view;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -77,14 +77,14 @@ public class Credits extends Stage {
         mainPane.setBottom(bottomBox);
 
         // ---- Scene Setup ----
-        Scene scene = new Scene(mainPane, 600, 500);
+        Scene scene = new Scene(mainPane, 800, 600);
         scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm()); // External CSS
         setScene(scene);
     }
 
     // ---- Small Credits Section for Main Game Page ----
     public static HBox createSmallCreditsSection() {
-        Label smallCreditsLabel = new Label("© 2024 Team 50 - CS2212");
+        Label smallCreditsLabel = new Label("© 2025 Team 50 - CS2212");
         smallCreditsLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: gray;");
 
         HBox smallCreditsBox = new HBox(smallCreditsLabel);
