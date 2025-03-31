@@ -64,7 +64,8 @@ public class PoCoToApp extends Application {
 
         parentalControlsButton.setOnAction(e -> {
             ParentalControlScreen pcScreen = new ParentalControlScreen(primaryStage);
-            primaryStage.setScene(new Scene(pcScreen.getRoot()));
+            Scene pcScene = new Scene(pcScreen.getRoot(), 800, 600);
+            primaryStage.setScene(pcScene);
         });
 
 

@@ -35,7 +35,6 @@ import javafx.util.Duration;
 import model.Po;
 import model.Co;
 import model.To;
-import view.ParentalControlScreen; // added by Adit
 import model.Inventory;
 import javafx.scene.control.Alert;
 import java.util.List;
@@ -145,7 +144,6 @@ public class GameplayScreen {
         Button saveButton = new Button("Save Game"); // moved up here by Adit
         Button loadButton = new Button("Load Game"); // moved up here by Adit
         Button backButton = new Button("Back to Main Menu"); // moved up here by Adit
-        Button parentalControlBtn = new Button("Parental Controls"); // added by Adit to display the Parental Controls button
         Button InventoryBtn = new Button("Inventory"); // added by Adit to display the Inventory button
 
         // Set preferred widths for consistent button sizing
@@ -154,14 +152,13 @@ public class GameplayScreen {
         sleepBtn.setPrefWidth(120);
         healBtn.setPrefWidth(120);
         pauseBtn.setPrefWidth(120);
-        parentalControlBtn.setPrefWidth(160);
         InventoryBtn.setPrefWidth(120);
         saveButton.setPrefWidth(140);
         loadButton.setPrefWidth(140);
         backButton.setPrefWidth(180);
 
 
-        HBox topButtons = new HBox(15, feedBtn, playBtn, sleepBtn, healBtn, parentalControlBtn, InventoryBtn);
+        HBox topButtons = new HBox(15, feedBtn, playBtn, sleepBtn, healBtn, InventoryBtn);
         topButtons.setPadding(new Insets(10));
         topButtons.setAlignment(Pos.CENTER);
 
@@ -215,11 +212,6 @@ public class GameplayScreen {
             pauseMenu.show();
         });
 
-        parentalControlBtn.setOnAction(e -> { // added by Adit for the parentalControl button
-            ParentalControlScreen screen = new ParentalControlScreen(primaryStage);
-            primaryStage.setScene(new Scene(screen.getRoot()));
-            primaryStage.show();
-        });
 
         InventoryBtn.setOnAction(e -> { // added by Adit to show the Inventory Button
             InventoryScreen inventoryScreen = new InventoryScreen(primaryStage, bearController, app);
