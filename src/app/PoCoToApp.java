@@ -31,6 +31,12 @@ import view.HelpScreen;
 import view.ParentalControlScreen;
 import view.SettingsScreen;
 
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.Priority;
+
+
 /**
  * PoCoToApp is the main application class for the PoCoTo game.
  * It initializes the JavaFX application and displays the main menu.
@@ -48,6 +54,7 @@ public class PoCoToApp extends Application {
         Label title = new Label("PoCoTo");
         title.getStyleClass().add("title");
 
+        // Menu buttons
         Button newGameButton = new Button("New Game");
         Button loadGameButton = new Button("Load Game");
         Button tutorialButton = new Button("Tutorial / Instructions");
@@ -73,15 +80,30 @@ public class PoCoToApp extends Application {
             settingsScreen.display(primaryStage);
         });
 
-
         exitButton.setOnAction(e -> primaryStage.close());
 
         VBox menuBox = new VBox(15, newGameButton, loadGameButton, tutorialButton, parentalControlsButton, settingsButton, exitButton);
         menuBox.setAlignment(Pos.CENTER);
 
-        VBox root = new VBox(30, title, menuBox);
-        root.setAlignment(Pos.CENTER);
-        root.setPadding(new Insets(40));
+
+        // Credits alignment and basic formatting
+        Label teamLabel = new Label("Created by: Adit Bhimani, Jayansh Bagga, Bhavya Sharma, Jeremy Ro, Krish Patel");
+        Label teamInfoLabel = new Label("Team 50 - Winter 2025");
+        Label courseLabel = new Label("Created for CS2212 at Western University");
+        VBox creditsBox = new VBox(2, teamLabel, teamInfoLabel, courseLabel);
+        creditsBox.setAlignment(Pos.CENTER);
+        creditsBox.getStyleClass().add("credits");
+
+        
+        VBox topBox = new VBox(10, title);
+        topBox.setAlignment(Pos.CENTER);
+        topBox.setPadding(new Insets(20));
+
+        BorderPane root = new BorderPane();
+        root.setTop(topBox);
+        root.setCenter(menuBox);
+        root.setBottom(creditsBox);
+        BorderPane.setMargin(creditsBox, new Insets(20));
 
         Scene scene = new Scene(root, 800, 600);
         URL css = getClass().getResource("/styles.css");
@@ -110,6 +132,7 @@ public class PoCoToApp extends Application {
 
         VBox buttonBox = new VBox(15, poButton, coButton, toButton, backButton);
         buttonBox.setAlignment(Pos.CENTER);
+
 
         VBox root = new VBox(30, title, buttonBox);
         root.setAlignment(Pos.CENTER);

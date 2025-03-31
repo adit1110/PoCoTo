@@ -101,3 +101,16 @@
     -fx-border-color: #3498DB;
     -fx-border-width: 2px;
 }
+
+/* Credits formatting */
+
+.credits {
+    -fx-font-size: 11px;
+    -fx-text-fill: gray;
+    -fx-alignment: center;
+}
+
+.logo-placeholder {
+    -fx-font-size: 16px;
+    -fx-text-fill: darkgray;
+}
