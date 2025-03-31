@@ -12,7 +12,10 @@ import model.Bear;
 import util.DatabaseHelper;
 
 
-
+/**
+ * SaveLoadController class handles the saving and loading of Bear game data.
+ * It uses the DatabaseHelper utility class to perform file operations.
+ */
 
 public class SaveLoadController {
 

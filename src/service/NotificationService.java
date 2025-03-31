@@ -11,6 +11,12 @@
 
  import model.Bear;
  import javafx.scene.text.Text;
+
+ /**
+  * NotificationService class is responsible for monitoring the bear's status
+  * and updating the UI with appropriate notifications.
+  * It checks the bear's state and sets the text of a Text node to inform the user.
+  */
  
  public class NotificationService {
  
