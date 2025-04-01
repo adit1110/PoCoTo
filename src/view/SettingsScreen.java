@@ -98,7 +98,7 @@ public class SettingsScreen {
         root.setPadding(new Insets(40));
         root.setAlignment(Pos.CENTER);
 
-        Scene settingsScene = new Scene(root, 800, 600); // modified from grid to root to use the new settings by Adit
+        Scene settingsScene = new Scene(root, 800, 640); // modified from grid to root to use the new settings by Adit
 
         var css = getClass().getResource("/styles.css"); // added by Adit
         if (css != null) {

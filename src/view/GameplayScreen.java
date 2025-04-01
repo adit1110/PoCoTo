@@ -99,7 +99,7 @@ public class GameplayScreen {
         bearNameLabel.getStyleClass().add("bear-name");
 
 
-        this.notificationService = new NotificationService(bearStatusText); // implemented by Bhavya Sharma (moved by Adit)
+        
 
         // Stat bars with labels
         hungerLabel = new Label("Hunger");
@@ -124,14 +124,16 @@ public class GameplayScreen {
 
         // Bear image setup
         bearImage = new ImageView(getBearImage(bearController.getBear()));
-        bearImage.setFitWidth(120);
-        bearImage.setFitHeight(120);
+        bearImage.setFitWidth(100);
+        bearImage.setFitHeight(100);
         bearImage.setPreserveRatio(true);
 
         // Status text setup
         bearStatusText = new Text("Bear is calm.");
         saveLoadController = new SaveLoadController(bearController.getBear()); // added by Bhavya Sharma
         bearStatusText.getStyleClass().add("text"); // added by Bhavya Sharma
+
+        this.notificationService = new NotificationService(bearStatusText); // implemented by Bhavya Sharma (moved by Adit)
 
         // Buttons
         Button feedBtn = new Button("Feed");
@@ -172,6 +174,7 @@ public class GameplayScreen {
 
         // Back to Main Menu button
         backButton.setOnAction(e -> app.showMainMenu(primaryStage));
+        VBox.setMargin(backButton, new Insets(10, 0, 30, 0));
 
         // Button logic for user interactions
         feedBtn.setOnAction(e -> {
@@ -220,9 +223,10 @@ public class GameplayScreen {
         VBox.setMargin(bearImage, new Insets(10, 0, 10, 0));
         root.setPadding(new Insets(30));
         root.setAlignment(Pos.CENTER);
+
         
 
-        Scene scene = new Scene(root, 800, 640); // game screen dimensions
+        Scene scene = new Scene(root, 800, 700); // game screen dimensions
 
         // Apply styles.css
         var css = getClass().getResource("/styles.css");

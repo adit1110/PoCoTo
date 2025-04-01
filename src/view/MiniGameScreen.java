@@ -23,6 +23,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox; // added by Adit
 import javafx.stage.Stage;
+import javafx.scene.control.Alert; // added by Adit
+import javafx.application.Platform; // added by Adit
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,8 +106,13 @@ public class MiniGameScreen extends Stage {
         mainPane.setBottom(bottomBox);
 
         // ---- Scene Setup ----
-        Scene scene = new Scene(mainPane, 800, 600);
-        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
+        Scene scene = new Scene(mainPane, 800, 640);
+        var css = getClass().getResource("/styles.css"); // added by Adit to add put the styles in
+        if (css != null) {
+            scene.getStylesheets().add(css.toExternalForm());
+        } else {
+            System.err.println("Minigame Screen: styles.css not found.");
+        }
         setScene(scene);
     }
 
@@ -249,6 +256,16 @@ public class MiniGameScreen extends Stage {
         if (resultHandler != null) {
             resultHandler.accept(result);
         }
+
+        // Show alert popup on game screen (added by Adit)
+
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Game Over");
+            alert.setHeaderText(null);
+            alert.setContentText(result);
+            alert.showAndWait();
+        });
     }
 
     /**

@@ -64,7 +64,7 @@ public class PauseMenu {
 
         layout.getChildren().addAll(resumeButton, saveButton, mainMenuButton);  // Updated layout structure
 
-        Scene scene = new Scene(layout, 800, 600); // Changed by Adit to make the window bigger
+        Scene scene = new Scene(layout, 800, 640); // Changed by Adit to make the window bigger
         pauseStage.setScene(scene);
     }
 

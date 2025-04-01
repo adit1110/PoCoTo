@@ -70,7 +70,7 @@ public class HelpScreen extends Stage {
         mainPane.setBottom(bottomBox);
 
         // ---- Scene Setup ----
-        Scene scene = new Scene(mainPane, 800, 600);
+        Scene scene = new Scene(mainPane, 800, 640);
         scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm()); // External CSS
         setScene(scene);
     }

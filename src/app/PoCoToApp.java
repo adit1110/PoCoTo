@@ -30,6 +30,7 @@ import view.GameplayScreen;
 import view.HelpScreen;
 import view.ParentalControlScreen;
 import view.SettingsScreen;
+import view.MiniGameScreen;
 
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -66,6 +67,7 @@ public class PoCoToApp extends Application {
         Button loadGameButton = new Button("Load Game");
         Button tutorialButton = new Button("Tutorial / Instructions");
         Button parentalControlsButton = new Button("Parental Controls");
+        Button minigameButton = new Button("Minigame");
         Button settingsButton = new Button("Settings");
         Button exitButton = new Button("Exit");
 
@@ -83,10 +85,15 @@ public class PoCoToApp extends Application {
             SettingsScreen settingsScreen = new SettingsScreen(this);
             settingsScreen.display(primaryStage);
         });
+        minigameButton.setOnAction(e -> {
+            MiniGameScreen minigame = new MiniGameScreen();
+            minigame.setResultHandler(result -> System.out.println("Minigame Result: " + result));
+            minigame.show();
+        });
         exitButton.setOnAction(e -> primaryStage.close());
 
         // Stack menu buttons vertically
-        VBox menuBox = new VBox(15, newGameButton, loadGameButton, tutorialButton, parentalControlsButton, settingsButton, exitButton);
+        VBox menuBox = new VBox(15, newGameButton, loadGameButton, minigameButton, tutorialButton, parentalControlsButton, settingsButton, exitButton);
         menuBox.setAlignment(Pos.CENTER);
 
 
