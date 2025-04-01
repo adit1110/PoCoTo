@@ -127,3 +127,9 @@
     -fx-text-fill: black;
     -fx-background-color: white;
 }
+
+.user-stats {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-fill: white;
+}

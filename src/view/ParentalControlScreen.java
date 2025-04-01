@@ -51,6 +51,7 @@ public class ParentalControlScreen {
         revivalToggleButton.setSelected(true);
 
         userStatsDisplay = new Text("User Statistics:\nTotal Playtime: 0 hours\nTotal Sessions: 0");
+        userStatsDisplay.getStyleClass().add("user-stats"); // added by Adit to implement styling on the user stats display text
 
         Button saveButton = new Button("Save");
         Button cancelButton = new Button("Cancel");
