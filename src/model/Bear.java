@@ -244,4 +244,23 @@ public abstract class Bear implements Serializable { //Serializable Added By Jay
         sleep = MAX_STAT;
         happiness = MAX_STAT;
     }
+
+    /* The following public setters are for testing purposes */
+
+    public void setHunger(int value) {
+        hunger = Math.max(MIN_STAT, Math.min(value, MAX_STAT));
+    }
+    
+    public void setSleep(int value) {
+        sleep = Math.max(MIN_STAT, Math.min(value, MAX_STAT));
+    }
+    
+    public void setHappiness(int value) {
+        happiness = Math.max(MIN_STAT, Math.min(value, MAX_STAT));
+    }
+    
+    public void setHealth(int value) {
+        health = Math.max(MIN_STAT, Math.min(value, MAX_STAT));
+    }
+    
 }

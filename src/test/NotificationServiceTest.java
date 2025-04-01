@@ -11,9 +11,10 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- 
-NotificationServiceTest.java
-Verifies correct notifications based on bear state.*/
+ * NotificationServiceTest.java
+ * Verifies correct notifications based on bear state.
+ * @author Adit Bhimani and Bhavya Sharma
+ * */
 public class NotificationServiceTest {
 
     private NotificationService service;
@@ -32,15 +33,15 @@ public class NotificationServiceTest {
 
     @Test
     void testDeadNotification() {
-        Bear bear = new Po();
-        bear.setHealth(0);
+        Po bear = new Po("TestPo");
+        bear.setHunger(0);
         service.checkBearStatus(bear);
         assertEquals("Your bear has died!", text.getText());
     }
 
     @Test
     void testAngryNotification() {
-        Bear bear = new Po();
+        Po bear = new Po("TestPo");
         bear.setHunger(0); // Triggers anger
         service.checkBearStatus(bear);
         assertEquals("Your bear is angry", text.getText());
@@ -48,23 +49,23 @@ public class NotificationServiceTest {
 
     @Test
     void testHungryNotification() {
-        Bear bear = new Po();
-        bear.setHunger(19); // Triggers hunger warning
+        Po bear = new Po("TestPo");
+        bear.setHunger(19); // Triggers hunger warning (modified by Adit)
         service.checkBearStatus(bear);
         assertEquals("Your bear is hungry!", text.getText());
     }
 
     @Test
     void testTiredNotification() {
-        Bear bear = new Po();
-        bear.setSleep(15);
+        Po bear = new Po("TestPo");
+        bear.setSleep(15); // modified by Adit
         service.checkBearStatus(bear);
         assertEquals("Your bear is tired", text.getText());
     }
 
     @Test
     void testCalmNotification() {
-        Bear bear = new Po(); // Default stats
+        Po bear = new Po("TestPo"); // Default stats
         service.checkBearStatus(bear);
         assertEquals("Bear is calm.", text.getText());
     }

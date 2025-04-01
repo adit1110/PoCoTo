@@ -5,23 +5,28 @@ import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import org.junit.jupiter.api.Test;
 import view.PauseMenu;
+import org.junit.jupiter.api.BeforeAll; // added by Adit
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * PauseMenuTest.java
  * Verifies PauseMenu functionality including resume callback execution.
- * @author: Jayansh Bagga
+ * @author: Jayansh Bagga and Adit Bhimani
  */
 public class PauseMenuTest {
 
+    @BeforeAll
+    public static void initFX() {
+        new JFXPanel(); // initalize JavaFX (added by Adit)
+    }
+    
     /**
      * Ensures the resume Runnable is triggered correctly
      * when resumeAction is invoked.
      */
     @Test
     public void testResumeActionTriggered() throws Exception {
-        new JFXPanel(); // Initializes JavaFX toolkit
 
         final boolean[] resumeCalled = {false};
 
