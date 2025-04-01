@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import controller.BearController; // added by Adit
 import app.PoCoToApp; // added by Adit
 import javafx.scene.text.Text; // added by Adit
+import javafx.scene.layout.Region;
 
 
 
@@ -46,10 +47,22 @@ public class InventoryScreen {
         VBox layout = new VBox(20);
         layout.setPadding(new Insets(20)); // added by Adit to style the inventory screen
         layout.setAlignment(Pos.CENTER); // added by Adit to style the inventory screen
+
+        VBox titleBox = new VBox(5); // spacing between text and underline
+        titleBox.setAlignment(Pos.CENTER);
+        
+        // added by Adit to implement a physical title and implement styling similar to other pages
+        Text titleText = new Text("Inventory");
+        titleText.getStyleClass().add("section-title");
+
+        Region underline = new Region();
+        underline.getStyleClass().add("underline-bar");
+
+        titleBox.getChildren().addAll(titleText, underline);
+
+
         layout.setStyle("-fx-background-color: #2c3e50;"); // added by Adit to style the inventory screen
 
-        HBox imageBox = new HBox(40); // added by Adit to style the inventory screen
-        imageBox.setAlignment(Pos.CENTER); // added by Adit to style the inventory screen
 
         feedbackText = new Text(""); // added by Adit to have a visual confirmation for feeding the bear show up
         feedbackText.setStyle("-fx-fill: white; -fx-font-size: 14px;"); // added by Adit to have a visual confirmation for feeding the bear show up
@@ -76,7 +89,8 @@ public class InventoryScreen {
             feedbackText.setText("Fed the bear with a banana!"); // added by Adit to have a visual confirmation for feeding the bear show up
         });
 
-        imageBox.getChildren().addAll(appleView, bananaView);
+        HBox imageBox = new HBox(40, appleView, bananaView); // modified by Adit to style the inventory screen
+        imageBox.setAlignment(Pos.CENTER); // added by Adit to style the inventory screen
 
         // Back button to return to GameplayScreen
         Button backButton = new Button("Back to Game");
@@ -84,10 +98,9 @@ public class InventoryScreen {
             GameplayScreen gameplay = new GameplayScreen(controller, app);
             gameplay.start(primaryStage);
         });
-        
 
-        layout.getChildren().addAll(appleView, bananaView, backButton);
-        
+        layout.getChildren().addAll(titleBox, imageBox, feedbackText, backButton); // added by Adit
+                
         Scene scene = new Scene(layout, 800, 600);
         scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm()); // modified by Adit to look for styles.css from the root of the classpath
 

@@ -133,3 +133,18 @@
     -fx-font-weight: bold;
     -fx-fill: white;
 }
+
+/* Styling for the Inventory screen title */
+
+.section-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-fill: white;
+    -fx-text-fill: white;
+}
+
+.underline-bar {
+    -fx-background-color: #3498DB;
+    -fx-min-height: 2px;
+    -fx-max-width: 40px;
+}
