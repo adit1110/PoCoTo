@@ -9,6 +9,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import app.PoCoToApp;
+import javafx.scene.layout.Region; // added by Adit for styling for this page
+import javafx.scene.layout.HBox; // added by Adit for styling for this page
 
 /**
  * The ParentalControlScreen class represents the parental control settings UI.
@@ -50,6 +52,16 @@ public class ParentalControlScreen {
         revivalToggleButton = new ToggleButton("Enable Bear Revival");
         revivalToggleButton.setSelected(true);
 
+        // added by Adit for a styled title for consistency
+        Text titleText = new Text("Parental Controls");
+        titleText.getStyleClass().add("section-title");
+
+        Region underline = new Region();
+        underline.getStyleClass().add("underline-bar");
+
+        VBox titleBox = new VBox(5, titleText, underline);
+        titleBox.setAlignment(Pos.CENTER);
+
         userStatsDisplay = new Text("User Statistics:\nTotal Playtime: 0 hours\nTotal Sessions: 0");
         userStatsDisplay.getStyleClass().add("user-stats"); // added by Adit to implement styling on the user stats display text
 
@@ -61,7 +73,7 @@ public class ParentalControlScreen {
         cancelButton.setOnAction(event -> app.showMainMenu(primaryStage)); // modified by Adit to ensure that pressing the cancel button goes back to the main menu
         mainMenuButton.setOnAction(e -> app.showMainMenu(primaryStage));
 
-        root = new VBox(15, passwordField, playtimeLimitDropdown, revivalToggleButton, userStatsDisplay, saveButton, cancelButton, mainMenuButton);
+        root = new VBox(15, titleBox, passwordField, playtimeLimitDropdown, revivalToggleButton, userStatsDisplay, saveButton, cancelButton, mainMenuButton);
         root.setPadding(new Insets(20));
         root.setAlignment(Pos.CENTER);
 

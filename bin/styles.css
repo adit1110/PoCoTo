@@ -134,10 +134,10 @@
     -fx-fill: white;
 }
 
-/* Styling for the Inventory screen title */
+/* Styling for the Inventory and ParentalControl screen title */
 
 .section-title {
-    -fx-font-size: 24px;
+    -fx-font-size: 30px;
     -fx-font-weight: bold;
     -fx-fill: white;
     -fx-text-fill: white;
