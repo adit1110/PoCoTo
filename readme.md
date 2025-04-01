@@ -86,7 +86,6 @@ From here, you can:
 
 **Debugs**:
 - Pause Button in the game is missing
-- Minigame is not fully implemented
 - Character Revive was not implemented
 
 **Javadocs**:
