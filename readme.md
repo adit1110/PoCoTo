@@ -16,16 +16,16 @@ Group 50 – COMPSCI 2212B - Winter 2025
 PoCoTo is a Java-based virtual pet simulation game where players care for one of three unique bears: Po (Panda), Co (Polar Bear), and To (Grizzly Bear). Each bear has different traits and needs. Players interact by feeding, playing, healing, and putting their bear to sleep. The goal is to maintain the bear’s happiness, hunger, sleep, and health. The game includes save/load features, parental controls, a settings menu, and optional mini-games for added interaction.
 
 
-**Required Libraries and Tools**
+**Required Libraries and Tools**:
 
 
-**- Languages and Build Tools**:
+**Languages and Build Tools**:
 - Java SE 11
 - Apache Maven 3.9.6
 
 
 
-**- APIs and Libraries**:
+**APIs and Libraries**:
 JUnit 5.10.0 (via Guardian API for testing)
 GSON 2.10.1 (used to convert Java objects to/from JSON)
 Jackson Databind 2.15.2 (for JSON parsing and writing)
@@ -71,7 +71,6 @@ Monitor the bear's status bars: hunger, happiness, sleep, and health.
 
 Save your progress anytime from the in-game menu.
 
-
 **Parental Controls**:
 - To access parental controls:
 - Go to the Settings menu.
@@ -79,7 +78,7 @@ Save your progress anytime from the in-game menu.
 
 
 When prompted, enter the password:
-admin
+- admin
 
 From here, you can:
 - Set a daily playtime limit
@@ -89,6 +88,9 @@ From here, you can:
 - Pause Button in the game is missing
 - Minigame is not fully implemented
 - Character Revive was not implemented
+
+**Javadocs**:
+- Our Javadoc documentation is located inside the docs folder. From there, there is a file named index-html, which contains Javadocs for all of the Javadocs compiled.
 
 
 
