@@ -92,8 +92,8 @@ public class PoCoToApp extends Application {
 
         // Credits for the team
         Label teamLabel = new Label("Created by: Adit Bhimani, Jayansh Bagga, Bhavya Sharma, Jeremy Ro, Krish Patel");
-        Label teamInfoLabel = new Label("Team 50 - Winter 2025");
-        Label courseLabel = new Label("Created for CS2212 at Western University");
+        Label teamInfoLabel = new Label("Team 50");
+        Label courseLabel = new Label("Created for CS2212 at Western University - Winter 2025");
         VBox creditsBox = new VBox(2, teamLabel, teamInfoLabel, courseLabel);
         creditsBox.setAlignment(Pos.CENTER);
         creditsBox.getStyleClass().add("credits");
