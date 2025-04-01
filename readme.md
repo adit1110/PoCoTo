@@ -45,13 +45,13 @@ This will download dependencies and compile the project.
 
 
 **How to Run the Game**:
-After building, double-click the file: runPoCoTo.bat. 
+After building, double-click the file: PoCoTo.exe (located in the main root folder (group50)) 
 This will launch the game automatically using the compiled files.
 No other commands or configuration are required.
 
 
 **User Guide**:
-Launch the game using the batch file.
+Launch the game using the .exe file.
 Use the Main Menu to start a new game or load a saved one.
 Select your bear: Po, Co, or To.
 
