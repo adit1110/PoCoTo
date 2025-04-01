@@ -98,8 +98,6 @@ public class GameplayScreen {
         bearNameLabel = new Label(bearController.getBear().getLabel());
         bearNameLabel.getStyleClass().add("bear-name");
 
-        bearStatusText = new Text("Bear is calm.");
-        bearStatusText.getStyleClass().add("text");
 
         this.notificationService = new NotificationService(bearStatusText); // implemented by Bhavya Sharma (moved by Adit)
 
@@ -126,8 +124,8 @@ public class GameplayScreen {
 
         // Bear image setup
         bearImage = new ImageView(getBearImage(bearController.getBear()));
-        bearImage.setFitWidth(150);
-        bearImage.setFitHeight(150);
+        bearImage.setFitWidth(120);
+        bearImage.setFitHeight(120);
         bearImage.setPreserveRatio(true);
 
         // Status text setup
@@ -224,7 +222,7 @@ public class GameplayScreen {
         root.setAlignment(Pos.CENTER);
         
 
-        Scene scene = new Scene(root, 800, 600); // game screen dimensions
+        Scene scene = new Scene(root, 800, 640); // game screen dimensions
 
         // Apply styles.css
         var css = getClass().getResource("/styles.css");
@@ -235,7 +233,7 @@ public class GameplayScreen {
         primaryStage.setTitle("PoCoTo - Gameplay");
         primaryStage.setScene(scene);
         primaryStage.setWidth(800);
-        primaryStage.setHeight(600);
+        primaryStage.setHeight(640);
         primaryStage.setResizable(false);
         primaryStage.show();
 

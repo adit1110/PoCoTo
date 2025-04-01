@@ -195,7 +195,7 @@ public class PoCoToApp extends Application {
         screen.start(primaryStage);
 
         primaryStage.setWidth(800);
-        primaryStage.setHeight(600);
+        primaryStage.setHeight(640);
         primaryStage.setResizable(false);
     }
 
