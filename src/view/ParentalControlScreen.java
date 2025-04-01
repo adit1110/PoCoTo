@@ -57,7 +57,7 @@ public class ParentalControlScreen {
         Button mainMenuButton = new Button("Back to Main Menu");
 
         saveButton.setOnAction(event -> saveSettings());
-        cancelButton.setOnAction(event -> cancelSettings());
+        cancelButton.setOnAction(event -> app.showMainMenu(primaryStage)); // modified by Adit to ensure that pressing the cancel button goes back to the main menu
         mainMenuButton.setOnAction(e -> app.showMainMenu(primaryStage));
 
         root = new VBox(15, passwordField, playtimeLimitDropdown, revivalToggleButton, userStatsDisplay, saveButton, cancelButton, mainMenuButton);
@@ -69,6 +69,25 @@ public class ParentalControlScreen {
 
         primaryStage.setTitle("Parental Controls");
         primaryStage.setScene(scene);
+
+        playtimeLimitDropdown.setButtonCell(new ListCell<>() { // added by Adit to implement some styling into the screen
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(item);
+                setStyle("-fx-text-fill: black; fx-background-color: white;");
+            }
+        });
+    
+        playtimeLimitDropdown.setCellFactory(listView -> new ListCell<>() { // added by Adit to implement some styling into the screen
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(item);
+                setStyle("-fx-text-fill: black; fx-background-color: white;");
+            }
+        });
+
         primaryStage.show();
     }
 

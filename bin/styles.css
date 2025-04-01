@@ -110,7 +110,20 @@
     -fx-alignment: center;
 }
 
-.logo-placeholder {
-    -fx-font-size: 16px;
-    -fx-text-fill: darkgray;
+/* Styling for parental controls */
+.combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #ccc;
+    -fx-font-weight: bold;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: black;
+    -fx-background-color: white;
+    -fx-padding: 6 12 6 12;
+}
+
+.password-field {
+    -fx-text-fill: black;
+    -fx-background-color: white;
 }
