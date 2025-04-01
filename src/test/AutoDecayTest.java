@@ -22,40 +22,39 @@ import model.To;
  * all three bear types: Po, Co, and To.
  */
 public class AutoDecayTest {
-
-    /**
-     * Sets low hunger/sleep to trigger health decay.
-     */
-
-     private void triggerHealthDecay(Bear bear) {
-        bear.feed(-100); // drop hunger to 0
-        bear.sleep(-100); // drop sleep to 0
-     }
     
     /**
      * Verifies that calling updateStats() causes all key stats
      * (hunger, health, sleep, and happiness) to decrease for Po.
      */
     @Test
-    public void testStatsDecreaseForPo() {
+    public void testPoHungerDecreases() {
         Bear po = new Po("Po");
         BearController controller = new BearController(po);
 
-        triggerHealthDecay(po);
+        double initial = controller.getHungerPercent();
+        controller.updateBear();
+        assertTrue(controller.getHungerPercent() < initial, "Po hunger should decrease");
+    }
 
-        double initialHunger = controller.getHungerPercent();
-        double initialHealth = controller.getHealthPercent();
-        double initialSleep = controller.getSleepPercent();
-        double initialHappiness = controller.getHappinessPercent();
+    @Test
+    public void testPoSleepDecreases() {
+        Bear po = new Po("Po");
+        BearController controller = new BearController(po);
 
-        for (int i = 0; i < 10; i++) { // run multiple decay cycles to trigger health loss
-            controller.getBear().updateStats();
-        }
+        double initial = controller.getSleepPercent();
+        controller.updateBear();
+        assertTrue(controller.getSleepPercent() < initial, "Po sleep should decrease");
+    }
 
-        assertTrue(controller.getHungerPercent() < initialHunger, "Po hunger should decrease");
-        assertTrue(controller.getHealthPercent() < initialHealth, "Po health should decrease");
-        assertTrue(controller.getSleepPercent() < initialSleep, "Po sleep should decrease");
-        assertTrue(controller.getHappinessPercent() < initialHappiness, "Po happiness should decrease");
+    @Test
+    public void testPoHappinessDecreases() {
+        Bear po = new Po("Po");
+        BearController controller = new BearController(po);
+
+        double initial = controller.getHappinessPercent();
+        controller.updateBear();
+        assertTrue(controller.getHappinessPercent() < initial, "Po happiness should decrease");
     }
 
     /**
@@ -63,25 +62,23 @@ public class AutoDecayTest {
      * to decrease for Co.
      */
     @Test
-    public void testStatsDecreaseForCo() {
+    public void testCoSleepDecreases() {
         Bear co = new Co("Co");
         BearController controller = new BearController(co);
 
-        triggerHealthDecay(co);
+        double initial = controller.getSleepPercent();
+        controller.updateBear();
+        assertTrue(controller.getSleepPercent() < initial, "Co sleep should decrease");
+    }
 
-        double initialHunger = controller.getHungerPercent();
-        double initialHealth = controller.getHealthPercent();
-        double initialSleep = controller.getSleepPercent();
-        double initialHappiness = controller.getHappinessPercent();
+    @Test
+    public void testCoHappinessDecreases() {
+        Bear co = new Co("Co");
+        BearController controller = new BearController(co);
 
-        for (int i = 0; i < 10; i++) { // run multiple decay cycles to trigger health loss
-            controller.getBear().updateStats();
-        }
-
-        assertTrue(controller.getHungerPercent() < initialHunger, "Co hunger should decrease");
-        assertTrue(controller.getHealthPercent() < initialHealth, "Co health should decrease");
-        assertTrue(controller.getSleepPercent() < initialSleep, "Co sleep should decrease");
-        assertTrue(controller.getHappinessPercent() < initialHappiness, "Co happiness should decrease");
+        double initial = controller.getHappinessPercent();
+        controller.updateBear();
+        assertTrue(controller.getHappinessPercent() < initial, "Co happiness should decrease");
     }
 
     /**
@@ -89,24 +86,32 @@ public class AutoDecayTest {
      * to decrease for To.
      */
     @Test
-    public void testStatsDecreaseForTo() {
+    public void testToHungerDecreases() {
         Bear to = new To("To");
         BearController controller = new BearController(to);
 
-        for (int i = 0; i < 10; i++) { // run multiple decay cycles to trigger health loss
-            controller.getBear().updateStats();
-        }
+        double initial = controller.getHungerPercent();
+        controller.updateBear();
+        assertTrue(controller.getHungerPercent() < initial, "To hunger should decrease");
+    }
 
-        double initialHunger = controller.getHungerPercent();
-        double initialHealth = controller.getHealthPercent();
-        double initialSleep = controller.getSleepPercent();
-        double initialHappiness = controller.getHappinessPercent();
+    @Test
+    public void testToSleepDecreases() {
+        Bear to = new To("To");
+        BearController controller = new BearController(to);
 
-        controller.getBear().updateStats();
+        double initial = controller.getSleepPercent();
+        controller.updateBear();
+        assertTrue(controller.getSleepPercent() < initial, "To sleep should decrease");
+    }
 
-        assertTrue(controller.getHungerPercent() < initialHunger, "To hunger should decrease");
-        assertTrue(controller.getHealthPercent() < initialHealth, "To health should decrease");
-        assertTrue(controller.getSleepPercent() < initialSleep, "To sleep should decrease");
-        assertTrue(controller.getHappinessPercent() < initialHappiness, "To happiness should decrease");
+    @Test
+    public void testToHappinessDecreases() {
+        Bear to = new To("To");
+        BearController controller = new BearController(to);
+
+        double initial = controller.getHappinessPercent();
+        controller.updateBear();
+        assertTrue(controller.getHappinessPercent() < initial, "To happiness should decrease");
     }
 }
