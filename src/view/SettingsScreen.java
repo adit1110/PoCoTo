@@ -22,6 +22,9 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import app.PoCoToApp; // added by Adit
+import javafx.scene.layout.VBox; // added by Adit
+import javafx.scene.layout.HBox; // added by Adit
+import javafx.geometry.Pos; // added by Adit
 
     /**
      * Constructs a new SettingsScreen.
@@ -53,27 +56,26 @@ public class SettingsScreen {
 
         // Title Label
         Label titleLabel = new Label("Settings");
-        GridPane.setConstraints(titleLabel, 0, 0);
+        titleLabel.getStyleClass().add("title"); // added by Adit to center it
+        HBox titleBox = new HBox(titleLabel);
+        titleBox.setAlignment(Pos.CENTER); // added by Adit to center the settings label
 
         // Volume Control
         Label volumeLabel = new Label("Volume:");
-        GridPane.setConstraints(volumeLabel, 0, 1);
-
         Slider volumeSlider = new Slider(0, 100, 50);
         volumeSlider.setShowTickLabels(true);
         volumeSlider.setShowTickMarks(true);
-        GridPane.setConstraints(volumeSlider, 1, 1);
+        HBox volumeBox = new HBox(10, volumeLabel, volumeSlider);
+        volumeBox.setAlignment(Pos.CENTER); // added by Adit to center the volume label and the volume slider
 
         // Dark Mode Toggle
         Label darkModeLabel = new Label("Dark Mode:");
-        GridPane.setConstraints(darkModeLabel, 0, 2);
-
         CheckBox darkModeCheckBox = new CheckBox();
-        GridPane.setConstraints(darkModeCheckBox, 1, 2);
+        HBox darkModeBox = new HBox(10, darkModeLabel, darkModeCheckBox); // added by Adit to clean up the dark mode settings
+        darkModeBox.setAlignment(Pos.CENTER); // added by Adit to center the dark mode settings
 
         // Save Button
         Button saveButton = new Button("Save");
-        GridPane.setConstraints(saveButton, 0, 3);
         saveButton.setOnAction(e -> {
             // Handle save logic here
             System.out.println("Settings saved:");
@@ -83,16 +85,20 @@ public class SettingsScreen {
 
         // Back to Main Menu Button
         Button backButton = new Button("Back to Main Menu");
-        GridPane.setConstraints(backButton, 1, 3);
         backButton.setOnAction(e -> {
             app.showMainMenu(primaryStage);
         });
 
-        // Add all elements to the grid
-        grid.getChildren().addAll(titleLabel, volumeLabel, volumeSlider, darkModeLabel, darkModeCheckBox, saveButton, backButton);
+        // group up save and back button and center it (added by Adit)
+        HBox buttonBox = new HBox(20, saveButton, backButton);
+        buttonBox.setAlignment(Pos.CENTER);
+        
+        // Wrap everything up in a VBox (added by Adit)
+        VBox root = new VBox(25, titleBox, volumeBox, darkModeBox, buttonBox);
+        root.setPadding(new Insets(40));
+        root.setAlignment(Pos.CENTER);
 
-
-        Scene settingsScene = new Scene(grid, 800, 600);
+        Scene settingsScene = new Scene(root, 800, 600); // modified from grid to root to use the new settings by Adit
 
         var css = getClass().getResource("/styles.css"); // added by Adit
         if (css != null) {
