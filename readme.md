@@ -90,7 +90,3 @@ From here, you can:
 
 **Javadocs**:
 - Our Javadoc documentation is located inside the docs folder. From there, there is a file named index-html, which contains Javadocs for all of the Javadocs compiled.
-
-
-
-No separate installation is required. This feature is built into the main game.
