@@ -1,106 +1,71 @@
 package service;
 
-import model.Bear;
-import service.NotificationService;
+import javafx.embed.swing.JFXPanel;
 import javafx.scene.text.Text;
+import model.Bear;
+import model.Po;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.mockito.Mockito.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * NotificationServiceTest.java
- * Unit tests for the NotificationService class
- * Ensures that the correct notification is displayed based on the bear's status
- * and that the notification text is set correctly.
- * @author: Bhavya Sharma
- */
-
+ 
+NotificationServiceTest.java
+Verifies correct notifications based on bear state.*/
 public class NotificationServiceTest {
-    /**
-     * Test: Simulate the resume button being clicked
-     * and verify that the associated Runnable is called.
-     * Uses a boolean flag to track if resumeAction is triggered.
-     * Note: JavaFX must be initialized using JFXPanel to run on headless test environments.
-     */
 
-    private NotificationService notificationService;
-    private Text mockNotificationText;
+    private NotificationService service;
+    private Text text;
 
-    /**
-     * Sets up a fresh NotificationService instance before each test.
-     * Creates a mock Text object to simulate the notification text.
-     */
+    @BeforeAll
+    static void initFX() {
+        new JFXPanel(); // Start JavaFX for headless test
+    }
 
     @BeforeEach
     void setUp() {
-        mockNotificationText = mock(Text.class);
-        notificationService = new NotificationService(mockNotificationText);
+        text = new Text();
+        service = new NotificationService(text);
     }
 
-    /**
-     * Tests that the correct notification is displayed based on the bear's status.
-     * Verifies that the notification text is set correctly.
-     * Uses mock Bear objects to simulate different bear statuses.
-     */
     @Test
-    void testCheckBearStatusDead() {
-        Bear deadBear = mock(Bear.class);
-        when(deadBear.isDead()).thenReturn(true);
-        notificationService.checkBearStatus(deadBear);
-        verify(mockNotificationText).setText("Your bear has died!");
+    void testDeadNotification() {
+        Bear bear = new Po();
+        bear.setHealth(0);
+        service.checkBearStatus(bear);
+        assertEquals("Your bear has died!", text.getText());
     }
 
-    /**
-     * Tests that the correct notification is displayed based on the bear's status.
-     * Verifies that the notification text is set correctly.
-     * Uses mock Bear objects to simulate different bear statuses.
-     */
     @Test
-    void testCheckBearStatusAngry() {
-        Bear angryBear = mock(Bear.class);
-        when(angryBear.isAngry()).thenReturn(true);
-        notificationService.checkBearStatus(angryBear);
-        verify(mockNotificationText).setText("Your bear is angry");
+    void testAngryNotification() {
+        Bear bear = new Po();
+        bear.setHunger(0); // Triggers anger
+        service.checkBearStatus(bear);
+        assertEquals("Your bear is angry", text.getText());
     }
 
-    /**
-     * Tests that the correct notification is displayed based on the bear's status.
-     * Verifies that the notification text is set correctly.
-     */
     @Test
-    void testCheckBearStatusHungry() {
-        Bear hungryBear = mock(Bear.class);
-        when(hungryBear.isHungry()).thenReturn(true);
-        notificationService.checkBearStatus(hungryBear);
-        verify(mockNotificationText).setText("Your bear is hungry!");
+    void testHungryNotification() {
+        Bear bear = new Po();
+        bear.setHunger(19); // Triggers hunger warning
+        service.checkBearStatus(bear);
+        assertEquals("Your bear is hungry!", text.getText());
     }
 
-    /**
-     * Tests that the correct notification is displayed based on the bear's status.
-     * Verifies that the notification text is set correctly.
-     */
     @Test
-    void testCheckBearStatusTired() {
-        Bear tiredBear = mock(Bear.class);
-        when(tiredBear.isTired()).thenReturn(true);
-        notificationService.checkBearStatus(tiredBear);
-        verify(mockNotificationText).setText("Your bear is tired");
+    void testTiredNotification() {
+        Bear bear = new Po();
+        bear.setSleep(15);
+        service.checkBearStatus(bear);
+        assertEquals("Your bear is tired", text.getText());
     }
 
-    /**
-     * Tests that the correct notification is displayed based on the bear's status.
-     * Verifies that the notification text is set correctly.
-     */
     @Test
-    void testCheckBearStatusCalm() {
-        Bear calmBear = mock(Bear.class);
-        when(calmBear.isDead()).thenReturn(false);
-        when(calmBear.isAngry()).thenReturn(false);
-        when(calmBear.isHungry()).thenReturn(false);
-        when(calmBear.isTired()).thenReturn(false);
-
-        notificationService.checkBearStatus(calmBear);
-        verify(mockNotificationText).setText("Bear is calm.");
+    void testCalmNotification() {
+        Bear bear = new Po(); // Default stats
+        service.checkBearStatus(bear);
+        assertEquals("Bear is calm.", text.getText());
     }
 }
