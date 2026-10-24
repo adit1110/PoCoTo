@@ -101,11 +101,13 @@ public class InventoryScreen {
 
         layout.getChildren().addAll(titleBox, imageBox, feedbackText, backButton); // added by Adit
                 
-        Scene scene = new Scene(layout, 800, 640);
+        Scene scene = new Scene(layout, 800, 700);
         scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm()); // modified by Adit to look for styles.css from the root of the classpath
 
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("PoCoTo - Inventory"); // added by Adit to title the screen
-        primaryStage.show();
+        app.switchScene(
+            primaryStage,
+            scene,
+            "PoCoTo - Inventory"
+        );
     }
 }
