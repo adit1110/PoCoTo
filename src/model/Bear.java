@@ -90,7 +90,7 @@ public abstract class Bear implements Serializable { //Serializable Added By Jay
      * @param amount the amount of fun to add
      */
     public void play(int amount) {
-        happiness = Math.min(hunger + amount, MAX_STAT);
+        happiness = Math.min(happiness + amount, MAX_STAT);
     }
 
     /**
@@ -99,7 +99,7 @@ public abstract class Bear implements Serializable { //Serializable Added By Jay
      * @param amount the healing amount
      */
     public void heal(int amount) {
-        health = Math.min(hunger + amount, MAX_STAT);
+        health = Math.min(health + amount, MAX_STAT);
     }
 
     /**
