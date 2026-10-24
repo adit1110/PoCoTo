@@ -172,11 +172,14 @@ public class GameplayScreen {
         pauseBox.setAlignment(Pos.BOTTOM_RIGHT);
         pauseBox.setPadding(new Insets(10, 20, 10, 10));
 
-        VBox root = new VBox(25, title, bearNameLabel, bearImage, statsBox, topButtons, saveLoadBox, bearStatusText, backButton);
+        VBox root = new VBox(25, title, bearNameLabel, bearImage, statsBox, topButtons, pauseBtn, saveLoadBox, bearStatusText, backButton);
         root.setAlignment(Pos.CENTER);
 
         // Back to Main Menu button
-        backButton.setOnAction(e -> app.showMainMenu(primaryStage));
+        backButton.setOnAction(e -> {
+            stopAutoDecay();
+            app.showMainMenu(primaryStage);
+        });
         VBox.setMargin(backButton, new Insets(10, 0, 30, 0));
 
         // Button logic for user interactions
@@ -211,14 +214,19 @@ public class GameplayScreen {
                     System.out.println("Game resumed."); //resume action 
                 }, 
                 () -> GameController.saveGame(bearController.getBear()), // Save (modified by Adit to pass the bear into the method call)
-                () -> app.showMainMenu(primaryStage) // Return to main menu
+                () -> {
+                    stopAutoDecay();
+                    app.showMainMenu(primaryStage); // Return to main menu
+                }
             );
             pauseMenu.show();
         });
 
 
-        InventoryBtn.setOnAction(e -> { // added by Adit to show the Inventory Button
-            InventoryScreen inventoryScreen = new InventoryScreen(primaryStage, bearController, app);
+        InventoryBtn.setOnAction(e -> {
+            stopAutoDecay();
+
+            new InventoryScreen(primaryStage, bearController, app);
         });
 
 
@@ -367,6 +375,16 @@ public class GameplayScreen {
      */
     private void loadGame() {
         System.out.println("Loading game...");
+    }
+
+    /**
+     * Stops automatic stat decay when leaving gameplay.
+     */
+    private void stopAutoDecay() {
+        if (autoDecayTimer != null) {
+            autoDecayTimer.stop();
+            autoDecayTimer = null;
+        }
     }
 
     /**
