@@ -39,6 +39,7 @@ import model.Inventory;
 import javafx.scene.control.Alert;
 import java.util.List;
 import view.GameplayScreen;
+import javafx.scene.control.ScrollPane;
 
 /**
  * GameplayScreen class represents the main gameplay screen of the application.
@@ -152,10 +153,12 @@ public class GameplayScreen {
         sleepBtn.setPrefWidth(120);
         healBtn.setPrefWidth(120);
         pauseBtn.setPrefWidth(120);
-        InventoryBtn.setPrefWidth(120);
+        InventoryBtn.setMinWidth(130);
+        InventoryBtn.setPrefWidth(130);
         saveButton.setPrefWidth(140);
         loadButton.setPrefWidth(140);
-        backButton.setPrefWidth(180);
+        backButton.setMinWidth(210);
+        backButton.setPrefWidth(210);
 
 
         HBox topButtons = new HBox(15, feedBtn, playBtn, sleepBtn, healBtn, InventoryBtn);
@@ -226,20 +229,29 @@ public class GameplayScreen {
 
         
 
-        Scene scene = new Scene(root, 800, 700); // game screen dimensions
+        ScrollPane scrollPane = new ScrollPane(root);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
-        // Apply styles.css
+        scrollPane.setStyle(
+            "-fx-background: #2c3e50;" +
+            "-fx-background-color: #2c3e50;" +
+            "-fx-border-color: transparent;"
+        );
+
+        Scene scene = new Scene(scrollPane, 800, 700);
+
         var css = getClass().getResource("/styles.css");
         if (css != null) {
             scene.getStylesheets().add(css.toExternalForm());
         }
 
-        primaryStage.setTitle("PoCoTo - Gameplay");
-        primaryStage.setScene(scene);
-        primaryStage.setWidth(800);
-        primaryStage.setHeight(640);
-        primaryStage.setResizable(false);
-        primaryStage.show();
+        app.switchScene(
+            primaryStage,
+            scene,
+            "PoCoTo - Gameplay"
+        );
 
         updateUI();
         startAutoDecay();
