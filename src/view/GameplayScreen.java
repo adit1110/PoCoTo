@@ -294,7 +294,8 @@ public class GameplayScreen {
         InventoryBtn.setOnAction(e -> {
             stopAutoDecay();
 
-            new InventoryScreen(primaryStage, bearController, app);
+            new InventoryScreen(primaryStage, bearController, app,
+                () -> new GameplayScreen(bearController, app, saveFile).start(primaryStage));
         });
 
 
