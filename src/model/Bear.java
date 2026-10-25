@@ -18,6 +18,33 @@ public abstract class Bear implements Serializable {
 
     private Inventory inventory;
 
+    // Included in the existing Bear serialization; old saves default to zero.
+    private int score;
+
+    public int getScore() {
+        return score;
+    }
+
+    /** Award only actual stat restoration, never a click at the maximum. */
+    public void awardCarePoints(int previousStat, int currentStat) {
+        int earned = Math.max(0, currentStat - previousStat);
+        if (earned > 0) addScore(earned);
+    }
+
+    /** A completed Pic, Pac, Toe round rewards its result once. */
+    public int rewardMiniGame(String result) {
+        int earned = "Player Wins!".equals(result) ? 30
+                   : "It's a Draw!".equals(result) ? 10 : 0;
+        addScore(earned);
+        return earned;
+    }
+
+    private void addScore(int amount) {
+        if (amount > 0) {
+            score = (int) Math.min(Integer.MAX_VALUE, (long) score + amount);
+        }
+    }
+
     /** Older saves lack this field, so initialize it on first access. */
     public Inventory getInventory() {
         if (inventory == null) {

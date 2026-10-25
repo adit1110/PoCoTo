@@ -90,7 +90,11 @@ public class PoCoToApp extends Application {
         });
         minigameButton.setOnAction(e -> {
             MiniGameScreen minigame = new MiniGameScreen();
-            minigame.setResultHandler(result -> System.out.println("Minigame Result: " + result));
+            minigame.setResultHandler(result -> {
+                Bear active = GameController.getCurrentBear();
+                int earned = active == null ? 0 : active.rewardMiniGame(result);
+                System.out.println("Minigame Result: " + result + "; points earned: " + earned);
+            });
             minigame.show();
         });
         exitButton.setOnAction(e -> primaryStage.close());
