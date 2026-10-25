@@ -2,6 +2,7 @@ package controller;
 
 import java.io.*;
 import model.Bear;
+import java.nio.file.Path;
 
 /**
  * GameController.java
@@ -22,36 +23,44 @@ public class GameController {
 
     /**
      * Get the currently active bear in the game.
-     * @return the current bear
+     * @return the current bearsaveGame
      */
     public static Bear getCurrentBear() {
         return currentBear;
     }
 
-    /**
-     * Saves the current bear to a file using serialization.
-     * @param bear the bear object to save
-     */
     public static void saveGame(Bear bear) {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("bear_save.dat"))) {
+        saveGame(bear, Path.of("bear_save.dat"));
+    }
+
+    public static boolean saveGame(Bear bear, Path path) {
+        try (ObjectOutputStream out =
+                new ObjectOutputStream(new FileOutputStream(path.toFile()))) {
             out.writeObject(bear);
-            System.out.println("Game saved successfully."); // log success
+            System.out.println("Game saved successfully.");
+            return true;
         } catch (IOException e) {
             System.err.println("Failed to save game: " + e.getMessage());
+            return false;
         }
     }
 
-    /**
-     * Loads the saved bear from file using deserialization.
-     * @return the loaded bear object, or null if loading failed
-     */
     public static Bear loadGame() {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("bear_save.dat"))) {
-            Bear loadedBear = (Bear) in.readObject();
+        return loadGame(Path.of("bear_save.dat"));
+    }
+
+    public static Bear loadGame(Path path) {
+        try (
+            FileInputStream fileIn = new FileInputStream(path.toFile());
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn)
+        ) {
+            Bear loadedBear = (Bear) objectIn.readObject();
             currentBear = loadedBear;
-            System.out.println("Game loaded successfully."); // log success
+
+            System.out.println("Game loaded successfully.");
             return loadedBear;
-        } catch (IOException | ClassNotFoundException e) {
+
+        } catch (IOException | ClassNotFoundException | ClassCastException e) {
             System.err.println("Failed to load game: " + e.getMessage());
             return null;
         }

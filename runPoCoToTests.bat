@@ -36,7 +36,7 @@ if errorlevel 1 (
 echo Compiling PoCoTo regression tests...
 javac --module-path "%JAVAFX_LIB%" --add-modules javafx.controls,javafx.fxml ^
   -cp "%APP_CLASSES%;bin;lib/*" -d "%TEST_CLASSES%" ^
-  src\test\BearStatLogicTest.java src\test\StatDecayLifecycleTest.java
+  src\test\BearStatLogicTest.java src\test\StatDecayLifecycleTest.java src/test/SaveLoadRegressionTest.java src/test/GameplaySaveLoadTest.java
 if errorlevel 1 (
     echo ERROR: Test compilation failed.
     exit /b 1
@@ -47,9 +47,21 @@ java --module-path "%JAVAFX_LIB%" --add-modules javafx.controls,javafx.fxml ^
   -cp "%TEST_CLASSES%;%APP_CLASSES%;bin;lib/*" ^
   org.junit.platform.console.ConsoleLauncher execute ^
   --select-class test.BearStatLogicTest ^
-  --select-class test.StatDecayLifecycleTest
+  --select-class test.StatDecayLifecycleTest ^
+  --select-class test.SaveLoadRegressionTest
 if errorlevel 1 (
     echo ERROR: One or more tests failed.
+    exit /b 1
+)
+
+REM Run UI tests in a separate JVM: JavaFX cannot restart after Platform.exit().
+echo Running gameplay Save/Load UI tests...
+java --module-path "%JAVAFX_LIB%" --add-modules javafx.controls,javafx.fxml ^
+  -cp "%TEST_CLASSES%;%APP_CLASSES%;bin;lib/*" ^
+  org.junit.platform.console.ConsoleLauncher execute ^
+  --select-class test.GameplaySaveLoadTest
+if errorlevel 1 (
+    echo ERROR: Gameplay UI tests failed.
     exit /b 1
 )
 
