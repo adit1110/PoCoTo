@@ -8,3 +8,6 @@ bear_save.dat
 # Ignore JARs (optional)
 *.jar
 git
+
+# Ignore parental control files
+parental_controls.properties
