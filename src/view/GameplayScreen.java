@@ -207,19 +207,37 @@ public class GameplayScreen {
             notificationService.checkBearStatus(bearController.getBear()); // added by Bhavya Sharma
         });
 
-        pauseBtn.setOnAction(e -> {   //By Jayansh Bagga- Pause Button Action 
+        pauseBtn.setOnAction(e -> {
+            // Pause automatic stat decay while the pause menu is open.
+            if (autoDecayTimer != null) {
+                autoDecayTimer.pause();
+            }
+
             PauseMenu pauseMenu = new PauseMenu(
-                primaryStage, // if needed, pass primaryStage directly (changed to primaryStage by Adit)
-                () -> {
-                    System.out.println("Game resumed."); //resume action 
-                }, 
-                () -> GameController.saveGame(bearController.getBear()), // Save (modified by Adit to pass the bear into the method call)
+                primaryStage,
+
+                // Resume
+                () -> System.out.println("Game resumed."),
+
+                // Save
+                () -> GameController.saveGame(bearController.getBear()),
+
+                // Return to main menu
                 () -> {
                     stopAutoDecay();
-                    app.showMainMenu(primaryStage); // Return to main menu
+                    app.showMainMenu(primaryStage);
                 }
             );
+
+            // This waits until the Pause window closes.
             pauseMenu.show();
+
+            // Resume the existing timer, including when the window
+            // is closed with X instead of the Resume button.
+            if (autoDecayTimer != null &&
+                autoDecayTimer.getStatus() == javafx.animation.Animation.Status.PAUSED) {
+                autoDecayTimer.play();
+            }
         });
 
 
