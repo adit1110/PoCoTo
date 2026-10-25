@@ -4,39 +4,26 @@ import model.Bear;
 import model.Po;
 import controller.GameController;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * GameControllerTest.java
- * Unit tests for save/load functionality and state management
- * @author: Jayansh Bagga
- */
+/** Original CS2212 GameController checks, isolated from real saves. */
 public class GameControllerTest {
-
-    /**
-     * Tests whether GameController properly stores and retrieves current bear
-     */
-    @Test
-    public void testSetAndGetCurrentBear() {
+    @TempDir Path tempDir;
+    @Test public void testSetAndGetCurrentBear() {
         Bear bear = new Po("Po");
         GameController.setCurrentBear(bear);
-        assertEquals("Po", GameController.getCurrentBear().getName(),
-            "Expected bear name 'Po' to be returned by getCurrentBear()");
+        assertSame(bear, GameController.getCurrentBear());
     }
-
-    /**
-     * Tests saving and loading a bear, and ensures hunger state is preserved
-     */
-    @Test
-    public void testSaveAndLoadBear() {
+    @Test public void testSaveAndLoadBear() {
+        Path save = tempDir.resolve("bear_save.dat");
         Bear bear = new Po("Po");
-        bear.feed(-40); // Simulate change in hunger
-        GameController.setCurrentBear(bear);
-        GameController.saveGame(bear); // bear added into brackets by Adit to help tests run
-
-        Bear loaded = GameController.loadGame();
-        assertNotNull(loaded, "Loaded bear should not be null");
-        assertEquals(bear.getName(), loaded.getName(), "Loaded bear name should match original");
-        assertEquals(bear.getHunger(), loaded.getHunger(), "Loaded bear hunger should match original");
+        bear.setHunger(60);
+        assertTrue(GameController.saveGame(bear, save));
+        Bear loaded = GameController.loadGame(save);
+        assertNotNull(loaded);
+        assertEquals(bear.getName(), loaded.getName());
+        assertEquals(60, loaded.getHunger());
     }
 }

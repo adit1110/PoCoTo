@@ -1,71 +1,49 @@
 package test;
 
-import model.Po; // added by Adit to help fix the tests not working
+import model.Po;
 import model.ParentalControl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * @author: Krish Patel
- * Unit tests for the ParentalControl class.
- * This class verifies the functionality of methods in the ParentalControl class.
- * It tests the functionality of playtime limit, character revival toggle, and user statistics.
- */
+/** Modernized CS2212 parental control checks. */
 class ParentalControlTest {
-
     private ParentalControl parentalControl;
+    @BeforeEach void setup() { parentalControl = new ParentalControl(new Po("Bear1")); }
 
-    /**
-     * Sets up a fresh ParentalControl object before each test.
-     */
-    @BeforeEach
-    void setUp() {
-        parentalControl = new ParentalControl(new Po("Bear1"));
+    @Test void testSetPlaytimeLimit() {
+        parentalControl.setPlaytimeLimit(60);
+        assertEquals(60, parentalControl.getPlaytimeLimit());
     }
-
-    /**
-     * Tests that the playtime limit can be set correctly.
-     */
-    @Test
-    void testSetPlaytimeLimit() {
-        parentalControl.setPlaytimeLimit(60); // Limit set to 60 minutes
-        assertEquals(60, parentalControl.getPlaytimeLimit(), "Playtime limit should be correctly set.");
-    }
-
-    /**
-     * Tests that the character revival toggle can be enabled and disabled.
-     */
-    @Test
-    void testCharacterRevivalToggle() {
+    @Test void testCharacterRevivalToggle() {
         parentalControl.toggleCharacterRevival(true);
-        assertTrue(parentalControl.isCharacterRevivalEnabled(), "Character revival should be enabled.");
-        
+        assertTrue(parentalControl.isCharacterRevivalEnabled());
         parentalControl.toggleCharacterRevival(false);
-        assertFalse(parentalControl.isCharacterRevivalEnabled(), "Character revival should be disabled.");
+        assertFalse(parentalControl.isCharacterRevivalEnabled());
     }
-
-    /**
-     * Tests that the user's statistics are correctly retrieved.
-     */
-    @Test
-    void testGetUserStatistics() {
+    @Test void testGetUserStatistics() {
         parentalControl.setPlaytimeLimit(60);
         parentalControl.toggleCharacterRevival(true);
-        
         String stats = parentalControl.getUserStatistics();
-        assertTrue(stats.contains("Playtime Limit: 60"), "Statistics should contain the correct playtime limit.");
-        assertTrue(stats.contains("Character Revival: Enabled"), "Statistics should contain the correct revival status.");
+        assertTrue(stats.contains("Playtime Limit: 60"));
+        assertTrue(stats.contains("Character Revival: Enabled"));
     }
-
-    /**
-     * Tests the behavior of password protection (assuming a method for password checking).
-     */
-    @Test
-    void testPasswordProtection() {
+    @Test void testPasswordProtection() {
         parentalControl.setPassword("test123");
-        assertTrue(parentalControl.checkPassword("test123"), "Password should match and grant access.");
-        assertFalse(parentalControl.checkPassword("wrongpass"), "Incorrect password should deny access.");
+        assertTrue(parentalControl.checkPassword("test123"));
+        assertFalse(parentalControl.checkPassword("wrongpass"));
+    }
+    @Test void testReviveOnlyWhenDeadAndEnabled() {
+        Po bear = new Po("Bear1");
+        ParentalControl controls = new ParentalControl(bear);
+        bear.setHealth(0);
+        controls.setRevivalEnabled(false);
+        assertFalse(controls.canReviveBear());
+        controls.reviveBear();
+        assertEquals(0, bear.getHealth());
+        controls.setRevivalEnabled(true);
+        assertTrue(controls.canReviveBear());
+        controls.reviveBear();
+        assertEquals(100, bear.getHealth());
     }
 }
