@@ -1,13 +1,16 @@
-# Ignore compiled class files and build output
-/bin/
+# Compiled Java classes and build artifacts
 *.class
+/build/
+bin/**/*.class
 
-# Ignore serialized save data
+# Local gameplay data
 bear_save.dat
-
-# Ignore JARs (optional)
-*.jar
-git
-
-# Ignore parental control files
+savefile.json
 parental_controls.properties
+
+# Local development scripts
+apply_pocoto_*.py
+install_pocoto_*.py
+
+# Temporary files
+*.log
