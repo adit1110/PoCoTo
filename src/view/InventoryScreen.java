@@ -1,111 +1,134 @@
-package view; // added by Adit
+package view;
 
-/**
- * The InventoryScreen class represents the inventory UI in the game.
- * It displays available items (apple and banana) and allows the player
- * to return to the GameplayScreen.
- * 
- * This class loads item images from the assets folder and applies styles
- * from styles.css for a consistent UI.
- * 
- * @author Krish Patel
- */
-
+import app.PoCoToApp;
+import controller.BearController;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
-import javafx.geometry.Insets; // added by Adit
-import javafx.geometry.Pos; // added by Adit
-import javafx.scene.layout.HBox; // added by Adit
-import javafx.stage.Stage;
-import controller.BearController; // added by Adit
-import app.PoCoToApp; // added by Adit
-import javafx.scene.text.Text; // added by Adit
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import model.Bear;
+import model.Inventory;
 
-
-
-/**
- * The InventoryScreen class represents the UI and all the items placed in the inventory section
- */
+/** Inventory screen: consume limited food and give gifts to the active bear. */
 public class InventoryScreen {
-    private Stage primaryStage;
-    private BearController controller; // added by Adit
-    private PoCoToApp app; // added by Adit
-    private Text feedbackText; // added by Adit
+    private final Stage stage;
+    private final BearController controller;
+    private final PoCoToApp app;
+    private final Runnable returnToGameplay;
+    private final Label feedback = new Label("Select an item to use it.");
 
-    public InventoryScreen(Stage primaryStage, BearController controller, PoCoToApp app) {
-        this.primaryStage = primaryStage;
-        this.controller = controller; // added by Adit
-        this.app = app; // added by Adit
+    public InventoryScreen(Stage stage, BearController controller, PoCoToApp app) {
+        this(stage, controller, app, () -> new GameplayScreen(controller, app).start(stage));
+    }
+
+    public InventoryScreen(Stage stage, BearController controller, PoCoToApp app,
+                           Runnable returnToGameplay) {
+        this.stage = stage;
+        this.controller = controller;
+        this.app = app;
+        this.returnToGameplay = returnToGameplay;
         showInventoryScreen();
     }
 
     private void showInventoryScreen() {
         VBox layout = new VBox(20);
-        layout.setPadding(new Insets(20)); // added by Adit to style the inventory screen
-        layout.setAlignment(Pos.CENTER); // added by Adit to style the inventory screen
+        layout.setPadding(new Insets(30));
+        layout.setAlignment(Pos.CENTER);
+        layout.setStyle("-fx-background-color: #2c3e50;");
 
-        VBox titleBox = new VBox(5); // spacing between text and underline
-        titleBox.setAlignment(Pos.CENTER);
-        
-        // added by Adit to implement a physical title and implement styling similar to other pages
-        Text titleText = new Text("Inventory");
-        titleText.getStyleClass().add("section-title");
-
+        Label title = new Label("Inventory");
+        title.getStyleClass().add("section-title");
         Region underline = new Region();
         underline.getStyleClass().add("underline-bar");
+        VBox titleBox = new VBox(5, title, underline);
+        titleBox.setAlignment(Pos.CENTER);
 
-        titleBox.getChildren().addAll(titleText, underline);
+        feedback.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
+        Label explanation = new Label("Food restores Hunger. Gifts restore Happiness.");
+        explanation.setStyle("-fx-text-fill: #d4e2ee; -fx-font-size: 14px;");
 
+        HBox itemsRow = new HBox(20);
+        itemsRow.setAlignment(Pos.CENTER);
+        Inventory inventory = controller.getBear().getInventory();
+        itemsRow.getChildren().addAll(
+            itemCard("Apple", "assets/apple.png", 10, true, inventory),
+            itemCard("Banana", "assets/banana.png", 15, true, inventory),
+            itemCard("Teddy Bear", null, 20, false, inventory)
+        );
 
-        layout.setStyle("-fx-background-color: #2c3e50;"); // added by Adit to style the inventory screen
+        Button back = new Button("Back to Game");
+        back.setOnAction(event -> returnToGameplay.run());
+        layout.getChildren().addAll(titleBox, explanation, itemsRow, feedback, back);
 
+        ScrollPane scrollPane = new ScrollPane(layout);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background: #2c3e50; -fx-background-color: #2c3e50;");
+        Scene scene = new Scene(scrollPane, 800, 700);
+        var css = getClass().getResource("/styles.css");
+        if (css != null) scene.getStylesheets().add(css.toExternalForm());
+        app.switchScene(stage, scene, "PoCoTo - Inventory");
+    }
 
-        feedbackText = new Text(""); // added by Adit to have a visual confirmation for feeding the bear show up
-        feedbackText.setStyle("-fx-fill: white; -fx-font-size: 14px;"); // added by Adit to have a visual confirmation for feeding the bear show up
-        
-        // Load images from assets
-        Image appleImage = new Image("file:assets/apple.png");
-        Image bananaImage = new Image("file:assets/banana.png");
+    private VBox itemCard(String name, String imagePath, int points, boolean food,
+                          Inventory inventory) {
+        VBox card = new VBox(9);
+        card.setAlignment(Pos.CENTER);
+        card.setPadding(new Insets(15));
+        card.setMinWidth(170);
+        card.setStyle("-fx-background-color: #203347; -fx-background-radius: 8px; " +
+                      "-fx-border-color: #47718b; -fx-border-radius: 8px;");
 
-        // feed bear with fruit logic added by Adit
-        ImageView appleView = new ImageView(appleImage);
-        appleView.setFitWidth(80);
-        appleView.setFitHeight(80);
-        appleView.setOnMouseClicked(e -> {
-            controller.feedBear();
-            feedbackText.setText("Fed the bear with a apple!"); // added by Adit to have a visual confirmation for feeding the bear show up
+        if (imagePath != null) {
+            ImageView icon = new ImageView(new Image("file:" + imagePath));
+            icon.setFitWidth(72);
+            icon.setFitHeight(72);
+            icon.setPreserveRatio(true);
+            card.getChildren().add(icon);
+        } else {
+            Label giftIcon = new Label("GIFT");
+            giftIcon.setStyle("-fx-text-fill: #ffdc85; -fx-font-size: 26px; -fx-font-weight: bold;");
+            giftIcon.setMinHeight(72);
+            card.getChildren().add(giftIcon);
+        }
+
+        Label nameLabel = new Label(name);
+        Label countLabel = new Label();
+        nameLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
+        countLabel.setStyle("-fx-text-fill: #d4e2ee;");
+        Label effectLabel = new Label("+" + points + (food ? " Hunger" : " Happiness"));
+        effectLabel.setStyle("-fx-text-fill: #d4e2ee;");
+        Button useButton = new Button(food ? "Feed" : "Give Gift");
+        Runnable refresh = () -> {
+            int count = inventory.getItemCount(name);
+            countLabel.setText("Quantity: " + count);
+            useButton.setDisable(count == 0);
+        };
+        useButton.setOnAction(event -> {
+            if (!inventory.useItem(name)) {
+                feedback.setText("No " + name + " items remaining.");
+                refresh.run();
+                return;
+            }
+            Bear bear = controller.getBear();
+            int before = food ? bear.getHunger() : bear.getHappiness();
+            if (food) bear.feed(points);
+            else bear.play(points);
+            bear.awardCarePoints(before, food ? bear.getHunger() : bear.getHappiness());
+            feedback.setText("Used " + name + "! +" + points +
+                             (food ? " Hunger" : " Happiness") +
+                             " (up to 100). Remaining: " + inventory.getItemCount(name));
+            refresh.run();
         });
-
-        // feed bear with fruit logic added by Adit
-        ImageView bananaView = new ImageView(new Image("file:assets/banana.png"));
-        bananaView.setFitWidth(80);
-        bananaView.setFitHeight(80);
-        bananaView.setOnMouseClicked(e -> {
-            controller.feedBear();
-            feedbackText.setText("Fed the bear with a banana!"); // added by Adit to have a visual confirmation for feeding the bear show up
-        });
-
-        HBox imageBox = new HBox(40, appleView, bananaView); // modified by Adit to style the inventory screen
-        imageBox.setAlignment(Pos.CENTER); // added by Adit to style the inventory screen
-
-        // Back button to return to GameplayScreen
-        Button backButton = new Button("Back to Game");
-        backButton.setOnAction(e -> { // modified by Adit to cleanly return to the gameplay screen
-            GameplayScreen gameplay = new GameplayScreen(controller, app);
-            gameplay.start(primaryStage);
-        });
-
-        layout.getChildren().addAll(titleBox, imageBox, feedbackText, backButton); // added by Adit
-                
-        Scene scene = new Scene(layout, 800, 640);
-        scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm()); // modified by Adit to look for styles.css from the root of the classpath
-
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("PoCoTo - Inventory"); // added by Adit to title the screen
-        primaryStage.show();
+        refresh.run();
+        card.getChildren().addAll(nameLabel, countLabel, effectLabel, useButton);
+        return card;
     }
 }

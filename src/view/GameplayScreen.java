@@ -39,6 +39,10 @@ import model.Inventory;
 import javafx.scene.control.Alert;
 import java.util.List;
 import view.GameplayScreen;
+import javafx.scene.control.ScrollPane;
+import java.nio.file.Path;
+import service.ParentalSettings;
+import javafx.scene.layout.Region;
 
 /**
  * GameplayScreen class represents the main gameplay screen of the application.
@@ -66,11 +70,17 @@ public class GameplayScreen {
     private Label healthLabel;
     private Label sleepLabel;
     private Label happinessLabel;
+    private Label scoreLabel;
     
     // Services and helper classes
     private NotificationService notificationService; // added by Bhavya Sharma
     private SaveLoadController saveLoadController; // added by Bhavya Sharma
     private Timeline autoDecayTimer;
+    private Timeline parentalClock;
+    private final ParentalSettings parentalSettings = ParentalSettings.getDefault();
+    private boolean playtimeExpired;
+    private Stage gameplayStage;
+    private final Path saveFile;
 
     private Inventory inventory = new Inventory(); // Inventory instance for the inventory
 
@@ -81,8 +91,14 @@ public class GameplayScreen {
      * @param app reference to the main app file for screen navigation
      */
     public GameplayScreen(BearController controller, PoCoToApp app) {
+        this(controller, app, Path.of("bear_save.dat"));
+    }
+
+    /** Allows integration tests to use a temporary save file. */
+    public GameplayScreen(BearController controller, PoCoToApp app, Path saveFile) {
         this.bearController = controller;
         this.app = app;
+        this.saveFile = saveFile;
     }
 
     /**
@@ -91,6 +107,20 @@ public class GameplayScreen {
      * @param primaryStage the main stage passed from the application entry point
      */
     public void start(Stage primaryStage) {
+        gameplayStage = primaryStage;
+        parentalSettings.flushElapsedTime();
+        if (!parentalSettings.canPlay()) {
+            app.showMainMenu(primaryStage);
+            new Alert(Alert.AlertType.WARNING, "Playtime limit reached. Ask an administrator to change the limit.").showAndWait();
+            return;
+        }
+        parentalSettings.beginSession();
+        parentalClock = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+            parentalSettings.flushElapsedTime();
+            enforcePlaytimeLimit();
+        }));
+        parentalClock.setCycleCount(Timeline.INDEFINITE);
+        parentalClock.play();
         // Title label
         Label title = new Label("PoCoTo");
         title.getStyleClass().add("title");
@@ -118,9 +148,32 @@ public class GameplayScreen {
         happinessBar = createLabeledBar("Happiness");
         HBox happinessBox = new HBox(10, happinessLabel, happinessBar);
 
+        // Keep the stats section centered and consistently sized.
         VBox statsBox = new VBox(10, hungerBox, healthBox, sleepBox, happinessBox);
         statsBox.setPadding(new Insets(20));
         statsBox.setAlignment(Pos.CENTER);
+        statsBox.setMaxWidth(480);
+
+        // Align all progress bars vertically.
+        hungerBox.setAlignment(Pos.CENTER_LEFT);
+        healthBox.setAlignment(Pos.CENTER_LEFT);
+        sleepBox.setAlignment(Pos.CENTER_LEFT);
+        happinessBox.setAlignment(Pos.CENTER_LEFT);
+
+        // Give each stat label the same width.
+        hungerLabel.setMinWidth(160);
+        healthLabel.setMinWidth(160);
+        sleepLabel.setMinWidth(160);
+        happinessLabel.setMinWidth(160);
+
+        // Give each progress bar the same width.
+        hungerBar.setPrefWidth(230);
+        healthBar.setPrefWidth(230);
+        sleepBar.setPrefWidth(230);
+        happinessBar.setPrefWidth(230);
+
+        scoreLabel = new Label();
+        scoreLabel.setStyle("-fx-text-fill: #ffdc85; -fx-font-size: 18px; -fx-font-weight: bold;");
 
         // Bear image setup
         bearImage = new ImageView(getBearImage(bearController.getBear()));
@@ -140,7 +193,9 @@ public class GameplayScreen {
         Button playBtn = new Button("Play");
         Button sleepBtn = new Button("Sleep");
         Button healBtn = new Button("Heal");
-        Button pauseBtn = new Button("Pause"); //Added by Jayansh Bagga
+        Button reviveBtn = new Button("Revive Bear");
+        Button pauseBtn = new Button("Pause");
+        Button miniGameBtn = new Button("Minigame"); //Added by Jayansh Bagga
         Button saveButton = new Button("Save Game"); // moved up here by Adit
         Button loadButton = new Button("Load Game"); // moved up here by Adit
         Button backButton = new Button("Back to Main Menu"); // moved up here by Adit
@@ -151,71 +206,170 @@ public class GameplayScreen {
         playBtn.setPrefWidth(120);
         sleepBtn.setPrefWidth(120);
         healBtn.setPrefWidth(120);
+        pauseBtn.setMinWidth(120);
         pauseBtn.setPrefWidth(120);
-        InventoryBtn.setPrefWidth(120);
+        miniGameBtn.setMinWidth(140);
+        miniGameBtn.setPrefWidth(140);
+        InventoryBtn.setMinWidth(130);
+        InventoryBtn.setPrefWidth(130);
         saveButton.setPrefWidth(140);
         loadButton.setPrefWidth(140);
-        backButton.setPrefWidth(180);
+        backButton.setMinWidth(210);
+        backButton.setPrefWidth(210);
 
 
         HBox topButtons = new HBox(15, feedBtn, playBtn, sleepBtn, healBtn, InventoryBtn);
         topButtons.setPadding(new Insets(10));
         topButtons.setAlignment(Pos.CENTER);
 
-        HBox saveLoadBox = new HBox(15, saveButton, loadButton);
+        reviveBtn.setOnAction(e -> {
+            if (parentalSettings.revive(bearController.getBear())) {
+                updateUI();
+            }
+        });
+        HBox saveLoadBox = new HBox(15, saveButton, loadButton, reviveBtn);
         saveLoadBox.setAlignment(Pos.CENTER);
 
-        HBox pauseBox = new HBox(pauseBtn);
-        pauseBox.setAlignment(Pos.BOTTOM_RIGHT);
-        pauseBox.setPadding(new Insets(10, 20, 10, 10));
+        Label saveLoadFeedback = new Label();
+        saveLoadFeedback.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
 
-        VBox root = new VBox(25, title, bearNameLabel, bearImage, statsBox, topButtons, saveLoadBox, bearStatusText, backButton);
+        // Center the Pause and Minigame buttons beneath the main actions.
+        HBox pauseBox = new HBox(15, pauseBtn, miniGameBtn);
+        pauseBox.setAlignment(Pos.CENTER);
+        pauseBox.setPadding(new Insets(10));
+        pauseBox.setMaxWidth(Region.USE_PREF_SIZE);
+
+        VBox root = new VBox(25, title, bearNameLabel, scoreLabel, bearImage, statsBox, topButtons, pauseBox, saveLoadBox, saveLoadFeedback, bearStatusText, backButton);
         root.setAlignment(Pos.CENTER);
 
         // Back to Main Menu button
-        backButton.setOnAction(e -> app.showMainMenu(primaryStage));
+        backButton.setOnAction(e -> {
+            stopAutoDecay();
+            stopParentalClock();
+            app.showMainMenu(primaryStage);
+        });
         VBox.setMargin(backButton, new Insets(10, 0, 30, 0));
 
         // Button logic for user interactions
         feedBtn.setOnAction(e -> {
+            Bear activeBear = bearController.getBear();
+            int before = activeBear.getHunger();
             bearController.feedBear();
+            activeBear.awardCarePoints(before, activeBear.getHunger());
             updateUI();
             notificationService.checkBearStatus(bearController.getBear()); // added by Bhavya Sharma
         });
 
         playBtn.setOnAction(e -> {
+            Bear activeBear = bearController.getBear();
+            int before = activeBear.getHappiness();
             bearController.playWithBear();
+            activeBear.awardCarePoints(before, activeBear.getHappiness());
             updateUI();
             notificationService.checkBearStatus(bearController.getBear()); // added by Bhavya Sharma
         });
 
         sleepBtn.setOnAction(e -> {
+            Bear activeBear = bearController.getBear();
+            int before = activeBear.getSleep();
             bearController.putBearToSleep();
+            activeBear.awardCarePoints(before, activeBear.getSleep());
             updateUI();
             notificationService.checkBearStatus(bearController.getBear()); // added by Bhavya Sharma
         });
 
         healBtn.setOnAction(e -> {
+            Bear activeBear = bearController.getBear();
+            int before = activeBear.getHealth();
             bearController.healBear();
+            activeBear.awardCarePoints(before, activeBear.getHealth());
             updateUI();
             notificationService.checkBearStatus(bearController.getBear()); // added by Bhavya Sharma
         });
 
-        pauseBtn.setOnAction(e -> {   //By Jayansh Bagga- Pause Button Action 
+        // Save using the same Java serialization format as the Pause menu.
+        saveButton.setOnAction(e -> {
+            boolean success = GameController.saveGame(bearController.getBear(), saveFile);
+            saveLoadFeedback.setText(success ? "Game saved successfully." : "Could not save game.");
+        });
+
+        // Replace the active controller so all gameplay actions use the loaded bear.
+        loadButton.setOnAction(e -> {
+            Bear loadedBear = GameController.loadGame(saveFile);
+            if (loadedBear == null) {
+                saveLoadFeedback.setText("Could not load game. No valid save found.");
+                return;
+            }
+            bearController = new BearController(loadedBear);
+            saveLoadController = new SaveLoadController(loadedBear);
+            updateUI();
+            saveLoadFeedback.setText("Game loaded successfully.");
+        });
+
+        miniGameBtn.setOnAction(e -> {
+            // Pause decay while the minigame's separate window is open.
+            if (autoDecayTimer != null) autoDecayTimer.pause();
+            pauseParentalClock();
+            view.MiniGameScreen miniGame = new view.MiniGameScreen();
+            miniGame.initOwner(primaryStage);
+            miniGame.initModality(javafx.stage.Modality.WINDOW_MODAL);
+            miniGame.setResultHandler(result -> {
+                int earned = bearController.getBear().rewardMiniGame(result);
+                saveLoadFeedback.setText(earned > 0
+                        ? "Minigame: +" + earned + " points!" : "Minigame finished. No points earned.");
+                updateUI();
+            });
+            miniGame.showAndWait();
+            resumeParentalClock();
+            if (autoDecayTimer != null &&
+                    autoDecayTimer.getStatus() == javafx.animation.Animation.Status.PAUSED) {
+                autoDecayTimer.play();
+            }
+        });
+
+        pauseBtn.setOnAction(e -> {
+            pauseParentalClock();
+            // Pause automatic stat decay while the pause menu is open.
+            if (autoDecayTimer != null) {
+                autoDecayTimer.pause();
+            }
+
             PauseMenu pauseMenu = new PauseMenu(
-                primaryStage, // if needed, pass primaryStage directly (changed to primaryStage by Adit)
+                primaryStage,
+
+                // Resume
+                () -> System.out.println("Game resumed."),
+
+                // Save
+                () -> GameController.saveGame(bearController.getBear()),
+
+                // Return to main menu
                 () -> {
-                    System.out.println("Game resumed."); //resume action 
-                }, 
-                () -> GameController.saveGame(bearController.getBear()), // Save (modified by Adit to pass the bear into the method call)
-                () -> app.showMainMenu(primaryStage) // Return to main menu
+                    stopAutoDecay();
+                    stopParentalClock();
+                    app.showMainMenu(primaryStage);
+                }
             );
+
+            // This waits until the Pause window closes.
             pauseMenu.show();
+            resumeParentalClock();
+
+            // Resume the existing timer, including when the window
+            // is closed with X instead of the Resume button.
+            if (autoDecayTimer != null &&
+                autoDecayTimer.getStatus() == javafx.animation.Animation.Status.PAUSED) {
+                autoDecayTimer.play();
+            }
         });
 
 
-        InventoryBtn.setOnAction(e -> { // added by Adit to show the Inventory Button
-            InventoryScreen inventoryScreen = new InventoryScreen(primaryStage, bearController, app);
+        InventoryBtn.setOnAction(e -> {
+            stopAutoDecay();
+            stopParentalClock();
+
+            new InventoryScreen(primaryStage, bearController, app,
+                () -> new GameplayScreen(bearController, app, saveFile).start(primaryStage));
         });
 
 
@@ -226,21 +380,35 @@ public class GameplayScreen {
 
         
 
-        Scene scene = new Scene(root, 800, 700); // game screen dimensions
+        ScrollPane scrollPane = new ScrollPane(root);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
-        // Apply styles.css
+        scrollPane.setStyle(
+            "-fx-background: #2c3e50;" +
+            "-fx-background-color: #2c3e50;" +
+            "-fx-border-color: transparent;"
+        );
+
+        Scene scene = new Scene(scrollPane, 800, 700);
+
         var css = getClass().getResource("/styles.css");
         if (css != null) {
             scene.getStylesheets().add(css.toExternalForm());
         }
 
-        primaryStage.setTitle("PoCoTo - Gameplay");
-        primaryStage.setScene(scene);
-        primaryStage.setWidth(800);
-        primaryStage.setHeight(640);
-        primaryStage.setResizable(false);
-        primaryStage.show();
+        app.switchScene(
+            primaryStage,
+            scene,
+            "PoCoTo - Gameplay"
+        );
 
+        // Expose revival only for a dead bear when the guardian allows it.
+        reviveBtn.visibleProperty().bind(javafx.beans.binding.Bindings.createBooleanBinding(
+                () -> parentalSettings.canRevive(bearController.getBear()),
+                healthBar.progressProperty()));
+        reviveBtn.managedProperty().bind(reviveBtn.visibleProperty());
         updateUI();
         startAutoDecay();
     }
@@ -261,6 +429,7 @@ public class GameplayScreen {
     private void updateUI() {
 
         bearNameLabel.setText(bearController.getBear().getLabel());
+        scoreLabel.setText("Score: " + bearController.getBear().getScore());
         
         double hunger = bearController.getHungerPercent();
         double health = bearController.getHealthPercent();
@@ -355,6 +524,46 @@ public class GameplayScreen {
      */
     private void loadGame() {
         System.out.println("Loading game...");
+    }
+
+    /**
+     * Stops automatic stat decay when leaving gameplay.
+     */
+    private void enforcePlaytimeLimit() {
+        if (playtimeExpired || parentalSettings.canPlay()) return;
+        playtimeExpired = true;
+        stopAutoDecay();
+        stopParentalClock();
+        app.showMainMenu(gameplayStage);
+        new Alert(Alert.AlertType.WARNING,
+                "Your playtime limit has been reached. Gameplay is now locked.").showAndWait();
+    }
+
+    private void pauseParentalClock() {
+        if (parentalClock != null) parentalClock.pause();
+        parentalSettings.endSession();
+    }
+
+    private void resumeParentalClock() {
+        if (parentalClock != null && !playtimeExpired) {
+            parentalSettings.beginSession();
+            parentalClock.play();
+        }
+    }
+
+    private void stopParentalClock() {
+        parentalSettings.endSession();
+        if (parentalClock != null) {
+            parentalClock.stop();
+            parentalClock = null;
+        }
+    }
+
+    private void stopAutoDecay() {
+        if (autoDecayTimer != null) {
+            autoDecayTimer.stop();
+            autoDecayTimer = null;
+        }
     }
 
     /**

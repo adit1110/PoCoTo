@@ -12,7 +12,47 @@ import java.io.Serializable;
  * Abstract class representing a Bear.
  * Contains common fields and methods used by all bear types.
  */
-public abstract class Bear implements Serializable { //Serializable Added By Jayansh Bagga, This allows bear onbjects to be saveable via seralization.
+public abstract class Bear implements Serializable {
+    // Fixed at the original serialized-class UID to preserve existing bear_save.dat files.
+    private static final long serialVersionUID = -2450195015779438704L;
+
+    private Inventory inventory;
+
+    // Included in the existing Bear serialization; old saves default to zero.
+    private int score;
+
+    public int getScore() {
+        return score;
+    }
+
+    /** Award only actual stat restoration, never a click at the maximum. */
+    public void awardCarePoints(int previousStat, int currentStat) {
+        int earned = Math.max(0, currentStat - previousStat);
+        if (earned > 0) addScore(earned);
+    }
+
+    /** A completed Pic, Pac, Toe round rewards its result once. */
+    public int rewardMiniGame(String result) {
+        int earned = "Player Wins!".equals(result) ? 30
+                   : "It's a Draw!".equals(result) ? 10 : 0;
+        addScore(earned);
+        return earned;
+    }
+
+    private void addScore(int amount) {
+        if (amount > 0) {
+            score = (int) Math.min(Integer.MAX_VALUE, (long) score + amount);
+        }
+    }
+
+    /** Older saves lack this field, so initialize it on first access. */
+    public Inventory getInventory() {
+        if (inventory == null) {
+            inventory = Inventory.starterInventory();
+        }
+        return inventory;
+    }
+ //Serializable Added By Jayansh Bagga, This allows bear onbjects to be saveable via seralization.
     // Basic attributes for a bear
     
     /**
@@ -61,6 +101,7 @@ public abstract class Bear implements Serializable { //Serializable Added By Jay
         this.health = MAX_STAT;
         this.sleep = MAX_STAT;
         this.happiness = MAX_STAT;
+        this.inventory = Inventory.starterInventory();
     }
 
     // Basic actions for the bear. These methods increase the respective stat
@@ -90,7 +131,7 @@ public abstract class Bear implements Serializable { //Serializable Added By Jay
      * @param amount the amount of fun to add
      */
     public void play(int amount) {
-        happiness = Math.min(hunger + amount, MAX_STAT);
+        happiness = Math.min(happiness + amount, MAX_STAT);
     }
 
     /**
@@ -99,7 +140,7 @@ public abstract class Bear implements Serializable { //Serializable Added By Jay
      * @param amount the healing amount
      */
     public void heal(int amount) {
-        health = Math.min(hunger + amount, MAX_STAT);
+        health = Math.min(health + amount, MAX_STAT);
     }
 
     /**

@@ -36,6 +36,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.Priority;
+import javafx.application.Platform;
+import javafx.scene.Parent;
+import javafx.scene.layout.StackPane;
 
 
 /**
@@ -87,7 +90,11 @@ public class PoCoToApp extends Application {
         });
         minigameButton.setOnAction(e -> {
             MiniGameScreen minigame = new MiniGameScreen();
-            minigame.setResultHandler(result -> System.out.println("Minigame Result: " + result));
+            minigame.setResultHandler(result -> {
+                Bear active = GameController.getCurrentBear();
+                int earned = active == null ? 0 : active.rewardMiniGame(result);
+                System.out.println("Minigame Result: " + result + "; points earned: " + earned);
+            });
             minigame.show();
         });
         exitButton.setOnAction(e -> primaryStage.close());
@@ -127,9 +134,7 @@ public class PoCoToApp extends Application {
             scene.getStylesheets().add(css.toExternalForm());
         }
 
-        primaryStage.setTitle("PoCoTo - Main Menu");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        switchScene(primaryStage, scene, "PoCoTo - Main Menu");
     }
 
     /**
@@ -168,8 +173,7 @@ public class PoCoToApp extends Application {
             scene.getStylesheets().add(css.toExternalForm());
         }
 
-        primaryStage.setTitle("Select Your Bear");
-        primaryStage.setScene(scene);
+        switchScene(primaryStage, scene, "Select Your Bear");
     }
 
     /**
@@ -200,10 +204,6 @@ public class PoCoToApp extends Application {
         BearController controller = new BearController(bear);
         GameplayScreen screen = new GameplayScreen(controller, this);
         screen.start(primaryStage);
-
-        primaryStage.setWidth(800);
-        primaryStage.setHeight(640);
-        primaryStage.setResizable(false);
     }
 
     /**
@@ -220,6 +220,42 @@ public class PoCoToApp extends Application {
             screen.start(primaryStage);
         }
 
+    }
+
+        /**
+     * Switches screen content while keeping the same Scene
+     * attached to the application's Stage.
+     *
+     * @param stage the main application window
+     * @param newScene the destination screen's scene
+     * @param title the destination window title
+     */
+    public void switchScene(Stage stage, Scene newScene, String title) {
+        stage.setTitle(title);
+        stage.setResizable(true);
+
+        // Initial startup: attach the first scene normally.
+        if (stage.getScene() == null) {
+            stage.setScene(newScene);
+            stage.show();
+            return;
+        }
+
+        Scene currentScene = stage.getScene();
+
+        // Get the content of the destination screen.
+        Parent newRoot = newScene.getRoot();
+
+        // Detach the destination root from its temporary scene.
+        newScene.setRoot(new StackPane());
+
+        // Replace the content without replacing the active Scene.
+        currentScene.setRoot(newRoot);
+
+        // Apply the destination screen's stylesheet(s).
+        currentScene.getStylesheets().setAll(
+            newScene.getStylesheets()
+        );
     }
 
     public static void main(String[] args) {

@@ -1,35 +1,31 @@
 package util;
 
 import model.Po;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.File;
-import java.io.IOException;
-
-/**
- * DatabaseHelperTest.java
- * Unit tests for saving and loading Bear game data to and from a file.
- * @author: Bhavya Sharma and Adit Bhimani
- */
-
+/** Original JSON persistence test. Savefile is backed up and restored. */
 public class DatabaseHelperTest {
-
-
-    @Test
-    void testWriteAndReadBear() throws IOException {
-        Po originalBear = new Po("TestPo");
-        originalBear.setHunger(70); // added by Adit
-        originalBear.setHappiness(50); // added by Adit
-
-        DatabaseHelper dbHelper = new DatabaseHelper();
-        dbHelper.writeToFile(originalBear);
-
-        Po loadedBear = (Po) dbHelper.readFromFile(Po.class); // added by Adit
-
-        assertNotNull(loadedBear);
-        assertEquals(originalBear.getName(), loadedBear.getName()); // modified by Adit
-        assertEquals(originalBear.getHunger(), loadedBear.getHunger()); // modified by Adit
-        assertEquals(originalBear.getHappiness(), loadedBear.getHappiness()); // modified by Adit
+    @Test void testWriteAndReadBear() throws IOException {
+        Path file = Path.of("savefile.json");
+        boolean existed = Files.exists(file);
+        byte[] previous = existed ? Files.readAllBytes(file) : null;
+        try {
+            Po original = new Po("TestPo");
+            original.setHunger(70);
+            original.setHappiness(50);
+            DatabaseHelper.writeToFile(original);
+            Po loaded = (Po) DatabaseHelper.readFromFile(Po.class);
+            assertNotNull(loaded);
+            assertEquals(original.getName(), loaded.getName());
+            assertEquals(70, loaded.getHunger());
+            assertEquals(50, loaded.getHappiness());
+        } finally {
+            if (existed) Files.write(file, previous);
+            else Files.deleteIfExists(file);
+        }
     }
 }

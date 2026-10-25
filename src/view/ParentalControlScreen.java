@@ -9,6 +9,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import app.PoCoToApp;
+import service.ParentalSettings;
 import javafx.scene.layout.Region; // added by Adit for styling for this page
 import javafx.scene.layout.HBox; // added by Adit for styling for this page
 
@@ -47,10 +48,13 @@ public class ParentalControlScreen {
 
         playtimeLimitDropdown = new ComboBox<>();
         playtimeLimitDropdown.getItems().addAll("1 Hour", "2 Hours", "3 Hours", "Unlimited");
-        playtimeLimitDropdown.setValue("Unlimited");
+        ParentalSettings settings = ParentalSettings.getDefault();
+        int minutes = settings.getLimitMinutes();
+        playtimeLimitDropdown.setValue(minutes == 60 ? "1 Hour" :
+                minutes == 120 ? "2 Hours" : minutes == 180 ? "3 Hours" : "Unlimited");
 
         revivalToggleButton = new ToggleButton("Enable Bear Revival");
-        revivalToggleButton.setSelected(true);
+        revivalToggleButton.setSelected(settings.isRevivalEnabled());
 
         // added by Adit for a styled title for consistency
         Text titleText = new Text("Parental Controls");
@@ -62,7 +66,8 @@ public class ParentalControlScreen {
         VBox titleBox = new VBox(5, titleText, underline);
         titleBox.setAlignment(Pos.CENTER);
 
-        userStatsDisplay = new Text("User Statistics:\nTotal Playtime: 0 hours\nTotal Sessions: 0");
+        userStatsDisplay = new Text("Total Playtime: " + (settings.getPlayedSeconds() / 60)
+                + " minutes\nTotal Sessions: " + settings.getSessions());
         userStatsDisplay.getStyleClass().add("user-stats"); // added by Adit to implement styling on the user stats display text
 
         Button saveButton = new Button("Save");
@@ -81,7 +86,7 @@ public class ParentalControlScreen {
         scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
 
         primaryStage.setTitle("Parental Controls");
-        primaryStage.setScene(scene);
+        app.switchScene(primaryStage, scene, "PoCoTo - Parental Controls");
 
         playtimeLimitDropdown.setButtonCell(new ListCell<>() { // added by Adit to implement some styling into the screen
             @Override
@@ -114,7 +119,14 @@ public class ParentalControlScreen {
             String playtimeLimit = playtimeLimitDropdown.getValue();
             boolean isRevivalEnabled = revivalToggleButton.isSelected();
 
-            userStatsDisplay.setText(String.format("Settings Saved:\nPlaytime Limit: %s\nRevival: %s", playtimeLimit, isRevivalEnabled ? "Enabled" : "Disabled"));
+            int minutes = "1 Hour".equals(playtimeLimit) ? 60
+                    : "2 Hours".equals(playtimeLimit) ? 120
+                    : "3 Hours".equals(playtimeLimit) ? 180 : -1;
+            ParentalSettings.getDefault().configure(minutes, isRevivalEnabled);
+            userStatsDisplay.setText(String.format("Settings Saved:\nPlaytime Limit: %s\nRevival: %s\nTotal Playtime: %d minutes\nTotal Sessions: %d",
+                    playtimeLimit, isRevivalEnabled ? "Enabled" : "Disabled",
+                    ParentalSettings.getDefault().getPlayedSeconds() / 60,
+                    ParentalSettings.getDefault().getSessions()));
             System.out.println("Settings Saved: " + playtimeLimit + ", Revival: " + isRevivalEnabled);
         } else {
             userStatsDisplay.setText("Incorrect Password. Try Again.");

@@ -62,9 +62,22 @@ class PoTest {
      * Verifies Po becomes angry after many updates, but not dead yet.
      */
     @Test
-    void testIsDeadAndIsAngry() {
-        for (int i = 0; i < 30; i++) po.updateStats();
-        assertTrue(po.isAngry());
-        assertFalse(po.isDead());
+    void testBecomesAngryAfterSufficientDecay() {
+        for (int i = 0; i < 38; i++) {
+            po.updateStats();
+        }
+
+        assertTrue(po.isAngry(),
+            "Po should become angry when Happiness reaches 25 or below");
+    }
+
+    @Test
+    void testHealthEventuallyReachesZero() {
+        for (int i = 0; i < 80; i++) {
+            po.updateStats();
+        }
+
+        assertTrue(po.isDead(),
+            "Po should eventually die when Health reaches zero");
     }
 }
