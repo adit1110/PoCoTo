@@ -36,7 +36,7 @@ if errorlevel 1 (
 echo Compiling PoCoTo regression tests...
 javac --module-path "%JAVAFX_LIB%" --add-modules javafx.controls,javafx.fxml ^
   -cp "%APP_CLASSES%;bin;lib/*" -d "%TEST_CLASSES%" ^
-  src\test\BearStatLogicTest.java src\test\StatDecayLifecycleTest.java src/test/SaveLoadRegressionTest.java src/test/GameplaySaveLoadTest.java src/test/ScoringRegressionTest.java src/test/InventoryRegressionTest.java
+  src\test\BearStatLogicTest.java src\test\StatDecayLifecycleTest.java src/test/SaveLoadRegressionTest.java src/test/GameplaySaveLoadTest.java src/test/ScoringRegressionTest.java src/test/InventoryRegressionTest.java src/test/ParentalSettingsIntegrationTest.java src/test/ParentalPlaytimeLimitTest.java src/test/ParentalRevivalTest.java
 if errorlevel 1 (
     echo ERROR: Test compilation failed.
     exit /b 1
@@ -50,7 +50,10 @@ java --module-path "%JAVAFX_LIB%" --add-modules javafx.controls,javafx.fxml ^
   --select-class test.StatDecayLifecycleTest ^
   --select-class test.SaveLoadRegressionTest ^
   --select-class test.ScoringRegressionTest ^
-  --select-class test.InventoryRegressionTest
+  --select-class test.InventoryRegressionTest ^
+  --select-class test.ParentalSettingsIntegrationTest ^
+  --select-class test.ParentalPlaytimeLimitTest ^
+  --select-class test.ParentalRevivalTest
 if errorlevel 1 (
     echo ERROR: One or more tests failed.
     exit /b 1

@@ -41,6 +41,7 @@ import java.util.List;
 import view.GameplayScreen;
 import javafx.scene.control.ScrollPane;
 import java.nio.file.Path;
+import service.ParentalSettings;
 import javafx.scene.layout.Region;
 
 /**
@@ -75,6 +76,10 @@ public class GameplayScreen {
     private NotificationService notificationService; // added by Bhavya Sharma
     private SaveLoadController saveLoadController; // added by Bhavya Sharma
     private Timeline autoDecayTimer;
+    private Timeline parentalClock;
+    private final ParentalSettings parentalSettings = ParentalSettings.getDefault();
+    private boolean playtimeExpired;
+    private Stage gameplayStage;
     private final Path saveFile;
 
     private Inventory inventory = new Inventory(); // Inventory instance for the inventory
@@ -102,6 +107,20 @@ public class GameplayScreen {
      * @param primaryStage the main stage passed from the application entry point
      */
     public void start(Stage primaryStage) {
+        gameplayStage = primaryStage;
+        parentalSettings.flushElapsedTime();
+        if (!parentalSettings.canPlay()) {
+            app.showMainMenu(primaryStage);
+            new Alert(Alert.AlertType.WARNING, "Playtime limit reached. Ask an administrator to change the limit.").showAndWait();
+            return;
+        }
+        parentalSettings.beginSession();
+        parentalClock = new Timeline(new KeyFrame(Duration.seconds(1), e -> {
+            parentalSettings.flushElapsedTime();
+            enforcePlaytimeLimit();
+        }));
+        parentalClock.setCycleCount(Timeline.INDEFINITE);
+        parentalClock.play();
         // Title label
         Label title = new Label("PoCoTo");
         title.getStyleClass().add("title");
@@ -174,6 +193,7 @@ public class GameplayScreen {
         Button playBtn = new Button("Play");
         Button sleepBtn = new Button("Sleep");
         Button healBtn = new Button("Heal");
+        Button reviveBtn = new Button("Revive Bear");
         Button pauseBtn = new Button("Pause");
         Button miniGameBtn = new Button("Minigame"); //Added by Jayansh Bagga
         Button saveButton = new Button("Save Game"); // moved up here by Adit
@@ -202,7 +222,12 @@ public class GameplayScreen {
         topButtons.setPadding(new Insets(10));
         topButtons.setAlignment(Pos.CENTER);
 
-        HBox saveLoadBox = new HBox(15, saveButton, loadButton);
+        reviveBtn.setOnAction(e -> {
+            if (parentalSettings.revive(bearController.getBear())) {
+                updateUI();
+            }
+        });
+        HBox saveLoadBox = new HBox(15, saveButton, loadButton, reviveBtn);
         saveLoadBox.setAlignment(Pos.CENTER);
 
         Label saveLoadFeedback = new Label();
@@ -220,6 +245,7 @@ public class GameplayScreen {
         // Back to Main Menu button
         backButton.setOnAction(e -> {
             stopAutoDecay();
+            stopParentalClock();
             app.showMainMenu(primaryStage);
         });
         VBox.setMargin(backButton, new Insets(10, 0, 30, 0));
@@ -283,6 +309,7 @@ public class GameplayScreen {
         miniGameBtn.setOnAction(e -> {
             // Pause decay while the minigame's separate window is open.
             if (autoDecayTimer != null) autoDecayTimer.pause();
+            pauseParentalClock();
             view.MiniGameScreen miniGame = new view.MiniGameScreen();
             miniGame.initOwner(primaryStage);
             miniGame.initModality(javafx.stage.Modality.WINDOW_MODAL);
@@ -293,6 +320,7 @@ public class GameplayScreen {
                 updateUI();
             });
             miniGame.showAndWait();
+            resumeParentalClock();
             if (autoDecayTimer != null &&
                     autoDecayTimer.getStatus() == javafx.animation.Animation.Status.PAUSED) {
                 autoDecayTimer.play();
@@ -300,6 +328,7 @@ public class GameplayScreen {
         });
 
         pauseBtn.setOnAction(e -> {
+            pauseParentalClock();
             // Pause automatic stat decay while the pause menu is open.
             if (autoDecayTimer != null) {
                 autoDecayTimer.pause();
@@ -317,12 +346,14 @@ public class GameplayScreen {
                 // Return to main menu
                 () -> {
                     stopAutoDecay();
+                    stopParentalClock();
                     app.showMainMenu(primaryStage);
                 }
             );
 
             // This waits until the Pause window closes.
             pauseMenu.show();
+            resumeParentalClock();
 
             // Resume the existing timer, including when the window
             // is closed with X instead of the Resume button.
@@ -335,6 +366,7 @@ public class GameplayScreen {
 
         InventoryBtn.setOnAction(e -> {
             stopAutoDecay();
+            stopParentalClock();
 
             new InventoryScreen(primaryStage, bearController, app,
                 () -> new GameplayScreen(bearController, app, saveFile).start(primaryStage));
@@ -372,6 +404,11 @@ public class GameplayScreen {
             "PoCoTo - Gameplay"
         );
 
+        // Expose revival only for a dead bear when the guardian allows it.
+        reviveBtn.visibleProperty().bind(javafx.beans.binding.Bindings.createBooleanBinding(
+                () -> parentalSettings.canRevive(bearController.getBear()),
+                healthBar.progressProperty()));
+        reviveBtn.managedProperty().bind(reviveBtn.visibleProperty());
         updateUI();
         startAutoDecay();
     }
@@ -492,6 +529,36 @@ public class GameplayScreen {
     /**
      * Stops automatic stat decay when leaving gameplay.
      */
+    private void enforcePlaytimeLimit() {
+        if (playtimeExpired || parentalSettings.canPlay()) return;
+        playtimeExpired = true;
+        stopAutoDecay();
+        stopParentalClock();
+        app.showMainMenu(gameplayStage);
+        new Alert(Alert.AlertType.WARNING,
+                "Your playtime limit has been reached. Gameplay is now locked.").showAndWait();
+    }
+
+    private void pauseParentalClock() {
+        if (parentalClock != null) parentalClock.pause();
+        parentalSettings.endSession();
+    }
+
+    private void resumeParentalClock() {
+        if (parentalClock != null && !playtimeExpired) {
+            parentalSettings.beginSession();
+            parentalClock.play();
+        }
+    }
+
+    private void stopParentalClock() {
+        parentalSettings.endSession();
+        if (parentalClock != null) {
+            parentalClock.stop();
+            parentalClock = null;
+        }
+    }
+
     private void stopAutoDecay() {
         if (autoDecayTimer != null) {
             autoDecayTimer.stop();
