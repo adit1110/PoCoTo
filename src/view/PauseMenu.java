@@ -7,6 +7,9 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Region;
 
 /**
  * PauseMenu.java
@@ -37,35 +40,78 @@ public class PauseMenu {
         pauseStage.initModality(Modality.WINDOW_MODAL);
         pauseStage.setTitle("Paused");
 
-        VBox layout = new VBox(15);
-        layout.setPadding(new Insets(20));
+        // Main pause menu layout
+        VBox layout = new VBox(18);
+        layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(30));
+        layout.setStyle("-fx-background-color: #2C3E50;");
 
-        Button resumeButton = new Button("Resume");
-        resumeButton.setOnAction(e -> {
-            onResume.run();           // Added by Jayansh Bagga - triggers resume logic
-            pauseStage.close();       // Closes the pause menu
-        });
+        // Title
+        Label title = new Label("Game Paused");
+        title.setStyle(
+            "-fx-font-size: 28px;" +
+            "-fx-font-weight: bold;" +
+            "-fx-text-fill: white;"
+        );
 
+        // Blue underline
+        Region underline = new Region();
+        underline.setStyle(
+            "-fx-background-color: #3498DB;" +
+            "-fx-min-width: 60px;" +
+            "-fx-max-width: 60px;" +
+            "-fx-min-height: 3px;" +
+            "-fx-max-height: 3px;"
+        );
+
+        // Buttons
+        Button resumeButton = new Button("Resume Game");
         Button saveButton = new Button("Save Game");
-        saveButton.setOnAction(e -> {
-            GameController.saveGame(GameController.getCurrentBear());
-        });
-
         Button mainMenuButton = new Button("Main Menu");
 
-        saveButton.setOnAction(e -> {
-            onSave.run();
+        // Consistent button dimensions
+        for (Button button : new Button[] {
+            resumeButton, saveButton, mainMenuButton
+        }) {
+            button.setPrefWidth(210);
+            button.setPrefHeight(45);
+        }
+
+        // Resume gameplay
+        resumeButton.setOnAction(e -> {
+            onResume.run();
+            pauseStage.close();
         });
 
+        // Save current bear
+        saveButton.setOnAction(e -> onSave.run());
+
+        // Return to main menu
         mainMenuButton.setOnAction(e -> {
             onMainMenu.run();
             pauseStage.close();
         });
 
-        layout.getChildren().addAll(resumeButton, saveButton, mainMenuButton);  // Updated layout structure
+        // Add all elements
+        layout.getChildren().addAll(
+            title,
+            underline,
+            resumeButton,
+            saveButton,
+            mainMenuButton
+        );
 
-        Scene scene = new Scene(layout, 300, 190); // Changed by Adit to make the window bigger
+        // Create a compact pause menu
+        Scene scene = new Scene(layout, 360, 320);
+
+        // Apply the same stylesheet used by the other screens
+        var css = getClass().getResource("/styles.css");
+        if (css != null) {
+            scene.getStylesheets().add(css.toExternalForm());
+        }
+
         pauseStage.setScene(scene);
+        pauseStage.setResizable(false);
     }
 
     /**
