@@ -40,6 +40,7 @@ import javafx.scene.control.Alert;
 import java.util.List;
 import view.GameplayScreen;
 import javafx.scene.control.ScrollPane;
+import java.nio.file.Path;
 
 /**
  * GameplayScreen class represents the main gameplay screen of the application.
@@ -72,6 +73,7 @@ public class GameplayScreen {
     private NotificationService notificationService; // added by Bhavya Sharma
     private SaveLoadController saveLoadController; // added by Bhavya Sharma
     private Timeline autoDecayTimer;
+    private final Path saveFile;
 
     private Inventory inventory = new Inventory(); // Inventory instance for the inventory
 
@@ -82,8 +84,14 @@ public class GameplayScreen {
      * @param app reference to the main app file for screen navigation
      */
     public GameplayScreen(BearController controller, PoCoToApp app) {
+        this(controller, app, Path.of("bear_save.dat"));
+    }
+
+    /** Allows integration tests to use a temporary save file. */
+    public GameplayScreen(BearController controller, PoCoToApp app, Path saveFile) {
         this.bearController = controller;
         this.app = app;
+        this.saveFile = saveFile;
     }
 
     /**
@@ -168,11 +176,14 @@ public class GameplayScreen {
         HBox saveLoadBox = new HBox(15, saveButton, loadButton);
         saveLoadBox.setAlignment(Pos.CENTER);
 
+        Label saveLoadFeedback = new Label();
+        saveLoadFeedback.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
+
         HBox pauseBox = new HBox(pauseBtn);
         pauseBox.setAlignment(Pos.BOTTOM_RIGHT);
         pauseBox.setPadding(new Insets(10, 20, 10, 10));
 
-        VBox root = new VBox(25, title, bearNameLabel, bearImage, statsBox, topButtons, pauseBtn, saveLoadBox, bearStatusText, backButton);
+        VBox root = new VBox(25, title, bearNameLabel, bearImage, statsBox, topButtons, pauseBtn, saveLoadBox, saveLoadFeedback, bearStatusText, backButton);
         root.setAlignment(Pos.CENTER);
 
         // Back to Main Menu button
@@ -205,6 +216,25 @@ public class GameplayScreen {
             bearController.healBear();
             updateUI();
             notificationService.checkBearStatus(bearController.getBear()); // added by Bhavya Sharma
+        });
+
+        // Save using the same Java serialization format as the Pause menu.
+        saveButton.setOnAction(e -> {
+            boolean success = GameController.saveGame(bearController.getBear(), saveFile);
+            saveLoadFeedback.setText(success ? "Game saved successfully." : "Could not save game.");
+        });
+
+        // Replace the active controller so all gameplay actions use the loaded bear.
+        loadButton.setOnAction(e -> {
+            Bear loadedBear = GameController.loadGame(saveFile);
+            if (loadedBear == null) {
+                saveLoadFeedback.setText("Could not load game. No valid save found.");
+                return;
+            }
+            bearController = new BearController(loadedBear);
+            saveLoadController = new SaveLoadController(loadedBear);
+            updateUI();
+            saveLoadFeedback.setText("Game loaded successfully.");
         });
 
         pauseBtn.setOnAction(e -> {
