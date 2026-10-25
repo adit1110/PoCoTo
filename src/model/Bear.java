@@ -12,7 +12,20 @@ import java.io.Serializable;
  * Abstract class representing a Bear.
  * Contains common fields and methods used by all bear types.
  */
-public abstract class Bear implements Serializable { //Serializable Added By Jayansh Bagga, This allows bear onbjects to be saveable via seralization.
+public abstract class Bear implements Serializable {
+    // Fixed at the original serialized-class UID to preserve existing bear_save.dat files.
+    private static final long serialVersionUID = -2450195015779438704L;
+
+    private Inventory inventory;
+
+    /** Older saves lack this field, so initialize it on first access. */
+    public Inventory getInventory() {
+        if (inventory == null) {
+            inventory = Inventory.starterInventory();
+        }
+        return inventory;
+    }
+ //Serializable Added By Jayansh Bagga, This allows bear onbjects to be saveable via seralization.
     // Basic attributes for a bear
     
     /**
@@ -61,6 +74,7 @@ public abstract class Bear implements Serializable { //Serializable Added By Jay
         this.health = MAX_STAT;
         this.sleep = MAX_STAT;
         this.happiness = MAX_STAT;
+        this.inventory = Inventory.starterInventory();
     }
 
     // Basic actions for the bear. These methods increase the respective stat

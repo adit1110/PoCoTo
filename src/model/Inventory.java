@@ -1,80 +1,49 @@
 package model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.List; // added by Adit for the List<String> method
-import java.util.ArrayList; // added by Adit for the List<String> method
 
+/** Per-bear inventory with finite, serializable item counts. */
+public class Inventory implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private final Map<String, Integer> items = new HashMap<>();
 
-/**
- * The Inventory class tracks the items and their counts for a player in the Bear game.
- * It provides methods to add, use, and check items in the inventory.
- * 
- * @author: Krish Patel
- */
-public class Inventory {
-
-    private static Map<String, Integer> items; // changed by Adit to include static to safely call it from the static method getItems()
-
-    /**
-     * Constructs an Inventory object with an empty list of items.
-     */
-    public Inventory() {
-        items = new HashMap<>();
+    public static Inventory starterInventory() {
+        Inventory inventory = new Inventory();
+        inventory.addItem("Apple", 3);
+        inventory.addItem("Banana", 2);
+        inventory.addItem("Teddy Bear", 1);
+        return inventory;
     }
 
-    /**
-     * Adds an item to the inventory. If the item already exists, it increments the count.
-     *
-     * @param item The item to be added.
-     */
-    public void addItem(String item) {
-        items.put(item, items.getOrDefault(item, 0) + 1);
-    }
+    public void addItem(String item) { addItem(item, 1); }
 
-    /**
-     * Uses an item from the inventory. If the item exists and has a count greater than 0,
-     * it decrements the count. If the item is not found, no action is taken.
-     *
-     * @param item The item to be used.
-     */
-    public void useItem(String item) {
-        if (items.containsKey(item) && items.get(item) > 0) {
-            items.put(item, items.get(item) - 1);
+    public void addItem(String item, int amount) {
+        if (item == null || item.isBlank() || amount <= 0) {
+            throw new IllegalArgumentException("Item name and positive quantity are required");
         }
+        items.merge(item, amount, Integer::sum);
     }
 
-    /**
-     * Checks if an item exists in the inventory.
-     *
-     * @param item The item to check.
-     * @return True if the item exists in the inventory, false otherwise.
-     */
-    public boolean hasItem(String item) {
-        return items.containsKey(item) && items.get(item) > 0;
+    /** Returns false if none are available; never permits negative counts. */
+    public boolean useItem(String item) {
+        int count = getItemCount(item);
+        if (count == 0) return false;
+        if (count == 1) items.remove(item);
+        else items.put(item, count - 1);
+        return true;
     }
 
-    /**
-     * Gets the number of items of a particular type in the inventory.
-     *
-     * @param item The item type to check.
-     * @return The count of the specified item in the inventory.
-     */
-    public int getItemCount(String item) {
-        return items.getOrDefault(item, 0);
+    public boolean hasItem(String item) { return getItemCount(item) > 0; }
+    public int getItemCount(String item) { return items.getOrDefault(item, 0); }
+
+    public List<String> getItems() {
+        List<String> result = new ArrayList<>();
+        items.forEach((item, count) -> result.add(item + ": " + count));
+        result.sort(String::compareTo);
+        return result;
     }
-
-    /** Added by Adit to implement a static getItems() method
-     * Returns a copy of the inventory items as a formatted list of strings.
-     * 
-     * @return A list of strings representating each item and its count
-     */
-
-     public static List<String> getItems() {
-        List<String> itemList = new ArrayList<>();
-        for(Map.Entry<String, Integer> entry: items.entrySet()) {
-            itemList.add(entry.getKey() + ": " + entry.getValue());
-        }
-        return itemList;
-     }
 }
