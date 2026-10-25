@@ -127,9 +127,29 @@ public class GameplayScreen {
         happinessBar = createLabeledBar("Happiness");
         HBox happinessBox = new HBox(10, happinessLabel, happinessBar);
 
+        // Keep the stats section centered and consistently sized.
         VBox statsBox = new VBox(10, hungerBox, healthBox, sleepBox, happinessBox);
         statsBox.setPadding(new Insets(20));
         statsBox.setAlignment(Pos.CENTER);
+        statsBox.setMaxWidth(480);
+
+        // Align all progress bars vertically.
+        hungerBox.setAlignment(Pos.CENTER_LEFT);
+        healthBox.setAlignment(Pos.CENTER_LEFT);
+        sleepBox.setAlignment(Pos.CENTER_LEFT);
+        happinessBox.setAlignment(Pos.CENTER_LEFT);
+
+        // Give each stat label the same width.
+        hungerLabel.setMinWidth(160);
+        healthLabel.setMinWidth(160);
+        sleepLabel.setMinWidth(160);
+        happinessLabel.setMinWidth(160);
+
+        // Give each progress bar the same width.
+        hungerBar.setPrefWidth(230);
+        healthBar.setPrefWidth(230);
+        sleepBar.setPrefWidth(230);
+        happinessBar.setPrefWidth(230);
 
         // Bear image setup
         bearImage = new ImageView(getBearImage(bearController.getBear()));
