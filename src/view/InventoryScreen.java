@@ -118,8 +118,10 @@ public class InventoryScreen {
                 return;
             }
             Bear bear = controller.getBear();
+            int before = food ? bear.getHunger() : bear.getHappiness();
             if (food) bear.feed(points);
             else bear.play(points);
+            bear.awardCarePoints(before, food ? bear.getHunger() : bear.getHappiness());
             feedback.setText("Used " + name + "! +" + points +
                              (food ? " Hunger" : " Happiness") +
                              " (up to 100). Remaining: " + inventory.getItemCount(name));

@@ -41,6 +41,7 @@ import java.util.List;
 import view.GameplayScreen;
 import javafx.scene.control.ScrollPane;
 import java.nio.file.Path;
+import javafx.scene.layout.Region;
 
 /**
  * GameplayScreen class represents the main gameplay screen of the application.
@@ -68,6 +69,7 @@ public class GameplayScreen {
     private Label healthLabel;
     private Label sleepLabel;
     private Label happinessLabel;
+    private Label scoreLabel;
     
     // Services and helper classes
     private NotificationService notificationService; // added by Bhavya Sharma
@@ -151,6 +153,9 @@ public class GameplayScreen {
         sleepBar.setPrefWidth(230);
         happinessBar.setPrefWidth(230);
 
+        scoreLabel = new Label();
+        scoreLabel.setStyle("-fx-text-fill: #ffdc85; -fx-font-size: 18px; -fx-font-weight: bold;");
+
         // Bear image setup
         bearImage = new ImageView(getBearImage(bearController.getBear()));
         bearImage.setFitWidth(100);
@@ -169,7 +174,8 @@ public class GameplayScreen {
         Button playBtn = new Button("Play");
         Button sleepBtn = new Button("Sleep");
         Button healBtn = new Button("Heal");
-        Button pauseBtn = new Button("Pause"); //Added by Jayansh Bagga
+        Button pauseBtn = new Button("Pause");
+        Button miniGameBtn = new Button("Minigame"); //Added by Jayansh Bagga
         Button saveButton = new Button("Save Game"); // moved up here by Adit
         Button loadButton = new Button("Load Game"); // moved up here by Adit
         Button backButton = new Button("Back to Main Menu"); // moved up here by Adit
@@ -180,7 +186,10 @@ public class GameplayScreen {
         playBtn.setPrefWidth(120);
         sleepBtn.setPrefWidth(120);
         healBtn.setPrefWidth(120);
+        pauseBtn.setMinWidth(120);
         pauseBtn.setPrefWidth(120);
+        miniGameBtn.setMinWidth(140);
+        miniGameBtn.setPrefWidth(140);
         InventoryBtn.setMinWidth(130);
         InventoryBtn.setPrefWidth(130);
         saveButton.setPrefWidth(140);
@@ -199,11 +208,13 @@ public class GameplayScreen {
         Label saveLoadFeedback = new Label();
         saveLoadFeedback.setStyle("-fx-text-fill: white; -fx-font-size: 14px;");
 
-        HBox pauseBox = new HBox(pauseBtn);
-        pauseBox.setAlignment(Pos.BOTTOM_RIGHT);
-        pauseBox.setPadding(new Insets(10, 20, 10, 10));
+        // Center the Pause and Minigame buttons beneath the main actions.
+        HBox pauseBox = new HBox(15, pauseBtn, miniGameBtn);
+        pauseBox.setAlignment(Pos.CENTER);
+        pauseBox.setPadding(new Insets(10));
+        pauseBox.setMaxWidth(Region.USE_PREF_SIZE);
 
-        VBox root = new VBox(25, title, bearNameLabel, bearImage, statsBox, topButtons, pauseBtn, saveLoadBox, saveLoadFeedback, bearStatusText, backButton);
+        VBox root = new VBox(25, title, bearNameLabel, scoreLabel, bearImage, statsBox, topButtons, pauseBox, saveLoadBox, saveLoadFeedback, bearStatusText, backButton);
         root.setAlignment(Pos.CENTER);
 
         // Back to Main Menu button
@@ -215,25 +226,37 @@ public class GameplayScreen {
 
         // Button logic for user interactions
         feedBtn.setOnAction(e -> {
+            Bear activeBear = bearController.getBear();
+            int before = activeBear.getHunger();
             bearController.feedBear();
+            activeBear.awardCarePoints(before, activeBear.getHunger());
             updateUI();
             notificationService.checkBearStatus(bearController.getBear()); // added by Bhavya Sharma
         });
 
         playBtn.setOnAction(e -> {
+            Bear activeBear = bearController.getBear();
+            int before = activeBear.getHappiness();
             bearController.playWithBear();
+            activeBear.awardCarePoints(before, activeBear.getHappiness());
             updateUI();
             notificationService.checkBearStatus(bearController.getBear()); // added by Bhavya Sharma
         });
 
         sleepBtn.setOnAction(e -> {
+            Bear activeBear = bearController.getBear();
+            int before = activeBear.getSleep();
             bearController.putBearToSleep();
+            activeBear.awardCarePoints(before, activeBear.getSleep());
             updateUI();
             notificationService.checkBearStatus(bearController.getBear()); // added by Bhavya Sharma
         });
 
         healBtn.setOnAction(e -> {
+            Bear activeBear = bearController.getBear();
+            int before = activeBear.getHealth();
             bearController.healBear();
+            activeBear.awardCarePoints(before, activeBear.getHealth());
             updateUI();
             notificationService.checkBearStatus(bearController.getBear()); // added by Bhavya Sharma
         });
@@ -255,6 +278,25 @@ public class GameplayScreen {
             saveLoadController = new SaveLoadController(loadedBear);
             updateUI();
             saveLoadFeedback.setText("Game loaded successfully.");
+        });
+
+        miniGameBtn.setOnAction(e -> {
+            // Pause decay while the minigame's separate window is open.
+            if (autoDecayTimer != null) autoDecayTimer.pause();
+            view.MiniGameScreen miniGame = new view.MiniGameScreen();
+            miniGame.initOwner(primaryStage);
+            miniGame.initModality(javafx.stage.Modality.WINDOW_MODAL);
+            miniGame.setResultHandler(result -> {
+                int earned = bearController.getBear().rewardMiniGame(result);
+                saveLoadFeedback.setText(earned > 0
+                        ? "Minigame: +" + earned + " points!" : "Minigame finished. No points earned.");
+                updateUI();
+            });
+            miniGame.showAndWait();
+            if (autoDecayTimer != null &&
+                    autoDecayTimer.getStatus() == javafx.animation.Animation.Status.PAUSED) {
+                autoDecayTimer.play();
+            }
         });
 
         pauseBtn.setOnAction(e -> {
@@ -350,6 +392,7 @@ public class GameplayScreen {
     private void updateUI() {
 
         bearNameLabel.setText(bearController.getBear().getLabel());
+        scoreLabel.setText("Score: " + bearController.getBear().getScore());
         
         double hunger = bearController.getHungerPercent();
         double health = bearController.getHealthPercent();
